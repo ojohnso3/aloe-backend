@@ -1,29 +1,21 @@
 const express = require('express');
 const router = express.Router();
 
-const admin = require('firebase-admin');
+const { testingFunctionNameOne, testingFunctionNameTwo }  = require("../controllers/testingController");
 
-const serviceAccount = require('../../aloe-stories-firebase-adminsdk-pu8m0-3f8b880ef5.json');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
-const db = admin.firestore();
-
-/* GET home page. */
+/* Home page default */
 router.get('/', function(req, res, next) {
   res.render('index', {title: 'Express'});
 });
 
-router.get('/testing-users', async function(req, res, next) {
-  const snapshot = await db.collection('users').get();
-  snapshot.forEach((doc) => {
-    console.log(doc.id, '=>', doc.data());
-  });
+function response(handler) {
+  return async (req, res, next) => {
+    res.send(handler(req, res, next));
+  };
+}
 
-  res.send('This is a test');
-});
-
+router.get('/testingEndpointName', response(testingFunctionNameOne));
+router.post('/testingEndpointNmae2', response(testingFunctionNameTwo));
 
 module.exports = router;
