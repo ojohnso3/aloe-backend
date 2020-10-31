@@ -1,8 +1,10 @@
 const db = require("../db.js");
 
 // - Load all posts — /posts
-async function getPosts(pork) { // add lastPost
-  const status = 'SUBMITTED';
+async function getPosts(status) { // add lastPost
+  // const status = 'SUBMITTED';
+  console.log('status', status)
+  console.log('status', status.params)
   const posts = db.collection('posts');
   const selected = await posts.where('status', '==', status).orderBy('timestamp')
     // .startAt(lastPost)
