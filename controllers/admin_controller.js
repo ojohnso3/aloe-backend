@@ -3,7 +3,6 @@ const db = require("../db.js");
 // - Load all posts — /posts
 async function getPosts(status) { // add lastPost parameter for pagination
   const posts = db.collection('posts');
-  console.log('query', status.query.status)
   const selected = await posts.where('status', '==', status.query.status).orderBy('timestamp')
     // .startAt(lastPost)
     .limit(10)
@@ -24,7 +23,6 @@ async function getPosts(status) { // add lastPost parameter for pagination
 async function updatePostStatus(postData) {
   const post = db.collection('posts').doc(postData.body.id)
   const res = await post.update({status: postData.body.status});
-  console.log('r', res)
   return res;
 }
 
