@@ -1,0 +1,97 @@
+{
+  "posts": {
+    "1": {
+      "timestamp": "October 10, 2020",
+      "updated-timestamp": "October 27, 2020",
+      "email": "sidneysux@aloe.co",
+      "username": "sidthekid",
+      "type": "STORY",
+      "status": "SUBMITTED",
+      "content": {
+        "title": "I want to post.",
+        "body": "<p>More content.</p>",
+        "media": "aloe.jpg",
+        "topics": ["LGBTQ+", "ASSAULT"]
+      },
+      "likes": 0,
+      "saves": 0,
+      "shares": 0,
+      "hidden": false,
+      "featured": false
+    },
+    "2": {
+      "timestamp": "November 1, 2020",
+      "updated-timestamp": "November 1, 2020",
+      "email": "sidneysux@aloe.co",
+      "username": "sidthekid",
+      "type": "OPINION",
+      "status": "SUBMITTED",
+      "content": {
+        "title": "Football yo 2.",
+        "body": "<p>footie footy foot.</p>",
+        "media": "aloe.jpg",
+        "topics": ["LGBTQ+", "ASSAULT"]
+      },
+      "likes": 0,
+      "saves": 0,
+      "shares": 0,
+      "hidden": false,
+      "featured": false
+    },
+    "3": {
+      "timestamp": "November 3, 2020",
+      "updated-timestamp": "November 5, 2020",
+      "email": "sidneysux@aloe.co",
+      "username": "sidthekid",
+      "type": "STORY",
+      "status": "SUBMITTED",
+      "content": {
+        "title": "Help me w foot.",
+        "body": "<p>footie PORK foot.</p>",
+        "media": "aloe.jpg",
+        "topics": ["LGBTQ+", "ASSAULT"]
+      },
+      "likes": 0,
+      "saves": 0,
+      "shares": 0,
+      "hidden": false,
+      "featured": false
+    }
+  },
+  "users": {
+    "1": {
+      "email": "sidneysux@aloe.co",
+      "username": "sidthekid",
+      "type": "ADMIN",
+      "image": "fake",
+      "bio": "I am Sidney.",
+      "consent": true,
+      "anonymous": "NONE",
+      "active": true,
+      "signup-timestamp": "October 1, 2020",
+      "login-timestamp": "October 27, 2020"
+    },
+    "2": {
+      "email": "olivia@aloe.co",
+      "username": "oj22",
+      "type": "ADMIN",
+      "image": "me",
+      "bio": "I am Olivia.",
+      "consent": true,
+      "anonymous": "NONE",
+      "active": false,
+      "signup-timestamp": "October 2, 2020",
+      "login-timestamp": "October 25, 2020"
+    }
+  },
+  "preview": {
+    "1": {
+      "username": "sidthekid",
+      "type": "STORY",
+      "status": "SUBMITTED",
+      "title": "I want to post.",
+      "preview": "Tbd...",
+      "timestamp": "October 10, 2020"
+    }
+  }
+}
