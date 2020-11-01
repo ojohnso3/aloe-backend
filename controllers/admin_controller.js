@@ -1,12 +1,10 @@
 const db = require("../db.js");
 
 // - Load all posts — /posts
-async function getPosts(status) { // add lastPost
-  // const status = 'SUBMITTED';
-  console.log('status', status)
-  console.log('status', status.params)
+async function getPosts(status) { // add lastPost parameter for pagination
   const posts = db.collection('posts');
-  const selected = await posts.where('status', '==', status).orderBy('timestamp')
+  console.log('query', status.query.status)
+  const selected = await posts.where('status', '==', status.query.status).orderBy('timestamp')
     // .startAt(lastPost)
     .limit(10)
     .get();
@@ -16,31 +14,24 @@ async function getPosts(status) { // add lastPost
   }
   var selectedPosts = []
   selected.forEach((doc) => {
-    console.log(doc.id, '=>', doc.data());
-    selectedPosts.push(doc.data())
+    // console.log(doc.id, '=>', doc.data());
+    selectedPosts.push({id: doc.id, data: doc.data()})
   });
   return selectedPosts;
 }
 
-// - view a post — /post
-async function viewPost(postID) {
-  const post = db.collection('posts').doc(postID.params.id)
-  console.log("check sid", post)
-  return post;
-}
-
 // - Change status — /poststatus 
-async function updatePostStatus(postID, newStatus) {
-  const post = db.collection('posts').doc(postID)
-  const res = await post.update({status: newStatus});
+async function updatePostStatus(postData) {
+  const post = db.collection('posts').doc(postData.body.id)
+  const res = await post.update({status: postData.body.status});
+  console.log('r', res)
   return res;
 }
 
 
 // TODO: // Figure out how to set up reporting/banning
 
-// - Load recent reported posts — /reported
-// - Load more reported posts — /reported
+// - Load reported posts — /reported
 async function getReported(limit) {
   const posts = db.collection('posts');
   const selected = await posts.where('reported', '==', true).orderBy('timestamp', 'desc').limit(limit).get();
@@ -64,14 +55,19 @@ async function updateUserStatus(userID, ban) {
   return res;
 }
 
-
 module.exports = {
   getPosts,
-  viewPost,
   getReported,
   updatePostStatus,
   updateUserStatus,
 }
+
+// // - view a post — /post
+// async function viewPost(postID) {
+//   const post = db.collection('posts').doc(postID.params.id)
+//   console.log("check sid", post)
+//   return post;
+// }
 
 // async function addNewUser(userData) {
 //   const res = await db.collection('users').get(userData.body.username);  

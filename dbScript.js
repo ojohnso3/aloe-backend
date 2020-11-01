@@ -42,6 +42,6 @@ const addUsers = () => {
   }
 };
 
-// addPosts();
+addPosts();
 // addUserPosts();
-addUsers();
+// addUsers();

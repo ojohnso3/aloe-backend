@@ -10,7 +10,6 @@ var contentController = require('../controllers/content_controller.js');
 
 function response(handler) {
   return async (req, res, next) => { 
-    // console.log('handler', req)
     handler(req, res, next).then((obj) => {
       res.send(obj)
     })
