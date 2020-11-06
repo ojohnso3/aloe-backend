@@ -1,25 +1,21 @@
 const db = require("../db.js");
 
-// - Load all posts — /posts
-async function getPosts(status) { // add lastPost parameter for pagination
+// Load all posts of chosen status
+async function getPosts(status) {
   const posts = db.collection('posts');
-  const selected = await posts.where('status', '==', status.query.status).orderBy('timestamp')
-    // .startAt(lastPost)
-    .limit(10)
-    .get();
+  const selected = await posts.where('status', '==', status.query.status).orderBy('timestamp').limit(10).get();
   if (selected.empty) {
     console.log('No matching documents.');
     return;
   }
   var selectedPosts = []
   selected.forEach((doc) => {
-    // console.log(doc.id, '=>', doc.data());
     selectedPosts.push({id: doc.id, data: doc.data()})
   });
   return selectedPosts;
 }
 
-// - Change status — /poststatus 
+// Change status of post 
 async function updatePostStatus(postData) {
   const post = db.collection('posts').doc(postData.body.id)
   const res = await post.update({status: postData.body.status});
@@ -29,10 +25,10 @@ async function updatePostStatus(postData) {
 
 // TODO: // Figure out how to set up reporting/banning
 
-// - Load reported posts — /reported
-async function getReported(limit) {
+// - Load reported posts
+async function getReported() {
   const posts = db.collection('posts');
-  const selected = await posts.where('reported', '==', true).orderBy('timestamp', 'desc').limit(limit).get();
+  const selected = await posts.where('reported', '==', true).orderBy('timestamp', 'desc').get();
   if (selected.empty) {
     console.log('No matching documents.');
     return;
@@ -45,8 +41,7 @@ async function getReported(limit) {
   return selectedPosts;
 }
 
-// - Ban user — /banuser
-// - Reactivate user — /reactivate
+// Ban user / Reactivate user
 async function updateUserStatus(userID, ban) {
   const user = db.collection('users').doc(userID)
   const res = await user.update({banned: ban});
@@ -59,6 +54,9 @@ module.exports = {
   updatePostStatus,
   updateUserStatus,
 }
+
+
+
 
 // // - view a post — /post
 // async function viewPost(postID) {

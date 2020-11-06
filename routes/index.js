@@ -7,6 +7,7 @@ var postController = require('../controllers/post_controller.js');
 var userController = require('../controllers/user_controller.js');
 var profileController = require('../controllers/profile_controller.js');
 var contentController = require('../controllers/content_controller.js');
+const { likePost } = require('../controllers/post_controller.js');
 
 function response(handler) {
   return async (req, res, next) => { 
@@ -23,10 +24,9 @@ router.get('/', function(req, res, next) {
 });
 
 // Admin routes
-router.get('/admin/posts', response(adminController.getPosts));
-router.get('/admin/post/:id', response(adminController.viewPost));
+router.get('/admin/posts', response(adminController.getPosts)); // tested
+router.put('/post/status', response(adminController.updatePostStatus)); // tested
 router.get('/admin/reported', response(adminController.getReported));
-router.put('/post/status', response(adminController.updatePostStatus));
 router.put('/user/status', response(adminController.updateUserStatus));
 
 // Post routes
@@ -49,8 +49,16 @@ router.put('/profile/update', response(profileController.updateProfile));
 router.put('/profile/posts', response(profileController.loadPosts));
 router.put('/profile/saved', response(profileController.loadSaved));
 
+// Content routes
+router.get('/content/featured', response(contentController.getFeatured)); // tested
+router.get('/content/foryou', response(contentController.getForYouPosts)); // tested
+
+
 
 module.exports = router;
+
+
+// router.get('/admin/post/:id', response(adminController.viewPost));
 
 
 // old response:
