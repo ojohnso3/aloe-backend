@@ -1,47 +1,54 @@
 const db = require("../db.js");
 
-// - Like post — /post/like
-async function likePost(userID, postID) {
-  const post = db.collection('posts').doc(postID);
-  const res = await post.update({likes: post.likes + 1});
+// TODO: eventually attach userID to post reactions
+
+// - Like post
+async function likePost(postID) {
+  const post = db.collection('posts').doc(postID.body.id);
+  const doc = await post.get();
+  const res = await post.update({likes: doc.data().likes + 1});
   return res;
 }
 
-// - Save post — /post/save
-async function savePost(userID, postID) {
-  const post = db.collection('posts').doc(postID);
-  const res = await post.update({saves: post.saves + 1});
-  // also add to users saved subcollection
+// TODO: add commenting
+
+// - Save post
+async function savePost(postID) {
+  const post = db.collection('posts').doc(postID.body.id);
+  const doc = await post.get();
+  const res = await post.update({saves: doc.data().saves + 1});
+  // also add to users saved subcollection (cloud function?)
   return res;
 }
 
-// - Share post — /post/share
-async function sharePost(userID, postID) {
-  const post = db.collection('posts').doc(postID);
-  const res = await post.update({shares: post.shares + 1});
+// - Share post
+async function sharePost(postID) {
+  const post = db.collection('posts').doc(postID.body.id);
+  const doc = await post.get();
+  const res = await post.update({shares: doc.data().shares + 1});
   // trigger share on frontend ?
   return res;
 }
 
 // - Report post — /post/report (How does this work?)
 async function reportPost(userID, postID) {
-  const post = db.collection('posts').doc(postID);
+  const post = db.collection('posts').doc(postID.body.id);
   const res = await post.update({reported: true});
   return res;
 }
 
-// - Create new post — /post/create
+// - Create new post
 async function createPost(postData) {
   // if post == draft, just change boolean to false, else:
-  const post = db.collection('posts').add(postData);
+  const post = db.collection('posts').add(postData.body);
   // also add to users posts subcollection
-  return post;
+  return post; // NOTE: be careful of returning sensitive data (private key)
 }
 
-// - Edit post — /post/edit
-async function editPost(postData) {
-  const posts = db.collection('posts').doc(postID);
-  const res = await post.update(postData);
+// - Edit post
+async function editPost(postData) { // remember dot notation (content.title) for nested fields
+  const post = db.collection('posts').doc(postData.body.id);
+  const res = await post.update(postData.body);
   return res;
 }
 

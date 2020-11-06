@@ -1,9 +1,9 @@
 const db = require("../db.js");
 
-// - Change profile — /profile/update (i.e. pic, bio, username, anonymity, consent) TBD: EMAIL??
-async function updateProfile(email, profileData) {
-  const user = db.collection('users').doc(email);
-  const res = await user.update(profileData);
+// - Change profile (i.e. pic, bio, username, anonymity, consent) TBD: EMAIL??
+async function updateProfile(profileData) {
+  const user = db.collection('users').doc(profileData.body.email);
+  const res = await user.update(profileData.body);
   return res;
 }
 
