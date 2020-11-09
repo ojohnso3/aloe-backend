@@ -1,7 +1,7 @@
 
 
 function postMiddleware(id, dbPost) {
-    return {
+    let ret = {
         id,
         timestamp: dbPost.createTimestamp,
         status: dbPost.status,
@@ -15,6 +15,8 @@ function postMiddleware(id, dbPost) {
         topics: dbPost.content.topics,
         featured: dbPost.featured,
     };
+    console.log(ret);
+    return ret;
 }
 
 module.exports = {
