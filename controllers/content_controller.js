@@ -1,5 +1,5 @@
 const db = require("../db.js");
-const middleware = require("../middleware.js");
+const middleware = require("../middleware.js")
 
 // - Get Featured posts
 async function getFeatured() {
@@ -9,8 +9,7 @@ async function getFeatured() {
     console.log('No matching documents.');
     return;
   }
-  
-  return {results: featured.map((doc) => middleware.postMiddleware(doc.id, doc.data))};
+  return {results: featured.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};
 }
 
 // - Get ForYou posts
