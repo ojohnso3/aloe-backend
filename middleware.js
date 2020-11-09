@@ -8,7 +8,7 @@ function postMiddleware(id, dbPost) {
         status: dbPost.status,
         user: dbPost.username,
         type: dbPost.type,
-        title: dbPost.title,
+        title: dbPost.content.title,
         content: dbPost.content.body,
         image: dbPost.content.media,
         video: dbPost.content.video || 'none',
