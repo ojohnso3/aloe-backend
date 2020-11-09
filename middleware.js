@@ -1,7 +1,6 @@
 
 
 function postMiddleware(id, dbPost) {
-    console.log(dbPost);
     return {
         id,
         timestamp: dbPost.createTimestamp,
