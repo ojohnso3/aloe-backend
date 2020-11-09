@@ -1,17 +1,18 @@
 
 
 function postMiddleware(id, dbPost) {
+    console.log(dbPost);
     let ret = {
         id,
-        timestamp: dbPost.createTimestamp,
+        timestamp: dbPost.timestamp,
         status: dbPost.status,
         user: dbPost.username,
         type: dbPost.type,
         title: dbPost.type,
         content: dbPost.content.body,
-        image: dbPost.content.image,
-        video: dbPost.content.video,
-        audio: dbPost.content.audio,
+        image: dbPost.content.media,
+        video: dbPost.content.video || 'none',
+        audio: dbPost.content.audio || 'none',
         topics: dbPost.content.topics,
         featured: dbPost.featured,
     };
