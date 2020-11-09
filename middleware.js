@@ -14,7 +14,9 @@ function postMiddleware(id, dbPost) {
         video: dbPost.content.video || 'none',
         audio: dbPost.content.audio || 'none',
         topics: dbPost.content.topics,
-        featured: dbPost.featured,
+        likes: dbPost.likes,
+        liked: true, // add later
+        comments: []
     };
     console.log(ret);
     return ret;
