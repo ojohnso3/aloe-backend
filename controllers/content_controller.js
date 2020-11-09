@@ -12,7 +12,8 @@ async function getFeatured() {
   featured.forEach((doc) => {
     featuredPosts.push({id: doc.id, data: doc.data()})
   });
-  return featuredPosts;
+  const response = {results: featuredPosts}
+  return response;
 }
 
 // - Get ForYou posts
