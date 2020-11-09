@@ -15,16 +15,12 @@ async function getFeatured() {
 // - Get ForYou posts
 async function getForYouPosts() {
   const posts = db.collection('posts');
-  const forYou = await posts.where('featured', '==', false).orderBy('timestamp').limit(10).get(); // .startAt(lastPost)
+  const forYou = await posts.orderBy('timestamp').limit(10).get(); // .startAt(lastPost)
   if (forYou.empty) {
     console.log('No matching documents.');
     return;
   }
-  var forYouPosts = []
-  forYou.forEach((doc) => {
-    forYouPosts.push({id: doc.id, data: doc.data()})
-  });
-  return forYouPosts
+  return {results: forYou.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};
 }
 
 // - Get Featured posts — /content/resources

@@ -1,8 +1,8 @@
 {
   "posts": {
     "1": {
-      "timestamp": "October 10, 2020",
-      "updated-timestamp": "October 27, 2020",
+      "timestamp": "November 10, 2020",
+      "updated-timestamp": "November 27, 2020",
       "email": "sidneysux@aloe.co",
       "username": "sidthekid",
       "type": "STORY",
@@ -16,8 +16,7 @@
       "likes": 0,
       "saves": 0,
       "shares": 0,
-      "hidden": false,
-      "featured": false
+      "anonymous": false
     },
     "2": {
       "timestamp": "November 1, 2020",
