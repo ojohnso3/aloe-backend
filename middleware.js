@@ -16,6 +16,21 @@ const fakeComments = [
     }
 ]
 
+const fakeAnswers = [
+    {
+        id: '123',
+        choice: 'A',
+        content: 'you suck boy',
+        users: ['oj', 'cam'],
+    },
+    {
+        id: '999',
+        choice: 'B',
+        content: 'you suck girl',
+        users: ['oj', 'sid'],
+    },
+]
+
 
 function postMiddleware(id, dbPost, comments) {
 
@@ -57,6 +72,24 @@ function promptMiddleware(id, dbPrompt, responses) {
         // saves: dbPost.saves,
         // shares: dbPost.shares,
     };
+    return ret;
+}
+
+function surveyMiddleware(id, dbPrompt, answers) {
+
+    let ret = {
+        id,
+        timestamp: dbPrompt.timestamp,
+        question: dbPrompt.header,
+        answers: fakeAnswers, // answers
+
+        // topics: dbPrompt.topics,
+        // status: dbPost.status,
+        // user: dbPost.username,
+        // likes: dbPost.likes,
+        // saves: dbPost.saves,
+        // shares: dbPost.shares,
+    };
     console.log("re", ret)
     return ret;
 }
@@ -85,6 +118,7 @@ function userMiddleware(id, dbUser) {
 module.exports = {
     postMiddleware,
     promptMiddleware,
+    surveyMiddleware,
     userMiddleware
 };
 

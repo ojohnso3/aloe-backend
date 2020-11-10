@@ -1,6 +1,6 @@
 const db = require("../db.js");
 const surveyJSON = require('./json/surveys');
-const optionJSON = require('./json/options');
+const answerJSON = require('./json/answers');
 
 const createSurveys = async () => {
 
@@ -23,14 +23,14 @@ const createSurveys = async () => {
 
   allSurveys.forEach((doc) => {
 
-    var options = db.collection('surveys').doc(doc.id).collection('options');
+    var answers = db.collection('surveys').doc(doc.id).collection('answers');
 
-    for(const option in optionJSON) {
-      const optionObject = optionJSON[option]
-      options.doc().set(optionObject).then(() => {
-          console.log('Option Added');
+    for(const answer in answerJSON) {
+      const answerObject = answerJSON[answer]
+      answers.doc().set(answerObject).then(() => {
+          console.log('answer Added');
       }).catch(function (error) {
-          console.error('Error adding option: ', error);
+          console.error('Error adding answer: ', error);
       });
     }
   });

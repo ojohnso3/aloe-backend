@@ -1,17 +1,6 @@
 const db = require("../db.js");
 const middleware = require("../middleware.js")
 
-// - Get Featured posts
-async function getFeatured() {
-  const posts = db.collection('posts');
-  const featured = await posts.where('featured', '==', true).orderBy('timestamp').limit(3).get();
-  if (featured.empty) {
-    console.log('No matching documents.');
-    return;
-  }
-  return {results: featured.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};
-}
-
 // - Get ForYou posts
 async function getForYouPosts() {
   const posts = db.collection('posts');
@@ -25,13 +14,24 @@ async function getForYouPosts() {
 
 // - Get Prompts
 async function getPrompts() {
-  const posts = db.collection('prompts');
-  const prompts = await posts.orderBy('timestamp').limit(1).get(); // .startAt(lastPost)
+  const allPrompts = db.collection('prompts');
+  const prompts = await allPrompts.orderBy('timestamp').limit(1).get(); // .startAt(lastPost)
   if (prompts.empty) {
     console.log('No matching documents.');
     return;
   }
   return {results: prompts.docs.map((doc) => middleware.promptMiddleware(doc.id, doc.data()))};
+}
+
+// - Get Surveys
+async function getSurveys() {
+  const allSurveys = db.collection('surveys');
+  const surveys = await allSurveys.orderBy('timestamp').get(); // .startAt(lastPost)
+  if (surveys.empty) {
+    console.log('No matching documents.');
+    return;
+  }
+  return {results: surveys.docs.map((doc) => middleware.surveyMiddleware(doc.id, doc.data()))};
 }
 
 // - Get ForYou posts
@@ -102,9 +102,9 @@ async function getResources(type) {
 
 
 module.exports = {
-  getFeatured,
   getForYouPosts,
   getPrompts,
+  getSurveys,
   getResources
 }
 
@@ -120,3 +120,15 @@ module.exports = {
 // - Load all national — /national
 // - Load all university — /university
 // - Load all brown — /brown
+
+
+// - Get Featured posts
+// async function getFeatured() {
+//   const posts = db.collection('posts');
+//   const featured = await posts.where('featured', '==', true).orderBy('timestamp').limit(3).get();
+//   if (featured.empty) {
+//     console.log('No matching documents.');
+//     return;
+//   }
+//   return {results: featured.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};
+// }

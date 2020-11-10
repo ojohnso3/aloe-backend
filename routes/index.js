@@ -44,9 +44,9 @@ router.get('/profile/posts', response(profileController.loadPosts)); // make sub
 router.get('/profile/saved', response(profileController.loadSaved)); // make subcollection
 
 // Content routes
-// router.get('/content/featured', response(contentController.getFeatured)); // tested
 router.get('/content/foryou', response(contentController.getForYouPosts)); // tested
 router.get('/content/prompts', response(contentController.getPrompts)); // tested
+router.get('/content/surveys', response(contentController.getSurveys)); // tested
 
 
 
