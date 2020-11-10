@@ -4,7 +4,6 @@ function postMiddleware(id, dbPost) {
     let ret = {
         id,
         timestamp: dbPost.timestamp,
-        updatedTimestamp: dbPost.updatedTimestamp,
         status: dbPost.status,
         user: dbPost.username,
         type: dbPost.type,
@@ -16,9 +15,9 @@ function postMiddleware(id, dbPost) {
         topics: dbPost.content.topics,
         likes: dbPost.likes,
         comments: dbPost.comments,
-        saves: dbPost.saves,
-        shares: dbPost.shares,
-        anonymous: dbPost.anonymous
+        // saves: dbPost.saves,
+        // shares: dbPost.shares,
+        // anonymous: dbPost.anonymous
     };
     return ret;
 }
@@ -49,4 +48,4 @@ module.exports = {
 };
 
 
-// liked: dbPost.likes.includes(dbPost.username) ? true : false
+// liked: dbPost.likes.includes(user) ? true : false
