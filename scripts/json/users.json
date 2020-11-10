@@ -1,0 +1,11 @@
+{
+  "1": {
+      "email": "sid@sid.co",
+      "username": "sidthekid",
+      "type": "ADMIN",
+      "image": "banana",
+      "bio": "I am Sidney",
+      "consent": true,
+      "notifSettings": "FULL"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "1": {
+    "body": "This is my first comment.",
+    "likes": ["olivia", "pork", "porktricia", "ploopy"]
+
+  },
+  "2": {
+    "body": "This is my second comment.",
+    "likes": []
+  },  
+  "3": {
+    "body": "This is my third comment.",
+    "likes": ["grandpa"]
+  }
+}

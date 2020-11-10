@@ -1,0 +1,152 @@
+{
+  "1": {
+      "username": "sidthekid",
+      "type": "STORY",
+      "status": "APPROVED",
+      "content": {
+        "title": "Title 1.",
+        "body": "Body.",
+        "image": "banana",
+        "topics": ["TOPIC 1", "TOPIC 2"]
+      },
+      "likes": ["olivia", "pork", "porktricia", "pattie"],
+      "saves": 0,
+      "shares": 0,
+      "anonymous": false
+  },
+  "2": {
+    "username": "sidthekid",
+    "type": "OPINION",
+    "status": "APPROVED",
+    "content": {
+      "title": "Title 2",
+      "body": "Body.",
+      "image": "cactus",
+      "topics": ["TOPIC 1", "TOPIC 2"]
+    },
+    "likes": ["olivia", "pork", "porktricia", "pattie"],
+    "saves": 0,
+    "shares": 0,
+    "anonymous": false
+  },
+  "3": {
+    "username": "sidthekid",
+    "type": "ART",
+    "status": "APPROVED",
+    "content": {
+      "title": "Title 3",
+      "body": "Body.",
+      "image": "safesex",
+      "topics": ["TOPIC 1", "TOPIC 2"]
+    },
+    "likes": ["olivia", "pork", "porktricia", "pattie"],
+    "saves": 0,
+    "shares": 0,
+    "anonymous": false
+  },
+  "4": {
+    "username": "sidthekid",
+    "type": "OPINION",
+    "status": "APPROVED",
+    "content": {
+      "title": "Title 4",
+      "body": "Body.",
+      "image": "fingers",
+      "topics": ["TOPIC 1", "TOPIC 2"]
+    },
+    "likes": ["porky"],
+    "saves": 0,
+    "shares": 0,
+    "anonymous": false
+  },
+  "5": {
+    "username": "sidthekid",
+    "type": "STORY",
+    "status": "APPROVED",
+    "content": {
+      "title": "Title 5",
+      "body": "Body.",
+      "image": "alcohol",
+      "topics": ["TOPIC 1", "TOPIC 2"]
+    },
+    "likes": [],
+    "saves": 0,
+    "shares": 0,
+    "anonymous": false
+  },
+  "6": {
+    "username": "sidthekid",
+    "type": "OPINION",
+    "status": "APPROVED",
+    "content": {
+      "title": "Title 6",
+      "body": "Body.",
+      "image": "safesex",
+      "topics": ["TOPIC 1", "TOPIC 2"]
+    },
+    "likes": [],
+    "saves": 0,
+    "shares": 0,
+    "anonymous": false
+  },
+  "7": {
+    "username": "sidthekid",
+    "type": "DAILY",
+    "status": "APPROVED",
+    "content": {
+      "title": "Title 7",
+      "body": "Body.",
+      "image": "banana",
+      "topics": ["TOPIC 1", "TOPIC 2"]
+    },
+    "likes": [],
+    "saves": 0,
+    "shares": 0,
+    "anonymous": false
+  },
+  "8": {
+    "username": "sidthekid",
+    "type": "STORY",
+    "status": "APPROVED",
+    "content": {
+      "title": "Title 8",
+      "body": "Body.",
+      "image": "cactus",
+      "topics": ["TOPIC 1", "TOPIC 2"]
+    },
+    "likes": ["porky", "joe", "scotty", "yomama", "jesus", "dalvincooks"],
+    "saves": 0,
+    "shares": 0,
+    "anonymous": false
+  },
+  "9": {
+    "username": "sidthekid",
+    "type": "OPINION",
+    "status": "APPROVED",
+    "content": {
+      "title": "Title 9",
+      "body": "Body.",
+      "image": "alcohol",
+      "topics": ["TOPIC 1", "TOPIC 2"]
+    },
+    "likes": [],
+    "saves": 0,
+    "shares": 0,
+    "anonymous": false
+  },
+  "10": {
+    "username": "sidthekid",
+    "type": "OPINION",
+    "status": "APPROVED",
+    "content": {
+      "title": "Title 10",
+      "body": "Body.",
+      "image": "fingers",
+      "topics": ["TOPIC 1", "TOPIC 2"]
+    },
+    "likes": ["josue"],
+    "saves": 0,
+    "shares": 0,
+    "anonymous": false
+  }
+}
