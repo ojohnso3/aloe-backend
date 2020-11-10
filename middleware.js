@@ -1,11 +1,13 @@
 const fakeComments = [
     {
         id: '123',
+        username: 'sidthekid',
         body: 'you suck boy',
         likes: ['oj', 'sid']
     },
     {
         id: '0001',
+        username: 'sidthekid',
         body: 'sausage fest',
         likes: ['yomama', 'sid', 'porky', 'joebiden']
     }
@@ -27,7 +29,7 @@ function postMiddleware(id, dbPost, comments) {
         audio: dbPost.content.audio || 'none',
         topics: dbPost.content.topics,
         likes: dbPost.likes,
-        comments: fakeComments
+        comments: []
         // comments: comments,
         // saves: dbPost.saves,
         // shares: dbPost.shares,
