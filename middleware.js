@@ -1,15 +1,18 @@
+// add image later + content instead of body
 const fakeComments = [
     {
         id: '123',
-        username: 'sidthekid',
-        body: 'you suck boy',
-        likes: ['oj', 'sid']
+        user: 'sidthekid',
+        content: 'you suck boy',
+        likes: ['oj', 'sid'],
+        timestamp: 'November Yomama'
     },
     {
         id: '0001',
-        username: 'sidthekid',
-        body: 'sausage fest',
-        likes: ['yomama', 'sid', 'porky', 'joebiden']
+        user: 'sidthekid',
+        content: 'sausage fest',
+        likes: ['yomama', 'sid', 'porky', 'joebiden'],
+        timestamp: 'October Yodada'
     }
 ]
 
@@ -29,7 +32,7 @@ function postMiddleware(id, dbPost, comments) {
         audio: dbPost.content.audio || 'none',
         topics: dbPost.content.topics,
         likes: dbPost.likes,
-        comments: []
+        comments: fakeComments
         // comments: comments,
         // saves: dbPost.saves,
         // shares: dbPost.shares,
