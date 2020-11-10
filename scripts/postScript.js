@@ -25,9 +25,10 @@ const createPosts = async () => {
 
     var comments = db.collection('posts').doc(doc.id).collection('comments');
 
-    
     for(const comment in commentJSON) {
-      comments.doc().set(commentJSON[comment]).then(() => {
+      const commentObject = commentJSON[comment]
+      commentObject['timestamp'] = Date()
+      comments.doc().set(commentObject).then(() => {
           console.log('Comment Added');
       }).catch(function (error) {
           console.error('Error adding comment: ', error);

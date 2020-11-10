@@ -2,10 +2,21 @@
   "1": {
       "email": "sid@sid.co",
       "username": "sidthekid",
-      "type": "ADMIN",
+      "type": "MEMBER",
+      "verified": false,
       "image": "banana",
       "bio": "I am Sidney",
       "consent": true,
       "notifSettings": "FULL"
-  }
+  },
+  "2": {
+    "email": "aloe@aloe.co",
+    "username": "ALOE",
+    "type": "ADMIN",
+    "verified": true,
+    "image": "cactus",
+    "bio": "Aloe Official Account",
+    "consent": true,
+    "notifSettings": "FULL"
+}
 }

@@ -1,0 +1,29 @@
+{
+  "1": {
+    "username": "Aloe",
+    "status": "APPROVED",
+    "prompt": "Prompt Question 1?",
+    "image": "banana",
+    "likes": ["olivia", "pork", "porktricia", "ploopy"],
+    "saves": 0,
+    "shares": 0
+  },
+  "2": {
+    "username": "Aloe",
+    "status": "APPROVED",
+    "header": "Prompt Question 2?",
+    "image": "cactus",
+    "likes": ["porkploopy"],
+    "saves": 0,
+    "shares": 0
+  },
+  "3": {
+    "username": "Aloe",
+    "status": "APPROVED",
+    "header": "Prompt Question 3?",
+    "image": "fingers",
+    "likes": ["pork", "porktricia"],
+    "saves": 0,
+    "shares": 0
+  }
+}
