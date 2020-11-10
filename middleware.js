@@ -42,6 +42,25 @@ function postMiddleware(id, dbPost, comments) {
     return ret;
 }
 
+function promptMiddleware(id, dbPrompt, responses) {
+
+    let ret = {
+        id,
+        timestamp: dbPrompt.timestamp,
+        question: dbPrompt.prompt,
+        answers: fakeComments, // responses
+        topics: dbPrompt.topics,
+
+        // status: dbPost.status,
+        // user: dbPost.username,
+        // likes: dbPost.likes,
+        // saves: dbPost.saves,
+        // shares: dbPost.shares,
+    };
+    console.log("re", ret)
+    return ret;
+}
+
 function userMiddleware(id, dbUser) {
 
     let ret = {
@@ -65,6 +84,7 @@ function userMiddleware(id, dbUser) {
 
 module.exports = {
     postMiddleware,
+    promptMiddleware,
     userMiddleware
 };
 

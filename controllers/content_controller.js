@@ -23,6 +23,17 @@ async function getForYouPosts() {
   return {results: forYou.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};
 }
 
+// - Get Prompts
+async function getPrompts() {
+  const posts = db.collection('prompts');
+  const prompts = await posts.orderBy('timestamp').limit(1).get(); // .startAt(lastPost)
+  if (prompts.empty) {
+    console.log('No matching documents.');
+    return;
+  }
+  return {results: prompts.docs.map((doc) => middleware.promptMiddleware(doc.id, doc.data()))};
+}
+
 // - Get ForYou posts
 async function getPosts() {
   const posts = db.collection('posts');
@@ -93,6 +104,7 @@ async function getResources(type) {
 module.exports = {
   getFeatured,
   getForYouPosts,
+  getPrompts,
   getResources
 }
 
