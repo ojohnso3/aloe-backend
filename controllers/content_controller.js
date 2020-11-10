@@ -23,6 +23,61 @@ async function getForYouPosts() {
   return {results: forYou.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};
 }
 
+// - Get ForYou posts
+async function getPosts() {
+  const posts = db.collection('posts');
+  const forYou = await posts.orderBy('timestamp').limit(10).get(); // .startAt(lastPost)
+  if (forYou.empty) {
+    console.log('No matching documents.');
+    return;
+  }
+  await processPosts(forYou).then((res) => {
+    console.log('win')
+    return res;
+  }).catch(() => {
+    console.log('lose')
+    return;
+  })
+}
+
+  // var postResult = []
+  // forYou.docs.map(async (doc) => {
+  //   const comments = await getComments(doc);
+  //   postResult.push(middleware.postMiddleware(doc.id, doc.data(), comments));
+  // });
+
+async function processPosts(posts) {
+  await posts.docs.map(async (doc) => {
+    await getComments(doc).then((comments) => {
+      console.log('there')
+      middleware.postMiddleware(doc.id, doc.data(), comments)
+    }).catch((err) => {
+      console.log('err1', err)
+      return;
+    })
+  }).then((res) => {
+    console.log('yay', res)
+    return {results: res}
+  }).catch((err) => {
+    console.log('err2', err)
+    return;
+  })
+}
+
+async function getComments(doc) {
+  const commentCollection = db.collection('posts').doc(doc.id).collection('comments')
+  const allComments = await commentCollection.orderBy('timestamp').get();
+  if (allComments.empty) {
+    console.log('No matching documents.');
+    return;
+  }
+  var comments = []
+  allComments.docs.map((doc) => {
+    comments.push({id: doc.id, likes: doc.data().likes, body: doc.data().body})
+  });
+  return comments
+}
+
 // - Get Featured posts — /content/resources
 async function getResources(type) {
   const resources = db.collection('resources');
