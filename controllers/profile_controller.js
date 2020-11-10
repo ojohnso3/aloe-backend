@@ -1,4 +1,16 @@
 const db = require("../db.js");
+const middleware = require("../middleware.js")
+
+// - Get Profile
+async function getProfile(username) {  
+  const user = db.collection('users').doc(username.params.id)
+  const profile = await user.get()
+  if (profile.empty) {
+    console.log('No matching document.');
+    return;
+  }
+  return middleware.userMiddleware(profile.data());
+}
 
 // - Change profile (i.e. pic, bio, username, anonymity, consent) TBD: EMAIL??
 async function updateProfile(profileData) {
@@ -32,6 +44,7 @@ async function loadSaved(email) {
 
 
 module.exports = {
+  getProfile,
   updateProfile,
   loadPosts,
   loadSaved

@@ -39,6 +39,7 @@ router.put('/user/login', response(userController.login)); // figure out user st
 router.put('/user/delete', response(userController.deleteAccount)); // figure out user stuff
 
 // Profile routes
+router.get('/profile/:id', response(profileController.getProfile)); // tested
 router.put('/profile/update', response(profileController.updateProfile)); // tested
 router.get('/profile/posts', response(profileController.loadPosts)); // make subcollection
 router.get('/profile/saved', response(profileController.loadSaved)); // make subcollection

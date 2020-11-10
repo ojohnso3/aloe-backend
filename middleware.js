@@ -94,20 +94,22 @@ function surveyMiddleware(id, dbPrompt, answers) {
     return ret;
 }
 
-function userMiddleware(id, dbUser) {
+function userMiddleware(dbUser, created, saved) { // id?
 
     let ret = {
-        id,
+        password: "asdklfjadkls;fjkl;saj", // think about security
         email: dbUser.email,
         username: dbUser.username,
         type: dbUser.type,
-        verified: dbUser.verified,
-        image: dbUser.image || 'none',
+        profilePicture: dbUser.image || 'none',
         bio: dbUser.bio || 'none',
-        created: dbUser.created,
-        saved: dbUser.saved,
-        consent: dbUser.consent,
-        notifSettings: dbUser.notifSettings
+        consentSetting: dbUser.consent,
+        notifSettings: dbUser.notifSettings,
+        posts: [], // created,
+        saved: [], // saved,
+        anonymous: false // remove
+
+        // verified: dbUser.verified,
     };
     return ret;
 }
