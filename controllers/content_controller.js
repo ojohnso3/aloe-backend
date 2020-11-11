@@ -92,7 +92,7 @@ async function getComments(doc) {
 // - Get Resources
 async function getResources(type) {
   const allResources = db.collection('resources');
-  const resources = await allResources.where('type', '==', type.body.type).get();
+  const resources = await allResources.where('type', '==', type.params.id).get();
   if (resources.empty) {
     console.log('No matching documents.');
     return;

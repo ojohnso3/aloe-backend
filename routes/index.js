@@ -51,7 +51,7 @@ router.get('/profile/saved', response(profileController.loadSaved)); // make sub
 router.get('/content/foryou', response(contentController.getForYouPosts)); // tested
 router.get('/content/prompts', response(contentController.getPrompts)); // tested
 router.get('/content/surveys', response(contentController.getSurveys)); // tested
-router.get('/content/resources', response(contentController.getResources)); // tested
+router.get('/content/resources/:id', response(contentController.getResources)); // tested
 
 
 
