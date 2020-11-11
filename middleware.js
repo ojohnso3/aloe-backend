@@ -104,7 +104,7 @@ function resourceMiddleware(id, dbResource) {
         email: dbResource.contact.email || 'none',
         website: dbResource.contact.website || 'none',
         address: dbResource.contact.address || 'none',
-        overview: dbResource.description.overview,
+        summary: dbResource.description.overview,
         confidentiality: dbResource.description.confidentiality,
         reporting: dbResource.description.reporting,
         image: dbResource.image,
