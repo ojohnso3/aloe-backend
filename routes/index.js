@@ -27,10 +27,13 @@ router.put('/user/status', response(adminController.updateUserStatus)); // figur
 router.put('/post/like', response(postController.likePost)); // tested
 router.put('/post/save', response(postController.savePost)); // tested
 router.put('/post/share', response(postController.sharePost)); // tested
-router.put('/post/report', response(postController.reportPost)); // figure out reporting
+router.put('/post/reportp', response(postController.reportPost)); // figure out reporting
+router.put('/post/reportc', response(postController.reportComment)); // figure out reporting
+router.post('/post/comment', response(postController.createComment)); // todo
+router.post('/post/removec', response(postController.removeComment)); // todo
 router.post('/post/create', response(postController.createPost)); // tested
 router.put('/post/edit', response(postController.editPost)); // tested
-router.delete('/post/delete', response(postController.deletePost)); // figure out drafting
+router.delete('/post/removep', response(postController.removePost)); // figure out drafting
 router.post('/post/draft', response(postController.draftPost)); // figure out drafting
 
 // User routes
@@ -48,6 +51,7 @@ router.get('/profile/saved', response(profileController.loadSaved)); // make sub
 router.get('/content/foryou', response(contentController.getForYouPosts)); // tested
 router.get('/content/prompts', response(contentController.getPrompts)); // tested
 router.get('/content/surveys', response(contentController.getSurveys)); // tested
+router.get('/content/resources', response(contentController.getResources)); // tested
 
 
 

@@ -89,15 +89,15 @@ async function getComments(doc) {
   return comments
 }
 
-// - Get Featured posts — /content/resources
+// - Get Resources
 async function getResources(type) {
-  const resources = db.collection('resources');
-  const selectedResources = await resources.where('type', '==', type).orderBy('timestamp')
-    // .startAt(lastPost)
-    .limit(3)
-    .get();
-  // array loop
-  return selectedResources;
+  const allResources = db.collection('resources');
+  const resources = await allResources.where('type', '==', type.body.type).get();
+  if (resources.empty) {
+    console.log('No matching documents.');
+    return;
+  }
+  return {results: resources.docs.map((doc) => middleware.resourceMiddleware(doc.id, doc.data()))};
 }
 
 

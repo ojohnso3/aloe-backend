@@ -1,16 +1,19 @@
 const db = require("../db.js");
 
-// TODO: eventually attach userID to post reactions
-
 // - Like post
-async function likePost(postID) {
-  const post = db.collection('posts').doc(postID.body.id);
+async function likePost(likeData) {
+  const post = db.collection('posts').doc(likeData.body.id);
   const doc = await post.get();
-  const res = await post.update({likes: doc.data().likes + 1});
+  var newLikes = doc.data().likes;
+  const user = likeData.body.user;
+  if (newLikes.includes(likeData.body.user)) {
+    newLikes.splice((newLikes).indexOf(user), 1);
+  } else {
+    newLikes.push(likeData.body.user);
+  }
+  const res = await post.update({likes: newLikes});
   return res;
 }
-
-// TODO: add commenting
 
 // - Save post
 async function savePost(postID) {
@@ -37,6 +40,25 @@ async function reportPost(userID, postID) {
   return res;
 }
 
+// - Report comment
+async function reportComment(userID, postID) {
+  const post = db.collection('posts').doc(postID.body.id);
+  const res = await post.update({reported: true});
+  return res;
+}
+
+// - Create new comment
+async function createComment(commentData) {
+  const comment = db.collection('posts').doc(commendData.body.id).collection('comments').add(commentData.body);
+  return comment;
+}
+
+// - Remove comment
+async function removeComment(userID, commentID) {
+  const comment = db.collection('posts').doc(commendData.body.id).collection('comments').doc(commentID.body.id);
+  return comment;
+}
+
 // - Create new post
 async function createPost(postData) {
   // if post == draft, just change boolean to false, else:
@@ -53,8 +75,8 @@ async function editPost(postData) { // remember dot notation (content.title) for
 }
 
 // - Delete post — /post/delete
-async function deletePost(userID, postID) {
-  const post = db.collection('posts').doc(postID);
+async function removePost(userID, postID) {
+  const post = db.collection('posts').doc(postID.body.id);
   // delete
   return ;
 }
@@ -73,8 +95,11 @@ module.exports = {
   savePost,
   sharePost,
   reportPost,
+  reportComment,
+  createComment,
+  removeComment,
   createPost,
   editPost,
-  deletePost,
+  removePost,
   draftPost
 }

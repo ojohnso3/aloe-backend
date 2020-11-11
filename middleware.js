@@ -90,9 +90,30 @@ function surveyMiddleware(id, dbPrompt, answers) {
         // saves: dbPost.saves,
         // shares: dbPost.shares,
     };
-    console.log("re", ret)
     return ret;
 }
+
+function resourceMiddleware(id, dbResource) {
+
+    let ret = {
+        id,
+        type: dbResource.type,
+        name: dbResource.name,
+        phone: dbResource.contact.phone || 'none',
+        text: dbResource.contact.text || 'none',
+        email: dbResource.contact.email || 'none',
+        website: dbResource.contact.website || 'none',
+        address: dbResource.contact.address || 'none',
+        overview: dbResource.description.overview,
+        confidentiality: dbResource.description.confidentiality,
+        reporting: dbResource.description.reporting,
+        image: dbResource.image,
+
+        // timestamp: dbPrompt.timestamp,
+    };
+    return ret;
+}
+
 
 function userMiddleware(dbUser, created, saved) { // id?
 
@@ -121,6 +142,7 @@ module.exports = {
     postMiddleware,
     promptMiddleware,
     surveyMiddleware,
+    resourceMiddleware,
     userMiddleware
 };
 
