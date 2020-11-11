@@ -65,6 +65,7 @@ function promptMiddleware(id, dbPrompt, responses) {
         question: dbPrompt.prompt,
         answers: fakeComments, // responses
         topics: dbPrompt.topics,
+        image: dbPrompt.image
 
         // status: dbPost.status,
         // user: dbPost.username,
