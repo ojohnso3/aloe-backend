@@ -17,6 +17,40 @@
     "image": "banana"
   },
   "2": {
+    "type": "NATIONAL",
+    "name": "Sexual Assault Yomama",
+    "contact": {
+      "phone": "",
+      "text": "Yomama",
+      "email": "so@fat.com",
+      "website": "she",
+      "address": "ate my arm"
+    },
+    "description": {
+      "overview": "This hotline is for yomama.",
+      "confidentiality": "11/10",
+      "reporting": "0/10"
+    },
+    "image": "banana"
+  },
+  "3": {
+    "type": "NATIONAL",
+    "name": "RAINN",
+    "contact": {
+      "phone": "111-222-3333",
+      "text": "HELP at 771661",
+      "email": "rainn@rainn.co",
+      "website": "rainn.com",
+      "address": "NYC, NYC"
+    },
+    "description": {
+      "overview": "This hotline is for RAINN.",
+      "confidentiality": "1/10",
+      "reporting": "1/10"
+    },
+    "image": "cactus"
+  },
+  "4": {
     "type": "BROWN",
     "name": "Sexual Assault Prevention and Education",
     "contact": {
@@ -32,5 +66,39 @@
       "reporting": "6/10"
     },
     "image": "fingers"
+  },
+  "5": {
+    "type": "BROWN",
+    "name": "Voices of Brown",
+    "contact": {
+      "phone": "",
+      "text": "",
+      "email": "vob@gmail.edu",
+      "website": "",
+      "address": "69 Brown St, Providence"
+    },
+    "description": {
+      "overview": "This resource is for Carter, and Carter only.",
+      "confidentiality": "0/10",
+      "reporting": "0/10"
+    },
+    "image": "banana"
+  },
+  "6": {
+    "type": "BROWN",
+    "name": "Safe Sex Bears",
+    "contact": {
+      "phone": "999-999-9999",
+      "text": "GRR to 69696",
+      "email": "ssb@brown.edu",
+      "website": "",
+      "address": "257 Thayer St, Providence"
+    },
+    "description": {
+      "overview": "This resource is for Bears. Watch out.",
+      "confidentiality": "3/10",
+      "reporting": "2/10"
+    },
+    "image": "safesex"
   }
 }

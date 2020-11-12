@@ -1,4 +1,5 @@
 const db = require("../db.js");
+const middleware = require("../middleware.js")
 
 // - Like post
 async function likePost(likeData) {
@@ -11,8 +12,10 @@ async function likePost(likeData) {
   } else {
     newLikes.push(likeData.body.user);
   }
-  const res = await post.update({likes: newLikes});
-  return res;
+  await post.update({likes: newLikes}); // const res = return res
+  const updatedPost = await post.get()
+  return middleware.postMiddleware(updatedPost.id, updatedPost.data());
+  // also add to users liked subcollection (cloud function?)
 }
 
 // - Save post
