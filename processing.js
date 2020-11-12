@@ -2,6 +2,8 @@
 
 function postProcessing(postData) {
 
+  console.log('pod', postData)
+
   let ret = {
       username: postData.user,
       timestamp: postData.timestamp,
