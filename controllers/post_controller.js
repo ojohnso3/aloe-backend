@@ -1,9 +1,14 @@
 const db = require("../db.js");
 const middleware = require("../middleware.js")
+const processing = require("../processing.js")
 
-
+// also add to users liked subcollection (cloud function?)
+// original version stored (what happens with changes?)
 async function addToSubCollection(user, post, subcollection) {
-  // also add to users liked subcollection (cloud function?)
+  // console.log('sub user', user)
+  // console.log('sub post', post)
+  // console.log('sub collection', subcollection)
+
   const fullDoc = await db.collection('users').doc(user).collection(subcollection).doc(post.id)
   const docDetails = await fullDoc.get()
 
@@ -34,7 +39,7 @@ async function likePost(likeData) {
   await post.update({likes: newLikes}); // const res = return res
   const updatedPost = await post.get()
 
-  addToSubCollection(user, updatedPost, 'liked')
+  addToSubCollection(user, updatedPost, 'liked') // original post stored
 
   return middleware.postMiddleware(updatedPost.id, updatedPost.data());
 }
@@ -79,16 +84,29 @@ async function removeComment(userID, commentID) {
 // Create new post
 async function createPost(postData) {
   // check if right values are passed in
+  // console.log('postdata', postData.body)
 
-  const post = await db.collection('test').add(postData.body);
+  const processedPost = processing.postProcessing(postData.body)
+
+  // console.log('processed', processedPost)
+
+  const post = await db.collection('test').add(processedPost);
+
+  // console.log('post', post)
   
-  const createdPost = await db.collection('test').doc(post.id).get();
+  // adds new comment collection
+  // const newPost = db.collection('test').doc(post.id);
+  // const deleteDoc = await newPost.collection('comments')
+  // .add({role: 'collection-starter'})
+  // await deleteDoc.delete();
 
-  addToSubCollection(createdPost.data().user, createdPost, 'created')
+  const createdPost = await db.collection('test').doc(post.id).get()
+  // console.log('creat', createdPost.data())
 
-  // return middleware.postMiddleware(createdPost.id, createdPost.data());
+  // how are comments updated from sub collection -- figure this out!!
+  addToSubCollection(createdPost.data().username, createdPost, 'created') // original post stored
 
-  return createdPost;
+  return middleware.postMiddleware(createdPost.id, createdPost.data());
 }
 
 // Edit post

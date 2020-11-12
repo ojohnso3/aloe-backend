@@ -16,17 +16,34 @@ const fakeComments = [
     }
 ]
 
+const fakeResponses = [
+    {
+        id: '123',
+        user: 'sidthekid',
+        content: 'I think Euphoria romanticized unhealthy relationships.',
+        likes: ['oj', 'sid'],
+        timestamp: 'November Yomama'
+    },
+    {
+        id: '0001',
+        user: 'sidthekid',
+        content: 'Episode 5 really triggered me.',
+        likes: ['yomama', 'sid', 'porky', 'joebiden'],
+        timestamp: 'October Yodada'
+    }
+]
+
 const fakeAnswers = [
     {
         id: '123',
         choice: 'A',
-        content: 'I think Euphoria romanticized unhealthy relationships.',
+    content: 'Yes!',
         users: ['oj', 'cam'],
     },
     {
         id: '999',
         choice: 'B',
-        content: 'Episode 5 really triggered me.',
+        content: 'No.',
         users: ['oj', 'sid'],
     },
 ]
@@ -63,7 +80,7 @@ function promptMiddleware(id, dbPrompt, responses) {
         id,
         timestamp: dbPrompt.timestamp,
         question: dbPrompt.prompt,
-        answers: fakeComments, // responses
+        answers: fakeResponses, // responses
         topics: dbPrompt.topics,
         image: dbPrompt.image
 
