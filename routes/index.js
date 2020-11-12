@@ -25,7 +25,6 @@ router.put('/user/status', response(adminController.updateUserStatus)); // figur
 
 // Post routes
 router.put('/post/like', response(postController.likePost)); // tested
-router.put('/post/save', response(postController.savePost)); // tested
 router.put('/post/share', response(postController.sharePost)); // tested
 router.put('/post/reportp', response(postController.reportPost)); // figure out reporting
 router.put('/post/reportc', response(postController.reportComment)); // figure out reporting
@@ -58,6 +57,8 @@ router.get('/content/resources/:id', response(contentController.getResources)); 
 module.exports = router;
 
 
+
+// router.put('/post/save', response(postController.savePost)); // tested
 
 // router.get('/admin/post/:id', response(adminController.viewPost));
 

@@ -1,12 +1,14 @@
 const db = require("../db.js");
 const userJSON = require('./json/users');
-const previewJSON = require('./json/postPreviews');
+// const previewJSON = require('./json/postPreviews');
+const postJSON = require('./json/singlePost');
 
 const createUsers = async () => {
 
   for(const user in userJSON) {
     const userObject = userJSON[user]
-    await db.collection('users').doc()
+    console.log('user', userObject.username)
+    await db.collection('users').doc(userObject.username)
         .set(userObject)
         .then(() => {
            console.log('successfully inserted the document');
@@ -22,18 +24,17 @@ const createUsers = async () => {
   allUsers.forEach((doc) => {
 
     var created = db.collection('users').doc(doc.id).collection('created');
-    var saved = db.collection('users').doc(doc.id).collection('saved');
+    var liked = db.collection('users').doc(doc.id).collection('liked');
 
-    previewJSON['created']['timestamp'] = Date()
-    previewJSON['saved']['timestamp'] = Date()
+    postJSON['timestamp'] = Date()
 
-    created.doc().set(previewJSON['created']).then(() => {
+    created.doc().set(postJSON).then(() => {
         console.log('Post Added');
     }).catch(function (error) {
         console.error('Error adding Post: ', error);
     });
 
-    saved.doc().set(previewJSON['saved']).then(() => {
+    liked.doc().set(postJSON).then(() => {
       console.log('Post Added');
     }).catch(function (error) {
       console.error('Error adding Post: ', error);

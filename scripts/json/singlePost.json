@@ -1,0 +1,17 @@
+{
+  "1": {
+      "username": "aloe",
+      "type": "STORY",
+      "status": "APPROVED",
+      "content": {
+        "title": "Single Post",
+        "body": "Body o mama",
+        "image": "cactus",
+        "topics": ["TOPIC 1", "TOPIC 2"]
+      },
+      "likes": ["olivia", "pork", "porktricia", "pattie"],
+      "saves": 0,
+      "shares": 0,
+      "anonymous": false
+  }
+}

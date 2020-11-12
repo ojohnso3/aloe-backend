@@ -1,38 +1,49 @@
 const db = require("../db.js");
 const middleware = require("../middleware.js")
 
-// - Like post
+
+async function addToSubCollection(user, post, subcollection) {
+  // also add to users liked subcollection (cloud function?)
+  const fullDoc = await db.collection('users').doc(user).collection(subcollection).doc(post.id)
+  const docDetails = await fullDoc.get()
+
+  if (docDetails.data()) {
+    console.log('Removing from subcollection');
+    fullDoc.delete();
+  } else{
+    console.log('Adding to subcolleciton');
+    const postData = post.data();
+    postData['id'] = post.id;
+    fullDoc.set(postData);
+  }
+}
+
+// Like post
 async function likePost(likeData) {
-  const post = db.collection('posts').doc(likeData.body.id);
+  const postID = likeData.body.id;
+  const user = likeData.body.user;
+
+  const post = db.collection('posts').doc(postID);
   const doc = await post.get();
   var newLikes = doc.data().likes;
-  const user = likeData.body.user;
-  if (newLikes.includes(likeData.body.user)) {
+  if (newLikes.includes(user)) {
     newLikes.splice((newLikes).indexOf(user), 1);
   } else {
-    newLikes.push(likeData.body.user);
+    newLikes.push(user);
   }
   await post.update({likes: newLikes}); // const res = return res
   const updatedPost = await post.get()
+
+  addToSubCollection(user, updatedPost, 'liked')
+
   return middleware.postMiddleware(updatedPost.id, updatedPost.data());
-  // also add to users liked subcollection (cloud function?)
 }
 
-// - Save post
-async function savePost(postID) {
-  const post = db.collection('posts').doc(postID.body.id);
-  const doc = await post.get();
-  const res = await post.update({saves: doc.data().saves + 1});
-  // also add to users saved subcollection (cloud function?)
-  return res;
-}
-
-// - Share post
+// Share post
 async function sharePost(postID) {
   const post = db.collection('posts').doc(postID.body.id);
   const doc = await post.get();
   const res = await post.update({shares: doc.data().shares + 1});
-  // trigger share on frontend ?
   return res;
 }
 
@@ -62,15 +73,23 @@ async function removeComment(userID, commentID) {
   return comment;
 }
 
-// - Create new post
+// if post == draft, just change boolean to false, else:
+// NOTE: be careful of returning sensitive data (private key)
+
+// Create new post
 async function createPost(postData) {
-  // if post == draft, just change boolean to false, else:
-  const post = db.collection('posts').add(postData.body);
-  // also add to users posts subcollection
-  return post; // NOTE: be careful of returning sensitive data (private key)
+  // check if right values are passed in
+  
+  const post = await db.collection('test').add(postData.body);
+  
+  const createdPost = await db.collection('test').doc(post.id).get();
+
+  addToSubCollection(createdPost.data().user, createdPost, 'created')
+
+  return createdPost;
 }
 
-// - Edit post
+// Edit post
 async function editPost(postData) { // remember dot notation (content.title) for nested fields
   const post = db.collection('posts').doc(postData.body.id);
   const res = await post.update(postData.body);
@@ -95,7 +114,6 @@ async function draftPost(userID, postData) {
 
 module.exports = {
   likePost,
-  savePost,
   sharePost,
   reportPost,
   reportComment,
@@ -106,3 +124,13 @@ module.exports = {
   removePost,
   draftPost
 }
+
+
+// - Save post
+// async function savePost(postID) {
+//   const post = db.collection('posts').doc(postID.body.id);
+//   const doc = await post.get();
+//   const res = await post.update({saves: doc.data().saves + 1});
+//   // also add to users saved subcollection (cloud function?)
+//   return res;
+// }
