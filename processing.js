@@ -1,11 +1,13 @@
-
+function topicProcessing(topicString) {
+  return topicString.split(" "); 
+}
 
 function postProcessing(post) {
 
   console.log('pod', post)
   const postData = JSON.parse(JSON.stringify(post)); 
-  console.log('pod2', postData)
-  // req.body = [Object: null prototype] { title: 'product' }
+  console.log('pod2', postData) // req.body = [Object: null prototype] { title: 'product' }
+
 
   let ret = {
       username: postData.user,
@@ -19,7 +21,7 @@ function postProcessing(post) {
         image: postData.image || '',
         video: postData.video || '',
         audio: postData.audio || '',
-        topics: postData.topics,
+        topics: topicProcessing(postData.topics),
       },
       likes: [],
       // comments: []
