@@ -3,6 +3,9 @@ const middleware = require("../middleware.js")
 
 // - Get Profile
 async function getProfile(username) {  
+  console.log('u', username)
+  console.log('us', username.params)
+  
   const user = db.collection('users').doc(username.params.id)
   const profile = await user.get()
   if (profile.empty) {
