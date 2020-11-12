@@ -92,7 +92,7 @@ async function createPost(postData) {
 
   const post = await db.collection('test').add(processedPost);
 
-  // console.log('post', post)
+  console.log('post', post)
   
   // adds new comment collection
   // const newPost = db.collection('test').doc(post.id);
@@ -101,7 +101,7 @@ async function createPost(postData) {
   // await deleteDoc.delete();
 
   const createdPost = await db.collection('test').doc(post.id).get()
-  // console.log('creat', createdPost.data())
+  console.log('creat', createdPost.data())
 
   // how are comments updated from sub collection -- figure this out!!
   addToSubCollection(createdPost.data().username, createdPost, 'created') // original post stored

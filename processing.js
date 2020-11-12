@@ -25,6 +25,7 @@ function postProcessing(post) {
       // comments: []
       // anonymous: dbPost.anonymous
   };
+  console.log('ret', ret)
   return ret;
 }
 
