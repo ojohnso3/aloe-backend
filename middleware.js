@@ -150,7 +150,6 @@ function userMiddleware(dbUser, created, saved) { // id?
 
         // verified: dbUser.verified,
     };
-    console.log('ret', ret)
     return ret;
 }
 
