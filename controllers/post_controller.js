@@ -61,16 +61,16 @@ async function reportComment(userID, postID) {
   return res;
 }
 
-// - Create new comment
+// Create new comment
 async function createComment(commentData) {
-  const comment = db.collection('posts').doc(commendData.body.id).collection('comments').add(commentData.body);
-  return comment;
+  const comment = db.collection('posts').doc(commentData.body.postID).collection('comments').add(commentData.body.comment);
+  const commentDoc = await comment.get()
+  return commentDoc;
 }
 
 // - Remove comment
 async function removeComment(userID, commentID) {
-  const comment = db.collection('posts').doc(commendData.body.id).collection('comments').doc(commentID.body.id);
-  return comment;
+  // delete comment
 }
 
 // if post == draft, just change boolean to false, else:
@@ -79,12 +79,14 @@ async function removeComment(userID, commentID) {
 // Create new post
 async function createPost(postData) {
   // check if right values are passed in
-  
+
   const post = await db.collection('test').add(postData.body);
   
   const createdPost = await db.collection('test').doc(post.id).get();
 
   addToSubCollection(createdPost.data().user, createdPost, 'created')
+
+  // return middleware.postMiddleware(createdPost.id, createdPost.data());
 
   return createdPost;
 }

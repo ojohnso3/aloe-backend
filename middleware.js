@@ -3,14 +3,14 @@ const fakeComments = [
     {
         id: '123',
         user: 'sidthekid',
-        content: 'you suck boy',
+        content: 'You are so strong <3',
         likes: ['oj', 'sid'],
         timestamp: 'November Yomama'
     },
     {
         id: '0001',
         user: 'sidthekid',
-        content: 'sausage fest',
+        content: 'This is amazing!',
         likes: ['yomama', 'sid', 'porky', 'joebiden'],
         timestamp: 'October Yodada'
     }
@@ -20,13 +20,13 @@ const fakeAnswers = [
     {
         id: '123',
         choice: 'A',
-        content: 'you suck boy',
+        content: 'I think Euphoria romanticized unhealthy relationships.',
         users: ['oj', 'cam'],
     },
     {
         id: '999',
         choice: 'B',
-        content: 'you suck girl',
+        content: 'Episode 5 really triggered me.',
         users: ['oj', 'sid'],
     },
 ]

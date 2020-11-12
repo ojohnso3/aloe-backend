@@ -13,6 +13,7 @@ async function getProfile(username) {
 }
 
 // - Change profile (i.e. pic, bio, username, anonymity, consent) TBD: EMAIL??
+// NOTE: need to change in every other location too
 async function updateProfile(profileData) {
   const user = db.collection('users').doc(profileData.body.email);
   const res = await user.update(profileData.body);
