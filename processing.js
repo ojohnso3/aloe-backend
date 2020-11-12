@@ -1,8 +1,11 @@
 
 
-function postProcessing(postData) {
+function postProcessing(post) {
 
-  console.log('pod', postData)
+  console.log('pod', post)
+  const postData = JSON.parse(JSON.stringify(post)); 
+  console.log('pod2', postData)
+  // req.body = [Object: null prototype] { title: 'product' }
 
   let ret = {
       username: postData.user,
