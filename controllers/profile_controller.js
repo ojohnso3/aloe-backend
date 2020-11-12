@@ -3,15 +3,18 @@ const middleware = require("../middleware.js")
 
 // - Get Profile
 async function getProfile(username) {  
-  console.log('u', username)
-  console.log('us', username.params)
-  
   const user = db.collection('users').doc(username.params.id)
+  console.log('coconut', user)
+
   const profile = await user.get()
+  console.log('orange', profile)
+
   if (profile.empty) {
     console.log('No matching document.');
     return;
   }
+  console.log('peel', profile.data())
+
   return middleware.userMiddleware(profile.data());
 }
 
