@@ -66,11 +66,13 @@ async function reportComment(userID, postID) {
   return res;
 }
 
-// Create new comment
+// Create new comment (should update comments in post in created/liked)
 async function createComment(commentData) {
-  const comment = db.collection('posts').doc(commentData.body.postID).collection('comments').add(commentData.body.comment);
-  const commentDoc = await comment.get()
-  return commentDoc;
+  db.collection('posts').doc(commentData.body.postID).collection('comments').add(commentData.body.comment);
+  // const commentDoc = await comment.get()
+  // return commentDoc;
+  const updatedPost = await db.collection('posts').doc(commentData.body.postID).get();
+  return middleware.postMiddleware(updatedPost.id, updatedPost.data());
 }
 
 // - Remove comment
@@ -91,8 +93,6 @@ async function createPost(postData) {
   // console.log('processed', processedPost)
 
   const post = await db.collection('test').add(processedPost);
-
-  console.log('post', post)
   
   // adds new comment collection
   // const newPost = db.collection('test').doc(post.id);
@@ -101,7 +101,6 @@ async function createPost(postData) {
   // await deleteDoc.delete();
 
   const createdPost = await db.collection('test').doc(post.id).get()
-  console.log('creat', createdPost.data())
 
   // how are comments updated from sub collection -- figure this out!!
   addToSubCollection(createdPost.data().username, createdPost, 'created') // original post stored

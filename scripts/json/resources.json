@@ -18,16 +18,16 @@
   },
   "2": {
     "type": "NATIONAL",
-    "name": "Sexual Assault Yomama",
+    "name": "Sexual Assault Counseling",
     "contact": {
-      "phone": "",
-      "text": "Yomama",
-      "email": "so@fat.com",
-      "website": "she",
-      "address": "ate my arm"
+      "phone": "545-266-2777",
+      "text": "",
+      "email": "counsel@national.com",
+      "website": "sac.com",
+      "address": ""
     },
     "description": {
-      "overview": "This hotline is for yomama.",
+      "overview": "This hotline is for counseling.",
       "confidentiality": "11/10",
       "reporting": "0/10"
     },
@@ -89,13 +89,13 @@
     "name": "Safe Sex Bears",
     "contact": {
       "phone": "999-999-9999",
-      "text": "GRR to 69696",
+      "text": "CUB to 10101",
       "email": "ssb@brown.edu",
       "website": "",
       "address": "257 Thayer St, Providence"
     },
     "description": {
-      "overview": "This resource is for Bears. Watch out.",
+      "overview": "This resource is for Bears. Stay safe.",
       "confidentiality": "3/10",
       "reporting": "2/10"
     },

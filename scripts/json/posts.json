@@ -1,12 +1,14 @@
 {
   "1": {
       "username": "sidthekid",
-      "type": "STORY",
+      "type": "OPINION",
       "status": "APPROVED",
       "content": {
-        "title": "Title 1.",
-        "body": "Body.",
+        "title": "Short Stories",
+        "body": "If you are on the lookout for great storytelling but don’t want to commit to a full-length novel, then short story collections are the answer. Whether it’s just before bed, during your commute, or waiting to see your doctor, small chunks of time are perfect for reading short stories.",
         "image": "banana",
+        "audio": "",
+        "video": "",
         "topics": ["TOPIC 1", "TOPIC 2"]
       },
       "likes": ["olivia", "pork", "porktricia", "pattie"],
@@ -16,12 +18,14 @@
   },
   "2": {
     "username": "sidthekid",
-    "type": "OPINION",
+    "type": "STORY",
     "status": "APPROVED",
     "content": {
-      "title": "Title 2",
-      "body": "Body.",
+      "title": "Cool Cucumber",
+      "body": "It's the new cool beans, but it sounds way better. Why would beans be cool? Well, cucumbers would be cool because they're in the fridge. Of course.",
       "image": "cactus",
+      "audio": "",
+      "video": "",
       "topics": ["TOPIC 1", "TOPIC 2"]
     },
     "likes": ["olivia", "pork", "porktricia", "pattie"],
@@ -31,12 +35,14 @@
   },
   "3": {
     "username": "sidthekid",
-    "type": "ART",
+    "type": "STORY",
     "status": "APPROVED",
     "content": {
-      "title": "Title 3",
-      "body": "Body.",
-      "image": "safesex",
+      "title": "Let's do a Handstand",
+      "body": "I’m gonna go ahead and start with the obvious: handstands are cool. If you didn’t agree, I’m pretty sure you wouldn’t have clicked on whatever link brought you here. So I’m not going to waste any words trying to convince you that handstands are worth your time. This article is about how to learn them, so let’s get started.",
+      "image": "fingers",
+      "audio": "",
+      "video": "",
       "topics": ["TOPIC 1", "TOPIC 2"]
     },
     "likes": ["olivia", "pork", "porktricia", "pattie"],
@@ -46,12 +52,14 @@
   },
   "4": {
     "username": "sidthekid",
-    "type": "OPINION",
+    "type": "STORY",
     "status": "APPROVED",
     "content": {
-      "title": "Title 4",
-      "body": "Body.",
-      "image": "fingers",
+      "title": "Some LGBTQ-friendly content",
+      "body": "Nayeon is gay Jeongyeon is gay Momo is still dahyun's Sana is gay Jihyo the straight Mina is gay Dahyun is gay Chaeyoung is gay Tzuyu is gay.",
+      "image": "safesex",
+      "audio": "",
+      "video": "",
       "topics": ["TOPIC 1", "TOPIC 2"]
     },
     "likes": ["porky"],
@@ -61,12 +69,14 @@
   },
   "5": {
     "username": "sidthekid",
-    "type": "STORY",
+    "type": "OPINION",
     "status": "APPROVED",
     "content": {
-      "title": "Title 5",
-      "body": "Body.",
+      "title": "Now you're a bartender",
+      "body": " How can you resist the opportunity to craft a tasty cocktail? Learning how to mix great drinks is fun and it is not difficult. If you're looking to dive deeper into the world of the bar—whether at home or as a pro—then a crash course in bartending is just what you need. With a few basic tools and a handful of tips and tricks, your next drinks can be better than any you've made before.",
       "image": "alcohol",
+      "audio": "",
+      "video": "",
       "topics": ["TOPIC 1", "TOPIC 2"]
     },
     "likes": [],
@@ -76,12 +86,14 @@
   },
   "6": {
     "username": "sidthekid",
-    "type": "OPINION",
+    "type": "ART",
     "status": "APPROVED",
     "content": {
-      "title": "Title 6",
-      "body": "Body.",
-      "image": "safesex",
+      "title": "My Favorite Fruit",
+      "body": "Inspired by the contents of my kitchen!",
+      "image": "banana",
+      "audio": "",
+      "video": "",
       "topics": ["TOPIC 1", "TOPIC 2"]
     },
     "likes": [],
@@ -94,9 +106,11 @@
     "type": "DAILY",
     "status": "APPROVED",
     "content": {
-      "title": "Title 7",
-      "body": "Body.",
-      "image": "banana",
+      "title": "[No title for daily thoughts]",
+      "body": "I wonder why all women aren't gay. Like truly how can you not be attracted to women?",
+      "image": "cactus",
+      "audio": "",
+      "video": "",
       "topics": ["TOPIC 1", "TOPIC 2"]
     },
     "likes": [],
@@ -106,12 +120,14 @@
   },
   "8": {
     "username": "sidthekid",
-    "type": "STORY",
+    "type": "ART",
     "status": "APPROVED",
     "content": {
-      "title": "Title 8",
-      "body": "Body.",
+      "title": "Aloe",
+      "body": "This is actually a cactus, but let's pretend.",
       "image": "cactus",
+      "audio": "",
+      "video": "",
       "topics": ["TOPIC 1", "TOPIC 2"]
     },
     "likes": ["porky", "joe", "scotty", "yomama", "jesus", "dalvincooks"],
@@ -121,12 +137,14 @@
   },
   "9": {
     "username": "sidthekid",
-    "type": "OPINION",
+    "type": "DAILY",
     "status": "APPROVED",
     "content": {
-      "title": "Title 9",
-      "body": "Body.",
+      "title": "[No title for daily thoughts]",
+      "body": "Rum and pineapple seems like a wonderful combo. Lmk what you think!",
       "image": "alcohol",
+      "audio": "",
+      "video": "",
       "topics": ["TOPIC 1", "TOPIC 2"]
     },
     "likes": [],
@@ -136,12 +154,14 @@
   },
   "10": {
     "username": "sidthekid",
-    "type": "OPINION",
+    "type": "ART",
     "status": "APPROVED",
     "content": {
-      "title": "Title 10",
-      "body": "Body.",
+      "title": "Hand",
+      "body": "My friend's hand. Tattoos right.",
       "image": "fingers",
+      "audio": "",
+      "video": "",
       "topics": ["TOPIC 1", "TOPIC 2"]
     },
     "likes": ["josue"],
