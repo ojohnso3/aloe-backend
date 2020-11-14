@@ -7,6 +7,7 @@ var postController = require('../controllers/post_controller.js');
 var userController = require('../controllers/user_controller.js');
 var profileController = require('../controllers/profile_controller.js');
 var contentController = require('../controllers/content_controller.js');
+var reportController = require('../controllers/report_controller.js');
 
 function response(handler) {
   return async (req, res, next) => { 
@@ -18,22 +19,28 @@ function response(handler) {
 }
 
 // Admin routes
-router.get('/admin/posts', response(adminController.getPosts)); // tested
-router.put('/post/status', response(adminController.updatePostStatus)); // tested
-router.get('/admin/reported', response(adminController.getReported)); // figure out reporting
-router.put('/user/status', response(adminController.updateUserStatus)); // figure out reporting
+router.get('/admin/posts', response(adminController.getPosts)); // connected
+router.put('/post/status', response(adminController.updatePostStatus)); // connected
+// TODO: Figure out reporting
+router.get('/admin/reported/:id', response(adminController.getReported));
+router.get('/admin/banned', response(adminController.getBannedUsers));
+router.put('/admin/postreport', response(adminController.reportPost));
+router.put('/admin/commentreport', response(adminController.reportComment));
+router.put('/admin/userreport', response(adminController.reportUser));
+
+// Reporting routes
+router.post('/report', response(reportController.report)); 
 
 // Post routes
-router.put('/post/like', response(postController.likePost)); // tested
+router.put('/post/like', response(postController.likePost)); // connected
 router.put('/post/share', response(postController.sharePost)); // tested
-router.put('/post/reportp', response(postController.reportPost)); // figure out reporting
-router.put('/post/reportc', response(postController.reportComment)); // figure out reporting
 router.post('/post/comment', response(postController.createComment)); // todo
 router.post('/post/removec', response(postController.removeComment)); // todo
-router.post('/post/create', response(postController.createPost)); // tested
+router.post('/post/create', response(postController.createPost)); // connected
 router.put('/post/edit', response(postController.editPost)); // tested
-router.delete('/post/removep', response(postController.removePost)); // figure out drafting
-router.post('/post/draft', response(postController.draftPost)); // figure out drafting
+// TODO: Figure out drafting
+router.delete('/post/removep', response(postController.removePost));
+router.post('/post/draft', response(postController.draftPost)); 
 
 // User routes
 router.post('/user/create', response(userController.createAccount)); // figure out user stuff
@@ -41,16 +48,16 @@ router.put('/user/login', response(userController.login)); // figure out user st
 router.put('/user/delete', response(userController.deleteAccount)); // figure out user stuff
 
 // Profile routes
-router.get('/profile/:id', response(profileController.getProfile)); // tested
+router.get('/profile/:id', response(profileController.getProfile)); // connected
 router.put('/profile/update', response(profileController.updateProfile)); // tested
-router.get('/profile/posts', response(profileController.loadPosts)); // make subcollection
-router.get('/profile/saved', response(profileController.loadSaved)); // make subcollection
+router.get('/profile/posts', response(profileController.loadPosts)); // tbd
+router.get('/profile/saved', response(profileController.loadSaved)); // tbd
 
 // Content routes
-router.get('/content/foryou', response(contentController.getForYouPosts)); // tested
-router.get('/content/prompts', response(contentController.getPrompts)); // tested
-router.get('/content/surveys', response(contentController.getSurveys)); // tested
-router.get('/content/resources/:id', response(contentController.getResources)); // tested
+router.get('/content/foryou', response(contentController.getForYouPosts)); // connected
+router.get('/content/prompts', response(contentController.getPrompts)); // connected
+router.get('/content/surveys', response(contentController.getSurveys)); // connected
+router.get('/content/resources/:id', response(contentController.getResources)); // connected
 
 
 

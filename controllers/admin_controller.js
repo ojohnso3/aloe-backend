@@ -17,43 +17,132 @@ async function getPosts(status) {
 
 // Change status of post 
 async function updatePostStatus(postData) {
-  const post = db.collection('posts').doc(postData.body.id)
-  const res = await post.update({status: postData.body.status});
+  const postID = postData.body.id;
+  const newStatus = postData.body.status;
+  const reason = postData.body.reason;
+
+  const post = db.collection('posts').doc(postID)
+  const res = await post.update({status: newStatus});
+  // send reason
+  console.log('reason: ', reason)
   return res;
 }
 
-
-// TODO: // Figure out how to set up reporting/banning
-
 // - Load reported posts
-async function getReported() {
-  const posts = db.collection('posts');
-  const selected = await posts.where('reported', '==', true).orderBy('timestamp', 'desc').get();
-  if (selected.empty) {
-    console.log('No matching documents.');
-    return;
+async function getReported(reportType) {
+  const type = reportType.params.id; // POST, COMMENT, USER
+  console.log('type', type);
+
+  switch(type) {
+    case 'POST':
+      const posts = db.collection('posts');
+      const reportedPosts = await posts.where('reported', '==', true).get();
+      if (reportedPosts.empty) {
+        console.log('No matching documents.');
+        return;
+      }
+      var reported = []
+      // array of {post data + array of reports on post}
+      return reportedPosts.docs.map(async (doc) => {
+        const reportDocs = await db.collection('posts').doc(doc.id).collection('reports').get();
+        var allReports = []
+        reported.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
+      });
+    case 'COMMENT':
+      // complicated
+      break;
+    case 'USER':
+      const users = db.collection('users');
+      const reportedUsers = await users.where('reported', '==', true).get();
+      if (reportedUsers.empty) {
+        console.log('No matching documents.');
+        return;
+      }
+      var reported = []
+      // array of {user data + array of reports on user}
+      return reportedUsers.docs.map(async (doc) => {
+        const reportDocs = await db.collection('users').doc(doc.id).collection('reports').get();
+        var allReports = []
+        reported.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
+      });
+    default:
+      // error -- return failure if error
+      console.log('ERROR: Reporting type ' + type + ' is invalid.')
+      break;
   }
-  var selectedPosts = []
-  selected.forEach((doc) => {
-    console.log(doc.id, '=>', doc.data());
-    selectedPosts.push(doc.data())
-  });
-  return selectedPosts;
+  return; // what??
 }
 
-// Ban user / Reactivate user
-async function updateUserStatus(userID, ban) {
+// Report post
+async function reportPost(postID, reason) {
+  const updatePost = {
+    id: postID,
+    newStatus: 'REJECTED',
+    reason: 'REPORT: ' + reason
+  }
+  updatePostStatus(updatePost)
+  return res;
+}
+
+// Report comment
+async function reportComment(userID, ban) {
   const user = db.collection('users').doc(userID)
   const res = await user.update({banned: ban});
   return res;
 }
 
+// Report User
+async function reportUser(reportData) {
+  const username = reportData.body.username;
+  const reason = reportData.body.reason;
+  const duration = reportData.body.duration;
+  const timestamp = reportData.body.timestamp;
+
+  const user = db.collection('users').doc(username)
+  const res = await user.update({ banned: { duration, timestamp } }); // how to self-check??
+  // send reason
+  console.log('reason: ', reason)
+  return res;
+}
+
+// Get all banned users
+async function getBannedUsers() {
+  const users = db.collection('users');
+  const bannedUsers = await users.where('banned', '!=', null).get();
+  var banned = [];
+  // TODO: make below into helper function
+  return bannedUsers.docs.map(async (doc) => {
+    const reportDocs = await db.collection('users').doc(doc.id).collection('reports').get();
+    var allReports = []
+    banned.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
+  });
+}
+
+// Unban a user
+async function unbanUser(username) {
+  const user = await db.collection('users').doc(username).get();
+  const res = await user.update({ banned: null });
+  // save history somehow
+  return res;
+}
+
+
+
+
 module.exports = {
   getPosts,
-  getReported,
   updatePostStatus,
-  updateUserStatus,
+  getReported,
+  reportPost,
+  reportComment,
+  reportUser,
+  getBannedUsers,
+  unbanUser,
 }
+
+
+
+
 
 
 
