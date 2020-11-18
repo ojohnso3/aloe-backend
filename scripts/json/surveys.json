@@ -2,27 +2,8 @@
   "1": {
     "username": "Aloe",
     "status": "APPROVED",
-    "choice": "A",
-    "header": "Survey Question 1?",
+    "question": "Survey Question 1?",
     "image": "banana",
-    "saves": 0,
-    "shares": 0
-  },
-  "2": {
-    "username": "Aloe",
-    "status": "APPROVED",
-    "choice": "B",
-    "header": "Survey Question 2?",
-    "image": "cactus",
-    "saves": 0,
-    "shares": 0
-  },
-  "3": {
-    "username": "Aloe",
-    "status": "APPROVED",
-    "choice": "C",
-    "header": "Survey Question 3?",
-    "image": "fingers",
     "saves": 0,
     "shares": 0
   }

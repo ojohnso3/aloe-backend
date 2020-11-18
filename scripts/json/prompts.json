@@ -8,25 +8,5 @@
     "likes": ["olivia", "pork", "porktricia", "ploopy"],
     "saves": 0,
     "shares": 0
-  },
-  "2": {
-    "username": "Aloe",
-    "status": "APPROVED",
-    "prompt": "Prompt Question 2?",
-    "image": "cactus",
-    "topics": ["TOPIC 1", "TOPIC 2"],
-    "likes": ["porkploopy"],
-    "saves": 0,
-    "shares": 0
-  },
-  "3": {
-    "username": "Aloe",
-    "status": "APPROVED",
-    "prompt": "Prompt Question 3?",
-    "image": "fingers",
-    "topics": ["TOPIC 1", "TOPIC 2"],
-    "likes": ["pork", "porktricia"],
-    "saves": 0,
-    "shares": 0
   }
 }

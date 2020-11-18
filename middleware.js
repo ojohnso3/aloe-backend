@@ -37,7 +37,7 @@ const fakeAnswers = [
     {
         id: '123',
         choice: 'A',
-    content: 'Yes!',
+        content: 'Yes!',
         users: ['oj', 'cam'],
     },
     {
@@ -98,7 +98,7 @@ function surveyMiddleware(id, dbPrompt, answers) {
     let ret = {
         id,
         timestamp: dbPrompt.timestamp,
-        question: dbPrompt.header,
+        question: dbPrompt.question,
         answers: fakeAnswers, // answers
 
         // topics: dbPrompt.topics,
@@ -133,7 +133,7 @@ function resourceMiddleware(id, dbResource) {
 }
 
 
-function userMiddleware(dbUser, created, saved) { // id?
+function userMiddleware(id, dbUser) { // id?
 
     let ret = {
         password: "asdklfjadkls;fjkl;saj", // think about security

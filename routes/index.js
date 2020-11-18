@@ -19,11 +19,10 @@ function response(handler) {
 }
 
 // Admin routes
-router.get('/admin/posts', response(adminController.getPosts)); // connected
-router.put('/post/status', response(adminController.updatePostStatus)); // connected
-// TODO: Figure out reporting
-router.get('/admin/reported/:id', response(adminController.getReported));
+router.get('/admin/posts', response(adminController.getPostsByStatus)); // connected
+router.get('/admin/reported/:id', response(adminController.getReportedByType));
 router.get('/admin/banned', response(adminController.getBannedUsers));
+router.put('/admin/status', response(adminController.moderatePost)); // connected
 router.put('/admin/postreport', response(adminController.reportPost));
 router.put('/admin/commentreport', response(adminController.reportComment));
 router.put('/admin/userreport', response(adminController.reportUser));
@@ -49,9 +48,9 @@ router.put('/user/delete', response(userController.deleteAccount)); // figure ou
 
 // Profile routes
 router.get('/profile/:id', response(profileController.getProfile)); // connected
-router.put('/profile/update', response(profileController.updateProfile)); // tested
-router.get('/profile/posts', response(profileController.loadPosts)); // tbd
-router.get('/profile/saved', response(profileController.loadSaved)); // tbd
+router.put('/profile/update', response(profileController.editProfile)); // tested
+router.get('/profile/created', response(profileController.getCreated)); // tbd
+router.get('/profile/liked', response(profileController.getLiked)); // tbd
 
 // Content routes
 router.get('/content/foryou', response(contentController.getForYouPosts)); // connected

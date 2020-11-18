@@ -48,4 +48,7 @@ async function report(reportData) {
 
 module.exports = {
   report,
+  // reportPost,
+  // reportComment,
+  // reportUser
 }

@@ -1,35 +1,21 @@
 const db = require("../db.js");
+const middleware = require("../middleware.js")
 
 // Load all posts of chosen status
-async function getPosts(status) {
+async function getPostsByStatus(status) {
   const posts = db.collection('posts');
+  console.log('stt', status.query.status);
   const selected = await posts.where('status', '==', status.query.status).orderBy('timestamp').limit(10).get();
   if (selected.empty) {
     console.log('No matching documents.');
-    return;
+    return [];
   }
-  var selectedPosts = []
-  selected.forEach((doc) => {
-    selectedPosts.push({id: doc.id, data: doc.data()})
-  });
-  return selectedPosts;
-}
 
-// Change status of post 
-async function updatePostStatus(postData) {
-  const postID = postData.body.id;
-  const newStatus = postData.body.status;
-  const reason = postData.body.reason;
-
-  const post = db.collection('posts').doc(postID)
-  const res = await post.update({status: newStatus});
-  // send reason
-  console.log('reason: ', reason)
-  return res;
+  return selected.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()));
 }
 
 // - Load reported posts
-async function getReported(reportType) {
+async function getReportedByType(reportType) {
   const type = reportType.params.id; // POST, COMMENT, USER
   console.log('type', type);
 
@@ -73,6 +59,37 @@ async function getReported(reportType) {
   return; // what??
 }
 
+// Get all reports for a specific post/comment/user
+async function getReportsByID() {
+  // TBD
+}
+
+// Get all banned users
+async function getBannedUsers() {
+  const users = db.collection('users');
+  const bannedUsers = await users.where('banned', '!=', null).get();
+  var banned = [];
+  // TODO: make below into helper function
+  return bannedUsers.docs.map(async (doc) => {
+    const reportDocs = await db.collection('users').doc(doc.id).collection('reports').get();
+    var allReports = []
+    banned.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
+  });
+}
+
+// Change status of post 
+async function moderatePost(postData) {
+  const postID = postData.body.id;
+  const newStatus = postData.body.status;
+  const reason = postData.body.reason;
+
+  const post = db.collection('posts').doc(postID)
+  const res = await post.update({status: newStatus});
+  // send reason
+  console.log('reason: ', reason)
+  return res;
+}
+
 // Report post
 async function reportPost(postID, reason) {
   const updatePost = {
@@ -105,19 +122,6 @@ async function reportUser(reportData) {
   return res;
 }
 
-// Get all banned users
-async function getBannedUsers() {
-  const users = db.collection('users');
-  const bannedUsers = await users.where('banned', '!=', null).get();
-  var banned = [];
-  // TODO: make below into helper function
-  return bannedUsers.docs.map(async (doc) => {
-    const reportDocs = await db.collection('users').doc(doc.id).collection('reports').get();
-    var allReports = []
-    banned.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
-  });
-}
-
 // Unban a user
 async function unbanUser(username) {
   const user = await db.collection('users').doc(username).get();
@@ -130,13 +134,14 @@ async function unbanUser(username) {
 
 
 module.exports = {
-  getPosts,
-  updatePostStatus,
-  getReported,
+  getPostsByStatus,
+  getReportedByType,
+  getReportsByID,
+  getBannedUsers,
+  moderatePost,
   reportPost,
   reportComment,
   reportUser,
-  getBannedUsers,
   unbanUser,
 }
 

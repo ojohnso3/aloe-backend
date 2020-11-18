@@ -86,21 +86,12 @@ async function removeComment(userID, commentID) {
 // Create new post
 async function createPost(postData) {
   // check if right values are passed in
-  // console.log('postdata', postData.body)
 
   const processedPost = processing.postProcessing(postData.body)
 
-  // console.log('processed', processedPost)
+  const post = await db.collection('posts').add(processedPost);
 
-  const post = await db.collection('test').add(processedPost);
-  
-  // adds new comment collection
-  // const newPost = db.collection('test').doc(post.id);
-  // const deleteDoc = await newPost.collection('comments')
-  // .add({role: 'collection-starter'})
-  // await deleteDoc.delete();
-
-  const createdPost = await db.collection('test').doc(post.id).get()
+  const createdPost = await db.collection('posts').doc(post.id).get()
 
   // how are comments updated from sub collection -- figure this out!!
   addToSubCollection(createdPost.data().username, createdPost, 'created') // original post stored
@@ -122,28 +113,25 @@ async function removePost(userID, postID) {
   return ;
 }
 
-// - Draft post — /post/draft (OPTIONAL)
-async function draftPost(userID, postData) {
-  const post = db.collection('posts').add(postData);
-  // draft field true
-  return post;
-}
-
-
 
 module.exports = {
-  likePost,
-  sharePost,
-  reportPost,
-  reportComment,
-  createComment,
-  removeComment,
   createPost,
+  createComment,
   editPost,
   removePost,
-  draftPost
+  removeComment,
+  likePost,
+  sharePost,
 }
 
+
+
+// // - Draft post — /post/draft (OPTIONAL)
+// async function draftPost(userID, postData) {
+//   const post = db.collection('posts').add(postData);
+//   // draft field true
+//   return post;
+// }
 
 // - Save post
 // async function savePost(postID) {
