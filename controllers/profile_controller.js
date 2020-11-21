@@ -10,6 +10,20 @@ async function getProfile(username) {
     return;
   }
   return middleware.userMiddleware(profile.data());
+
+  // REAL CODE
+  // const users = db.collection('users');
+  // const profile = await users.where('username', '==', username.params.id).get();
+  // if (profile.empty) {
+  //   console.log('No such user.');
+  //   return;
+  // }
+  // if(profile.docs.length != 1 ) {
+  //   console.log('ERROR: More than one user with the same username.')
+  // }
+  // const userDoc = profile.docs[0];
+  // return middleware.userMiddleware(userDoc.id, userDoc.data());
+
 }
 
 // - Change profile (i.e. pic, bio, username, anonymity, consent) TBD: EMAIL??
