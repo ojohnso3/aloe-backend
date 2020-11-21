@@ -2,10 +2,13 @@ const db = require("../db.js");
 const middleware = require("../middleware.js")
 
 // Load all posts of chosen status
-async function getPostsByStatus(status) {
+async function getPostsByStatus(request) {
   const posts = db.collection('posts');
-  console.log('stt', status.query.status);
-  const selected = await posts.where('status', '==', status.query.status).orderBy('timestamp').limit(10).get();
+  const status = request.query.status;
+
+  const selected = status === 'ALL' ?
+    await posts.orderBy('timestamp').get() :
+    await posts.where('status', '==', status).orderBy('timestamp').limit(10).get();
   if (selected.empty) {
     console.log('No matching documents.');
     return [];
