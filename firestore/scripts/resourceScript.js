@@ -1,5 +1,5 @@
-const db = require("../db.js");
-const resourceJSON = require('./json/resources');
+const db = require("../../db.js");
+const resourceJSON = require('../json/resources');
 
 const createResources = async () => {
 
@@ -7,8 +7,7 @@ const createResources = async () => {
     const resourceObject = resourceJSON[resource]
     resourceObject['timestamp'] = Date()
     resourceObject['updatedTimestamp'] = Date()
-    await db.collection('resources').doc()
-        .set(resourceObject)
+    await db.collection('resources').add(resourceObject)
         .then(() => {
            console.log('successfully inserted the document');
            return null;

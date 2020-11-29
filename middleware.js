@@ -49,13 +49,16 @@ const fakeAnswers = [
 ]
 
 
-function postMiddleware(id, dbPost, comments) {
-
+function adminMiddleware(id, dbPost, userInfo) {
     let ret = {
         id,
         timestamp: dbPost.timestamp,
         status: dbPost.status,
-        user: dbPost.username,
+        statusNotes: dbPost.statusNotes, // only difference?
+        userID: dbPost.userID,
+        username: userInfo.username || 'No Corresponding User',
+        profilePic: userInfo.profilePic || 'none',
+        verified: userInfo.verified || false,
         type: dbPost.type,
         title: dbPost.content.title,
         content: dbPost.content.body,
@@ -63,32 +66,54 @@ function postMiddleware(id, dbPost, comments) {
         video: dbPost.content.video || 'none',
         audio: dbPost.content.audio || 'none',
         topics: dbPost.content.topics,
-        likes: dbPost.likes,
-        comments: fakeComments
-        // comments: comments,
-        // saves: dbPost.saves,
-        // shares: dbPost.shares,
-        // anonymous: dbPost.anonymous
+        likes: dbPost.numLikes,
+        shares: dbPost.numShares,
+        comments: dbPost.numComments,
+    };
+    return ret;
+}
+
+function postMiddleware(id, dbPost, userInfo) {
+    var username = userInfo.username;;
+    if(dbPost.anonymous || !username) {
+        username = 'Anonymous';
+    };
+
+    let ret = {
+        id,
+        timestamp: dbPost.timestamp,
+        status: dbPost.status,
+        username: username,
+        profilePic: userInfo.profilePic || 'none',
+        verified: userInfo.verified || false,
+        type: dbPost.type,
+        title: dbPost.content.title,
+        content: dbPost.content.body,
+        image: dbPost.content.image || 'none',
+        video: dbPost.content.video || 'none',
+        audio: dbPost.content.audio || 'none',
+        topics: dbPost.content.topics,
+        likes: dbPost.numLikes,
+        shares: dbPost.numShares,
+        comments: dbPost.numComments,
+        anonymous: dbPost.anonymous
     };
     // console.log('re', ret)
     return ret;
 }
 
-function promptMiddleware(id, dbPrompt, responses) {
+function promptMiddleware(id, dbPrompt) {
 
     let ret = {
         id,
         timestamp: dbPrompt.timestamp,
+        username: 'aloe_official',
         question: dbPrompt.prompt,
-        answers: fakeResponses, // responses
+        image: dbPrompt.image,
         topics: dbPrompt.topics,
-        image: dbPrompt.image
-
-        // status: dbPost.status,
-        // user: dbPost.username,
-        // likes: dbPost.likes,
-        // saves: dbPost.saves,
-        // shares: dbPost.shares,
+        numLikes: dbPrompt.numLikes,
+        numShares: dbPrompt.numShares,
+        numResponses: dbPrompt.numResponses,
     };
     return ret;
 }
@@ -98,15 +123,40 @@ function surveyMiddleware(id, dbPrompt, answers) {
     let ret = {
         id,
         timestamp: dbPrompt.timestamp,
-        question: dbPrompt.question,
-        answers: fakeAnswers, // answers
+        username: 'aloe_official',
+        question: dbPrompt.prompt,
+        image: dbPrompt.image,
+        topics: dbPrompt.topics,
+        numLikes: dbPrompt.numLikes,
+        numShares: dbPrompt.numShares,
+        numAnswers: dbPrompt.numAnswers,
+        numResponses: dbPrompt.numResponses,
+        answers: answers,
+    };
+    return ret;
+}
 
-        // topics: dbPrompt.topics,
-        // status: dbPost.status,
-        // user: dbPost.username,
-        // likes: dbPost.likes,
-        // saves: dbPost.saves,
-        // shares: dbPost.shares,
+function answerMiddleware(id, dbAnswer) {
+
+    let ret = {
+        id,
+        timestamp: dbAnswer.timestamp,
+        content: dbAnswer.content,
+        choice: dbAnswer.choice
+    };
+    return ret;
+}
+
+function commentMiddleware(id, dbComment, userInfo) {
+
+    let ret = {
+        id,
+        username: userInfo.username || 'Anonymous',
+        profilePic: userInfo.profilePic || 'none',
+        verified: userInfo.verified || false,
+        body: dbComment.body,
+        numLikes: dbComment.numLikes,
+        timestamp: dbComment.timestamp
     };
     return ret;
 }
@@ -122,33 +172,44 @@ function resourceMiddleware(id, dbResource) {
         email: dbResource.contact.email || 'none',
         website: dbResource.contact.website || 'none',
         address: dbResource.contact.address || 'none',
-        summary: dbResource.description.overview,
+        summary: dbResource.description.summary,
         confidentiality: dbResource.description.confidentiality,
         reporting: dbResource.description.reporting,
         image: dbResource.image,
-
-        // timestamp: dbPrompt.timestamp,
     };
     return ret;
 }
 
 
-function userMiddleware(id, dbUser) { // id?
+function userMiddleware(id, dbUser) {
+    console.log('db', dbUser)
 
     let ret = {
-        password: "asdklfjadkls;fjkl;saj", // think about security
+        id,
+        // password: "asdklfjadkls;fjkl;saj", // think about security
         email: dbUser.email,
         username: dbUser.username,
+        verified: dbUser.verified,
         type: dbUser.type,
-        profilePicture: dbUser.image || 'none',
+        profilePicture: dbUser.profilePic || 'none',
         bio: dbUser.bio || 'none',
         consentSetting: dbUser.consent,
         notifSettings: dbUser.notifSettings,
-        posts: [], // created,
-        saved: [], // saved,
-        anonymous: false // remove
+        created: [], // created,
+        liked: [], // liked
+    };
+    return ret;
+}
 
-        // verified: dbUser.verified,
+function profileMiddleware(id, dbUser) {
+
+    let ret = {
+        id,
+        username: dbUser.username,
+        verified: dbUser.verified,
+        profilePicture: dbUser.profilePic || 'none',
+        bio: dbUser.bio || 'none',
+        // created: [], // created
     };
     return ret;
 }
@@ -157,12 +218,34 @@ function userMiddleware(id, dbUser) { // id?
 
 
 module.exports = {
+    adminMiddleware,
     postMiddleware,
     promptMiddleware,
     surveyMiddleware,
+    answerMiddleware,
+    commentMiddleware,
     resourceMiddleware,
-    userMiddleware
+    userMiddleware,
+    profileMiddleware
 };
 
 
-// liked: dbPost.likes.includes(user) ? true : false
+// liked: dbPost.likes.includes(user) ? true : 
+
+// function surveyMiddleware(id, dbPrompt, answers) {
+
+//     let ret = {
+//         id,
+//         timestamp: dbPrompt.timestamp,
+//         question: dbPrompt.question,
+//         answers: fakeAnswers, // answers
+
+//         // topics: dbPrompt.topics,
+//         // status: dbPost.status,
+//         // user: dbPost.username,
+//         // likes: dbPost.likes,
+//         // saves: dbPost.saves,
+//         // shares: dbPost.shares,
+//     };
+//     return ret;
+// }

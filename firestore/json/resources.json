@@ -1,0 +1,19 @@
+{
+  "1": {
+    "type": "NATIONAL",
+    "name": "Sexual Assault Hotline",
+    "contact": {
+      "phone": "111-222-3333",
+      "text": "HELP at 771661",
+      "email": "hotline@help.co",
+      "website": "hotline.com",
+      "address": "22 Road, Los Angeles"
+    },
+    "description": {
+      "summary": "This hotline is for survivors. It is confidential, but not for reporting.",
+      "confidentiality": "7/10",
+      "reporting": "2/10"
+    },
+    "image": "aloe.jpg"
+  }
+}

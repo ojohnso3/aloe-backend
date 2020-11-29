@@ -1,0 +1,26 @@
+{
+  "1": {
+    "userID": "RatkApgPLlbK1f9g3Oio",
+    "status": "APPROVED",
+    "prompt": "Where do the ducks go in the winter?",
+    "image": "aloe.jpg",
+    "topics": ["TOPIC 1", "TOPIC 2"],
+    "numLikes": 30,
+    "numShares": 4,
+    "numAnswers": 0,
+    "numResponses": 21,
+    "reported": false
+  },
+  "2": {
+    "userID": "RatkApgPLlbK1f9g3Oio",
+    "status": "APPROVED",
+    "prompt": "Where do the seagulls go in the summer?",
+    "image": "aloe.jpg",
+    "topics": ["TOPIC 1", "TOPIC 2"],
+    "numLikes": 211,
+    "numShares": 43,
+    "numAnswers": 3,
+    "numResponses": 338,
+    "reported": false
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "1": {
+    "userID": "RatkApgPLlbK1f9g3Oio",
+    "type": "OPINION",
+    "status": "APPROVED",
+    "content": {
+      "title": "Short Stories",
+      "body": "If you are on the lookout for great storytelling but don’t want to commit to a full-length novel, then short story collections are the answer. Whether it’s just before bed, during your commute, or waiting to see your doctor, small chunks of time are perfect for reading short stories.",
+      "image": "emma_watson.jpg",
+      "video": "",
+      "audio": "",
+      "topics": ["TOPIC 1", "TOPIC 2"]
+    },   
+    "numLikes": 42,
+    "numShares": 7,
+    "numComments": 18,     
+    "reported": true,
+    "anonymous": false,
+    "removed": false
+  }
+}

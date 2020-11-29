@@ -4,7 +4,7 @@
     "username": "sidthekid",
     "type": "MEMBER",
     "verified": false,
-    "image": "saoirse.jpg",
+    "profilePic": "saoirse.jpg",
     "bio": "I am Sidney",
     "consent": true,
     "reported": true,
@@ -13,7 +13,8 @@
       "duration": 0,
       "reason": ""
     },
-    "notifications": true
+    "notifications": true,
+    "removed": false
   },
   "2": {
     "email": "aloe@aloe.co",
@@ -29,6 +30,7 @@
       "duration": 0,
       "reason": ""
     },
-    "notifications": true
+    "notifications": true,
+    "removed": false
   }
 }

@@ -1,0 +1,18 @@
+{
+  "1": {
+    "userID": "RatkApgPLlbK1f9g3Oio",
+    "parentID": "IcEabL7VIcliDT01T8VK",
+    "body": "Vikings are cool.",
+    "numLikes": 9,
+    "reported": false,
+    "removed": false
+  },
+  "2": {
+    "userID": "RatkApgPLlbK1f9g3Oio",
+    "parentID": "IcEabL7VIcliDT01T8VK",
+    "body": "I like Kennedy",
+    "numLikes": 33,
+    "reported": false,
+    "removed": false
+  }
+}

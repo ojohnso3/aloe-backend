@@ -1,0 +1,16 @@
+{
+  "1": {
+      "userID": "sidthekid",
+      "parentID": "IcEabL7VIcliDT01T8VK",
+      "type": "POST",
+      "reason": "Curse word.",
+      "status": "PENDING"
+  },
+  "2": {
+    "userID": "sidthekid",
+    "parentID": "NxZmUYV1p5fxHOLrCd3c",
+    "type": "COMMENT",
+    "reason": "Inappropriate content.",
+    "status": "PENDING"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "1": {
+    "promptID": "DHkldis24twgJKlxuvUc",
+    "choice": "A",
+    "content": "Turtles are wack."
+  },
+  "2": {
+    "promptID": "DHkldis24twgJKlxuvUc",
+    "choice": "B",
+    "content": "Lizards are the goat."
+  },
+  "3": {
+    "promptID": "DHkldis24twgJKlxuvUc",
+    "choice": "C",
+    "content": "Snakes are snacks."
+  }
+}
