@@ -1,6 +1,6 @@
 const db = require("../db.js");
 const middleware = require("../middleware.js");
-const { likePost } = require("./post_controller.js");
+const helpers = require("../helpers.js");
 
 // Get Profile
 async function getProfile(username) {  
@@ -19,13 +19,16 @@ async function getProfile(username) {
 
 // Load created posts on profile
 async function getCreated(userData) {
-  const posts = db.collection('posts');
-  const created = await posts.where('userID', '==', userData.body.userID).get(); // .where('removed', '==', false)
-  if (created.empty) {
-    console.log('No matching document.');
-    return;
-  }
-  return {results: created.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};
+  return {results: helpers.getCreated(userData.body.userID)};
+
+  // Before helper
+  // const posts = db.collection('posts');
+  // const created = await posts.where('userID', '==', userData.body.userID).get(); // .where('removed', '==', false)
+  // if (created.empty) {
+  //   console.log('No matching document.');
+  //   return;
+  // }
+  // return {results: created.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};
 }
 
 async function likedHelper(doc) {

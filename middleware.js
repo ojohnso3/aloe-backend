@@ -1,3 +1,6 @@
+const helpers = require("../helpers.js");
+
+
 // add image later + content instead of body
 const fakeComments = [
     {
@@ -83,11 +86,11 @@ function postMiddleware(id, dbPost, userInfo) {
         id,
         timestamp: dbPost.timestamp,
         status: dbPost.status,
-        username: username,
-        profilePic: userInfo.profilePic || 'none',
+        user: username,
+        profilePicture: userInfo.profilePic || 'none',
         verified: userInfo.verified || false,
         type: dbPost.type,
-        title: dbPost.content.title,
+        title: dbPost.content.title || 'No title.',
         content: dbPost.content.body,
         image: dbPost.content.image || 'none',
         video: dbPost.content.video || 'none',
@@ -98,51 +101,51 @@ function postMiddleware(id, dbPost, userInfo) {
         comments: dbPost.numComments,
         anonymous: dbPost.anonymous
     };
-    // console.log('re', ret)
     return ret;
 }
 
-function promptMiddleware(id, dbPrompt) {
+function promptMiddleware(id, dbPrompt, answers) {
 
     let ret = {
         id,
         timestamp: dbPrompt.timestamp,
-        username: 'aloe_official',
+        // username: 'aloe_official',
         question: dbPrompt.prompt,
         image: dbPrompt.image,
         topics: dbPrompt.topics,
-        numLikes: dbPrompt.numLikes,
-        numShares: dbPrompt.numShares,
-        numResponses: dbPrompt.numResponses,
+        likes: dbPrompt.numLikes,
+        shares: dbPrompt.numShares,
+        comments: dbPrompt.numResponses,
+        answers: answers || []
     };
     return ret;
 }
 
-function surveyMiddleware(id, dbPrompt, answers) {
+// function surveyMiddleware(id, dbPrompt, answers) {
 
-    let ret = {
-        id,
-        timestamp: dbPrompt.timestamp,
-        username: 'aloe_official',
-        question: dbPrompt.prompt,
-        image: dbPrompt.image,
-        topics: dbPrompt.topics,
-        numLikes: dbPrompt.numLikes,
-        numShares: dbPrompt.numShares,
-        numAnswers: dbPrompt.numAnswers,
-        numResponses: dbPrompt.numResponses,
-        answers: answers,
-    };
-    return ret;
-}
+//     let ret = {
+//         id,
+//         timestamp: dbPrompt.timestamp,
+//         question: dbPrompt.prompt,
+//         image: dbPrompt.image,
+//         topics: dbPrompt.topics,
+//         numLikes: dbPrompt.numLikes,
+//         numShares: dbPrompt.numShares,
+//         numAnswers: dbPrompt.numAnswers,
+//         numResponses: dbPrompt.numResponses,
+//         answers: answers,
+//     };
+//     return ret;
+// }
 
 function answerMiddleware(id, dbAnswer) {
 
     let ret = {
         id,
-        timestamp: dbAnswer.timestamp,
+        // timestamp: dbAnswer.timestamp,
         content: dbAnswer.content,
-        choice: dbAnswer.choice
+        choice: dbAnswer.choice,
+        // users later
     };
     return ret;
 }
@@ -151,11 +154,11 @@ function commentMiddleware(id, dbComment, userInfo) {
 
     let ret = {
         id,
-        username: userInfo.username || 'Anonymous',
-        profilePic: userInfo.profilePic || 'none',
+        user: userInfo.username || 'Anonymous',
+        profilePicture: userInfo.profilePic || 'none',
         verified: userInfo.verified || false,
-        body: dbComment.body,
-        numLikes: dbComment.numLikes,
+        content: dbComment.body,
+        likes: dbComment.numLikes,
         timestamp: dbComment.timestamp
     };
     return ret;
@@ -182,11 +185,11 @@ function resourceMiddleware(id, dbResource) {
 
 
 function userMiddleware(id, dbUser) {
-    console.log('db', dbUser)
+    const created = helpers.getCreated(id);
 
     let ret = {
-        id,
-        // password: "asdklfjadkls;fjkl;saj", // think about security
+        userid: id,
+        password: "asdklfjadkls;fjkl;saj", // think about security
         email: dbUser.email,
         username: dbUser.username,
         verified: dbUser.verified,
@@ -195,8 +198,8 @@ function userMiddleware(id, dbUser) {
         bio: dbUser.bio || 'none',
         consentSetting: dbUser.consent,
         notifSettings: dbUser.notifSettings,
-        created: [], // created,
-        liked: [], // liked
+        posts: created,
+        liked: []
     };
     return ret;
 }
@@ -209,7 +212,7 @@ function profileMiddleware(id, dbUser) {
         verified: dbUser.verified,
         profilePicture: dbUser.profilePic || 'none',
         bio: dbUser.bio || 'none',
-        // created: [], // created
+        doc: dbUser.signupTime
     };
     return ret;
 }
@@ -221,7 +224,7 @@ module.exports = {
     adminMiddleware,
     postMiddleware,
     promptMiddleware,
-    surveyMiddleware,
+    // surveyMiddleware,
     answerMiddleware,
     commentMiddleware,
     resourceMiddleware,

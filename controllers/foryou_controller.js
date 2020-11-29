@@ -77,12 +77,13 @@ async function getPrompts() {
   const finalPrompts = [];
   await Promise.all(prompts.docs.map(async (doc) => {
     console.log('asurveyn', doc.data().numAnswers)
-    if(doc.data().numAnswers) {
-      const answers = await getSurveyAnswers(doc.id);
-      finalPrompts.push(middleware.surveyMiddleware(doc.id, doc.data(), answers))
-    } else {
-      finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data()))
+    const answers = []
+    // answers exist
+    if(doc.data().answers.length > 0) {
+      answers = await getSurveyAnswers(doc.id);
+      // finalPrompts.push(middleware.surveyMiddleware(doc.id, doc.data(), answers))
     }
+    finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), answers))
   }));
 
   return {results: finalPrompts}

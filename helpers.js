@@ -1,4 +1,15 @@
 const db = require("./db.js");
+const middleware = require("../middleware.js");
+
+async function getCreated(userID) {
+  const posts = db.collection('posts');
+  const created = await posts.where('userID', '==', userID).get(); // .where('removed', '==', false)
+  if (created.empty) {
+    console.log('No matching document.');
+    return;
+  }
+  return created.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()));
+}
 
 async function getUserInfo(userID) {
   const userDoc = await db.collection('users').doc(userID).get();
@@ -16,5 +27,6 @@ async function getUserInfo(userID) {
 }
 
 module.exports = {
+  getCreated,
   getUserInfo
 }
