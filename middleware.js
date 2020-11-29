@@ -1,4 +1,4 @@
-const helpers = require("../helpers.js");
+const helpers = require("./helpers.js");
 
 
 // add image later + content instead of body

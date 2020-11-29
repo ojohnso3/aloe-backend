@@ -1,5 +1,5 @@
 const db = require("./db.js");
-const middleware = require("../middleware.js");
+const middleware = require("./middleware.js");
 
 async function getCreated(userID) {
   const posts = db.collection('posts');
