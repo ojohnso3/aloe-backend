@@ -189,17 +189,20 @@ function userMiddleware(id, dbUser) {
 
     let ret = {
         userid: id,
-        password: "asdklfjadkls;fjkl;saj", // think about security
-        email: dbUser.email,
         username: dbUser.username,
         verified: dbUser.verified,
-        type: dbUser.type,
         profilePicture: dbUser.profilePic || 'none',
         bio: dbUser.bio || 'none',
+
+        type: dbUser.type,
+        email: dbUser.email,
+        doc: dbUser.signupTime,
         consentSetting: dbUser.consent,
         notifSettings: dbUser.notifSettings,
         posts: created,
         liked: []
+
+        // password: "asdklfjadkls;fjkl;saj", // think about security
     };
     return ret;
 }
@@ -207,12 +210,11 @@ function userMiddleware(id, dbUser) {
 function profileMiddleware(id, dbUser) {
 
     let ret = {
-        id,
+        userid: id,
         username: dbUser.username,
         verified: dbUser.verified,
         profilePicture: dbUser.profilePic || 'none',
         bio: dbUser.bio || 'none',
-        doc: dbUser.signupTime
     };
     return ret;
 }

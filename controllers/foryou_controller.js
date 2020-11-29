@@ -79,11 +79,10 @@ async function getPrompts() {
     console.log('asurveyn', doc.data().numAnswers)
     const answers = []
     // answers exist
-    if(doc.data().answers.length > 0) {
-      answers = await getSurveyAnswers(doc.id);
-      // finalPrompts.push(middleware.surveyMiddleware(doc.id, doc.data(), answers))
-    }
-    finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), answers))
+    // if(doc.data().answers.length > 0) {
+    //   answers = await getSurveyAnswers(doc.id);
+    // }
+    finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), answers)) // survey middleware
   }));
 
   return {results: finalPrompts}
