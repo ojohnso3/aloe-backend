@@ -202,7 +202,7 @@ function userMiddleware(id, dbUser) {
         posts: created,
         liked: []
 
-        // password: "asdklfjadkls;fjkl;saj", // think about security
+        password: "asdklfjadkls;fjkl;saj", // think about security
     };
     return ret;
 }
