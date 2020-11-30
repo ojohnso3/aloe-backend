@@ -200,7 +200,7 @@ function userMiddleware(id, dbUser) {
         consentSetting: dbUser.consent,
         notifSettings: dbUser.notifSettings,
         posts: created,
-        liked: []
+        liked: [],
 
         password: "asdklfjadkls;fjkl;saj", // think about security
     };
