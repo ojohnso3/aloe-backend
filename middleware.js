@@ -185,7 +185,7 @@ function resourceMiddleware(id, dbResource) {
 
 
 function userMiddleware(id, dbUser) {
-    const created = helpers.getCreated(id);
+    // const created = helpers.getCreated(id);
 
     let ret = {
         userid: id,
@@ -199,7 +199,7 @@ function userMiddleware(id, dbUser) {
         doc: dbUser.signupTime,
         consentSetting: dbUser.consent,
         notifSettings: dbUser.notifSettings,
-        posts: created,
+        posts: [], // created
         liked: [],
 
         password: "asdklfjadkls;fjkl;saj", // think about security
