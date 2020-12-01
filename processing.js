@@ -36,7 +36,7 @@ function postProcessing(post) {
       numShares: 0,
       numComments: 0,
       reported: false,
-      anonymous: postData.anonymous,
+      anonymous: postData.anonymous || false,
       removed: false
   };
   for (var key of Object.keys(ret)) {
