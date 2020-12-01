@@ -193,7 +193,6 @@ function userMiddleware(id, dbUser) {
         verified: dbUser.verified,
         profilePicture: dbUser.profilePic || 'none',
         bio: dbUser.bio || 'none',
-
         type: dbUser.type,
         email: dbUser.email,
         doc: dbUser.signupTime,
@@ -202,7 +201,7 @@ function userMiddleware(id, dbUser) {
         posts: [], // created
         liked: [],
 
-        password: "asdklfjadkls;fjkl;saj", // think about security
+        // password: "asdklfjadkls;fjkl;saj", // think about security
     };
     return ret;
 }
@@ -215,6 +214,8 @@ function profileMiddleware(id, dbUser) {
         verified: dbUser.verified,
         profilePicture: dbUser.profilePic || 'none',
         bio: dbUser.bio || 'none',
+        doc: dbUser.doc,
+        posts: []
     };
     return ret;
 }

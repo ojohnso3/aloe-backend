@@ -14,8 +14,8 @@ async function getProfile(username) {
     console.log('ERROR: More than one user with the same username.')
   }
   const userDoc = profile.docs[0];
-  return middleware.userMiddleware(userDoc.id, userDoc.data());
-  // return middleware.profileMiddleware(userDoc.id, userDoc.data());
+  // return middleware.userMiddleware(userDoc.id, userDoc.data());
+  return middleware.profileMiddleware(userDoc.id, userDoc.data());
 }
 
 // Load created posts on profile
