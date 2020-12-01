@@ -1,5 +1,6 @@
 const db = require("../db.js");
 const middleware = require("../middleware.js")
+const processing = require("../processing.js")
 
 // Checks if username exists
 async function checkUsername(data) {
@@ -16,8 +17,8 @@ async function checkUsername(data) {
 
 // Create new user account (after auth verification)
 async function createAccount(userData) {
-  // TODO: check that all required fields are included (checkUsername in here or separate route??)
-  const newUser = db.collection('users').add(userData.body);
+  const processedUser = processing.userProcessing(userData.body)
+  const newUser = db.collection('users').add(processedUser);
   return newUser; // TODO: return value
 }
 

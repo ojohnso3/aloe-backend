@@ -130,11 +130,44 @@ function promptProcessing(prompt) {
   return {prompt: ret, answers: answers};
 }
 
+
+function userProcessing(user) {
+
+  const userData = JSON.parse(JSON.stringify(prompt)); 
+
+  let ret = {
+      email: userData.email,
+      username: userData.username,
+      loginTime: userData.loginTime,
+      type: 'MEMBER',
+      consent: true,
+      verified: false,
+      profilePic: '',
+      bio: '',
+      banned: {
+        duration: 0,
+        timestamp: '',
+        reason: '',
+      },
+      notifications: true,
+      removed: false,
+  };
+  for (var key of Object.keys(ret)) {
+    console.log('key', key, ' - ', ret[key]);
+    if(ret[key] == undefined) {
+      console.log('here')
+      return null
+    }
+  } 
+  return ret;
+}
+
 module.exports = {
   postProcessing,
   editProcessing,
   commentProcessing,
-  promptProcessing
+  promptProcessing,
+  userProcessing
 };
 
 
