@@ -214,7 +214,7 @@ function profileMiddleware(id, dbUser) {
         verified: dbUser.verified,
         profilePicture: dbUser.profilePic || 'none',
         bio: dbUser.bio || 'none',
-        doc: dbUser.doc,
+        doc: dbUser.signupTime,
         posts: []
     };
     return ret;
