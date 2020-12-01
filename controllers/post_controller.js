@@ -43,11 +43,14 @@ async function createPost(postData) {
   if(!processedPost) {
     return 'There was an error in post creation';
   }
+  console.log('flying dogs', processedPost)
 
   const newPost = await db.collection('posts').add(processedPost);
   const doc = await newPost.get();
 
   const userInfo = await helpers.getUserInfo(doc.data().userID);
+
+  console.log('doc id pig', doc.id)
 
   return {results: middleware.postMiddleware(doc.id, doc.data(), userInfo)}
 }
