@@ -133,11 +133,13 @@ function promptProcessing(prompt) {
 
 function userProcessing(user) {
 
-  const userData = JSON.parse(JSON.stringify(prompt)); 
+  const userData = JSON.parse(JSON.stringify(user)); 
 
   let ret = {
       email: userData.email,
       username: userData.username,
+      doc: userData.loginTime,
+      signupTime: userData.loginTime,
       loginTime: userData.loginTime,
       type: 'MEMBER',
       consent: true,
