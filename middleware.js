@@ -215,7 +215,7 @@ function profileMiddleware(id, dbUser) {
         profilePicture: dbUser.profilePic || 'none',
         bio: dbUser.bio || 'none',
         doc: dbUser.signupTime,
-        posts: []
+        // posts: []
     };
     return ret;
 }
