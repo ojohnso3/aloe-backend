@@ -19,7 +19,7 @@ function postProcessing(post) {
   const postData = JSON.parse(JSON.stringify(post)); 
 
   let ret = {
-      userID: postData.userID,
+      userID: postData.userid,
       timestamp: postData.timestamp,
       updatedTimestamp: postData.timestamp,
       type: postData.type,
