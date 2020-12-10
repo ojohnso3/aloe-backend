@@ -37,7 +37,7 @@ async function getComments(parentData) {
 async function getPosts(post) {
   const posts = db.collection('posts');
   var forYou = []
-  if(post.params.timestamp) {
+  if(post.query.timestamp) {
     forYou = await posts.orderBy('timestamp').startAfter(post.query.timestamp).limit(3).get()
   } else {
     forYou = await posts.orderBy('timestamp').limit(3).get()
@@ -77,7 +77,7 @@ async function getPrompts(prompt) {
   const collection = db.collection('prompts');
   // console.log('params prompt', prompt.params.timestamp)
   var prompts = []
-  if(prompt.params.timestamp) {
+  if(prompt.query.timestamp) {
     prompts = await collection.orderBy('timestamp').startAfter(prompt.query.timestamp).limit(2).get()
   } else {
     prompts = await collection.orderBy('timestamp').limit(2).get()
