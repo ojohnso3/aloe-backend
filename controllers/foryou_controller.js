@@ -36,12 +36,12 @@ async function getComments(parentData) {
 // Get ForYou posts
 async function getPosts(post) {
   const posts = db.collection('posts');
-  var forYou = []
-  if(post.body.timestamp) {
-    forYou = await posts.orderBy('timestamp').startAfter(post.body.timestamp).limit(3).get()
-  } else {
-    forYou = await posts.orderBy('timestamp').limit(10).get()
-  }
+  var forYou = await posts.orderBy('timestamp').startAfter(post.body.timestamp).limit(3).get()
+  // if(post.body.timestamp) {
+  //   forYou = await posts.orderBy('timestamp').startAfter(post.body.timestamp).limit(3).get()
+  // } else {
+  //   forYou = await posts.orderBy('timestamp').limit(3).get()
+  // }
   if (forYou.empty) {
     console.log('No matching documents.');
     return;
