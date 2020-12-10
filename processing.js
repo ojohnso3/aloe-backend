@@ -85,7 +85,7 @@ function commentProcessing(comment) {
   let ret = {
       userID: commentData.userID,
       // parentType: commentData.parentType,
-      parentID: commentData.parentID,
+      parentID: commentData.id,
       timestamp: commentData.timestamp,
       body: commentData.body,
       numLikes: 0,

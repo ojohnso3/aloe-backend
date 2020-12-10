@@ -55,11 +55,11 @@ async function getPosts(post) {
   }));
 
   // console.log('finalPosts', finalPosts)
-  console.log("getting posts with this params", post.query.timestamp)
-  console.log("final posts", finalPosts)
-  if(finalPosts.length == 0) {
-    console.log('fish ahahaha u sux')
-  }
+  // console.log("getting posts with this params", post.query.timestamp)
+  // console.log("final posts", finalPosts)
+  // if(finalPosts.length == 0) {
+  //   console.log('fish ahahaha u sux')
+  // }
 
   return {results: finalPosts}
 }
@@ -103,7 +103,7 @@ async function getPrompts(prompt) {
     finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), answers)) // survey middleware
   }));
 
-  console.log('final', finalPrompts)
+  // console.log('final', finalPrompts)
 
   return {results: finalPrompts}
 }
