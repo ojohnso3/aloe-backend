@@ -136,14 +136,20 @@ async function likePost(parentData) {
 
   const parent = db.collection(type).doc(parentID);
 
+  const item = await parent.get();
+
+  console.log('check item here', item.data())
+
   var res = null;
 
   if(liked == '1') {
+    console.log('getting into remove like func')
     const docArr = await poparentst.collection('likes').where('userID','==', userID).get();
     if (docArr.size != 1) {
       console.log('ERROR: should like once');
       return null;
     }
+    console.log('size was 1 (thats good)')
     docArr.forEach(function(doc) {
       res = doc.ref.delete();
     });
