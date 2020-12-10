@@ -82,10 +82,10 @@ async function getPrompts(prompt) {
 
   const finalPrompts = [];
   await Promise.all(prompts.docs.map(async (doc) => {
-    var answers = []
-    if(doc.data().numAnswers) {
-      answers = await getSurveyAnswers(doc.id);
-    }
+    // var answers = []
+    // if(doc.data().numAnswers) {
+    //   answers = await getSurveyAnswers(doc.id);
+    // }
     finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), answers)) // survey middleware
   }));
 
