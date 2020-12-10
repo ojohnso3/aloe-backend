@@ -63,9 +63,13 @@ async function createComment(commentData) {
   }
 
   const newComment = await db.collection('comments').add(processedComment);
+
+  console.log('new', newComment)
   const doc = await newComment.get();
 
   const userInfo = await helpers.getUserInfo(doc.data().userID);
+
+  console.log('check here', doc.data())
 
   return {results: middleware.commentMiddleware(doc.id, doc.data(), userInfo)}
 }
