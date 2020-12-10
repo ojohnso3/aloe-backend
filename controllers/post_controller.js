@@ -16,9 +16,10 @@ async function checkLikedPost(parentData) {
   console.log('check id', parentID)
   console.log('check user', userID)
   console.log('check type', type)
+  console.log("FINISH BITCH")
 
   const item = await db.collection(type).doc(parentID).get()
-  console.log('item data', item.data())
+  // console.log('item data', item.data())
 
   const likedUsers = db.collection(type).doc(parentID).collection('likes');
 
@@ -131,7 +132,7 @@ async function likePost(parentData) {
   const userID = parentData.body.user;
   const liked = parentData.body.liked;
   const timestamp = parentData.body.timestamp;
-  const type = parentData.query.type; // posts / comments
+  const type = parentData.body.type; // posts / comments
 
   const parent = db.collection(type).doc(parentID);
 
