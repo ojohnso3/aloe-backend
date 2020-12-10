@@ -9,8 +9,10 @@ const decrement = FieldValue.increment(-1);
 
 // Check if user has liked post
 async function checkLikedPost(postData) {
-  const postID = postData.body.postID;
-  const userID = postData.body.userID;
+  console.log('postid', postData.query.id)
+  console.log('userid', postData.query.userid)
+  const postID = postData.query.id;
+  const userID = postData.query.userid;
   const postUsers = db.collection('posts').doc(postID).collection('likes');
   const userDoc = await postUsers.where('userID', '==', userID).get();
   if (userDoc.empty) {

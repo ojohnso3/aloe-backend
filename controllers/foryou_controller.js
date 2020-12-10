@@ -20,8 +20,8 @@ async function getComments(parentData) {
   console.log('check parent id', parentData.query.id)
   const comments = await collection.where('parentID', '==', parentData.query.id).get();
   if (comments.empty) {
-    console.log('No matching document.');
-    return;
+    console.log('No matching document for comment.');
+    return {results: []};
   }
 
   const finalComments = [];
@@ -96,9 +96,9 @@ async function getPrompts(prompt) {
   await Promise.all(prompts.docs.map(async (doc) => {
     var answers = []
     if(doc.data().numAnswers) {
-      console.log('docid', doc.id)
+      // console.log('docid', doc.id)
       answers = await getSurveyAnswers(doc.id);
-      console.log('answers here', answers)
+      // console.log('answers here', answers)
     }
     finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), answers)) // survey middleware
   }));
