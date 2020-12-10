@@ -10,14 +10,14 @@ const decrement = FieldValue.increment(-1);
 // Check if user has liked post
 async function checkLikedPost(postData) {
   console.log('the farm starts here.')
-  console.log('postid pig', postData.query.postid)
-  console.log('userid chick', postData.query.userid)
   const postID = postData.query.id;
-  var userID = postData.query.userid;
-  if(userID == 'no user2') {
-    console.log('user id is wrong sidney sux')
-    userId = ''
-  }
+  const userID = postData.query.userid;
+  // if(userID == 'no user2') {
+  //   console.log('user id is wrong sidney sux')
+  //   userId = ''
+  // }
+  console.log('postid pig', postID)
+  console.log('userid chick', userID)
   const postUsers = db.collection('posts').doc(postID).collection('likes');
   console.log('pp', postUsers)
   if(postsUsers == undefined) {
