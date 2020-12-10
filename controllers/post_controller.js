@@ -9,7 +9,7 @@ const decrement = FieldValue.increment(-1);
 
 // Check if user has liked post
 async function checkLikedPost(postData) {
-  console.log('postid', postData.query.id)
+  console.log('postid', postData.query.postid)
   console.log('userid', postData.query.userid)
   const postID = postData.query.id;
   const userID = postData.query.userid;
@@ -116,7 +116,6 @@ async function likePost(postData) {
   var res = null;
 
   if(liked == '1') {
-    await post.update({numLikes: decrement});
     const docArr = await post.collection('likes').where('userID','==', userID).get();
     if (docArr.size != 1) {
       // console.log('No matching document.');
@@ -126,10 +125,12 @@ async function likePost(postData) {
     docArr.forEach(function(doc) {
       res = doc.ref.delete();
     });
+    await post.update({numLikes: decrement});
     return res;
   } else {
+    res = await post.collection('likes').add({userID: userID, timestamp: timestamp});
     await post.update({numLikes: increment});
-    return await post.collection('likes').add({userID: userID, timestamp: timestamp});
+    return res;
   }
 }
 
