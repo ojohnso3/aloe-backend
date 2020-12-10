@@ -76,14 +76,12 @@ async function getSurveyAnswers(promptID) {
 // Get prompts for feed
 async function getPrompts(prompt) {
   const collection = db.collection('prompts');
-  // console.log('params prompt', prompt.params.timestamp)
   var prompts = []
   if(prompt.query.timestamp) {
     prompts = await collection.orderBy('timestamp', 'desc').startAfter(prompt.query.timestamp).limit(2).get()
   } else {
     prompts = await collection.orderBy('timestamp', 'desc').limit(2).get()
   }
-  // const prompts = await collection.orderBy('timestamp').startAfter(prompt.params.timestamp).limit(2).get()
   if (prompts.empty) {
     console.log('No matching documents.');
     return;
@@ -94,9 +92,12 @@ async function getPrompts(prompt) {
     var answers = []
     if(doc.data().numAnswers) {
       answers = await getSurveyAnswers(doc.id);
+      console.log('answers here', answers)
     }
     finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), answers)) // survey middleware
   }));
+
+  console.log('final', finalPrompts)
 
   return {results: finalPrompts}
 }
