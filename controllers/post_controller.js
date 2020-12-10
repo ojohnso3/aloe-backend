@@ -14,7 +14,7 @@ async function checkLikedPost(postData) {
   console.log('userid chick', postData.query.userid)
   const postID = postData.query.id;
   var userID = postData.query.userid;
-  if(userID == undefined) {
+  if(userID == 'no user2') {
     console.log('user id is wrong sidney sux')
     userId = ''
   }
