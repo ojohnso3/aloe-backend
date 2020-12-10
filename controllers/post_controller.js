@@ -13,7 +13,11 @@ async function checkLikedPost(postData) {
   console.log('postid pig', postData.query.postid)
   console.log('userid chick', postData.query.userid)
   const postID = postData.query.id;
-  const userID = postData.query.userid;
+  var userID = postData.query.userid;
+  if(userID == undefined) {
+    console.log('user id is wrong sidney sux')
+    userId = ''
+  }
   const postUsers = db.collection('posts').doc(postID).collection('likes');
   const userDoc = await postUsers.where('userID', '==', userID).get();
   if (userDoc.empty) {
