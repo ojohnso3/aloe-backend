@@ -82,8 +82,10 @@ function commentProcessing(comment) {
 
   const commentData = JSON.parse(JSON.stringify(comment)); 
 
+  console.log('commendData', commentData)
+
   let ret = {
-      userID: commentData.userID,
+      userID: commentData.userid,
       // parentType: commentData.parentType,
       parentID: commentData.id,
       timestamp: commentData.timestamp,
@@ -93,7 +95,9 @@ function commentProcessing(comment) {
       removed: false
   };
   for (var key of Object.keys(ret)) {
+    console.log('key pee', ret[key])
     if(ret[key] == undefined) {
+      console.log('whyy', ret[key])
       return null
     }
   } 
