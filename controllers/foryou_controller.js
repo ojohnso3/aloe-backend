@@ -38,9 +38,9 @@ async function getPosts(post) {
   const posts = db.collection('posts');
   var forYou = []
   if(post.query.timestamp) {
-    forYou = await posts.orderBy('timestamp').startAfter(post.query.timestamp).limit(3).get()
+    forYou = await posts.orderBy('timestamp', 'desc').startAfter(post.query.timestamp).limit(3).get()
   } else {
-    forYou = await posts.orderBy('timestamp').limit(3).get()
+    forYou = await posts.orderBy('timestamp', 'desc').limit(3).get()
   }
   if (forYou.empty) {
     console.log('No matching documents.');
@@ -79,9 +79,9 @@ async function getPrompts(prompt) {
   // console.log('params prompt', prompt.params.timestamp)
   var prompts = []
   if(prompt.query.timestamp) {
-    prompts = await collection.orderBy('timestamp').startAfter(prompt.query.timestamp).limit(2).get()
+    prompts = await collection.orderBy('timestamp', 'desc').startAfter(prompt.query.timestamp).limit(2).get()
   } else {
-    prompts = await collection.orderBy('timestamp').limit(2).get()
+    prompts = await collection.orderBy('timestamp', 'desc').limit(2).get()
   }
   // const prompts = await collection.orderBy('timestamp').startAfter(prompt.params.timestamp).limit(2).get()
   if (prompts.empty) {
