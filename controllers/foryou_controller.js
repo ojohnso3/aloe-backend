@@ -17,7 +17,7 @@ async function getRecentPrompt() {
 // Get Comments by ID
 async function getComments(parentData) {
   const collection = db.collection('comments');
-  console.log('check parent id', parentData.query.id)
+  // console.log('check parent id', parentData.query.id)
   const comments = await collection.where('parentID', '==', parentData.query.id).get();
   if (comments.empty) {
     console.log('No matching document for comment.');
