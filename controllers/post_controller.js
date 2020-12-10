@@ -140,6 +140,7 @@ async function likePost(postData) {
     return res;
   } else {
     res = await post.collection('likes').add({userID: userID, timestamp: timestamp});
+    console.log('im adding to sublikes', res)
     await post.update({numLikes: increment});
     return res;
   }
