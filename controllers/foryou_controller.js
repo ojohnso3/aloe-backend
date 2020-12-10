@@ -53,6 +53,8 @@ async function getPosts(post) {
     finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo))
   }));
 
+  console.log('finalPosts', finalPosts)
+
   return {results: finalPosts}
 }
 
@@ -73,7 +75,7 @@ async function getSurveyAnswers(promptID) {
 // Get prompts for feed
 async function getPrompts(prompt) {
   const collection = db.collection('prompts');
-  console.log('params prompt', prompt.params.timestamp)
+  // console.log('params prompt', prompt.params.timestamp)
   var prompts = []
   if(prompt.params.timestamp) {
     prompts = await collection.orderBy('timestamp').startAfter(prompt.query.timestamp).limit(2).get()
