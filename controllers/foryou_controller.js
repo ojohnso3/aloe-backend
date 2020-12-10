@@ -44,7 +44,7 @@ async function getPosts(post) {
   }
   if (forYou.empty) {
     console.log('No matching documents.');
-    return;
+    return {results: []};
   }
 
   const finalPosts = [];
