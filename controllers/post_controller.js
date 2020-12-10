@@ -13,6 +13,10 @@ async function checkLikedPost(parentData) {
   const userID = parentData.query.userid;
   const type = parentData.query.type; // posts / comments
 
+  console.log('check id', parentID)
+  console.log('check user', userID)
+  console.log('check type', type)
+
   const likedUsers = db.collection(type).doc(parentID).collection('likes');
 
   // postUsers.limit(1).get().
@@ -27,7 +31,7 @@ async function checkLikedPost(parentData) {
 
   const userDoc = await likedUsers.where('userID', '==', userID).get();
 
-  // console.log('empty', userDoc.empty)
+  console.log('empty', userDoc.empty)
 
   if (userDoc.empty) {
     console.log('User has not liked.');
