@@ -105,6 +105,7 @@ async function removeComment(commentData) {
 // Like post
 async function likePost(postData) {
   console.log('postData', postData.body)
+  console.log('liked', postData.body.liked)
   const postID = postData.body.postid;
   const userID = postData.body.user;
   const liked = postData.body.liked;
@@ -114,7 +115,7 @@ async function likePost(postData) {
 
   var res = null;
 
-  if(liked) {
+  if(liked == '1') {
     await post.update({numLikes: decrement});
     const docArr = await post.collection('likes').where('userID','==', userID).get();
     if (docArr.size != 1) {
