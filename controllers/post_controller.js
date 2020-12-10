@@ -8,29 +8,25 @@ const increment = FieldValue.increment(1);
 const decrement = FieldValue.increment(-1);
 
 // Check if user has liked post
-async function checkLikedPost(postData) {
-  console.log('the farm starts here.')
-  const postID = postData.query.postid;
-  const userID = postData.query.userid;
+async function checkLikedPost(parentData) {
+  const parentID = parentData.query.id;
+  const userID = parentData.query.userid;
+  const type = parentData.query.type; // posts / comments
 
-  console.log('postid pig', postID)
-  console.log('userid chick', userID)
+  const likedUsers = db.collection(type).doc(parentID).collection('likes');
 
-  const postUsers = db.collection('posts').doc(postID).collection('likes');
+  // postUsers.limit(1).get().
+  // then(sub => {
+  //   if (sub.docs.length > 0) {
+  //     console.log('subcollection exists');
+  //   } else {
+  //     console.log('subcollection is NOT there, so user has not liked');
+  //     return false;
+  //   }
+  // });
 
-  postUsers.limit(1).get().
-  then(sub => {
-    if (sub.docs.length > 0) {
-      console.log('subcollection exists');
-    } else {
-      console.log('subcollection is NOT there, so user has not liked');
-      return false;
-    }
-  });
+  const userDoc = await likedUsers.where('userID', '==', userID).get();
 
-  const userDoc = await postUsers.where('userID', '==', userID).get();
-
-  // console.log('pp', postUsers)
   console.log('empty', userDoc.empty)
 
   if (userDoc.empty) {
@@ -41,15 +37,6 @@ async function checkLikedPost(postData) {
     return true;
   }
 }
-
-  // if(userID == 'no user2') {
-  //   console.log('user id is wrong sidney sux')
-  //   userId = ''
-  // }
-    // if(postsUsers == undefined) {
-  //   console.log('no likes collection yet')
-  //   return false;
-  // }
 
 // Check if user has liked comment
 async function checkLikedComment(commentData) {
