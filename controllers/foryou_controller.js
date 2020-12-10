@@ -36,7 +36,9 @@ async function getComments(parentData) {
 // Get ForYou posts
 async function getPosts(post) {
   const posts = db.collection('posts');
-  console.log('params post', post.params.timestamp)
+  console.log('params post', post.params)
+  console.log('body post', post.body)
+  console.log('query post', post.query)
   var forYou = []
   if(post.params.timestamp) {
     forYou = await posts.orderBy('timestamp').startAfter(post.params.timestamp).limit(3).get()
