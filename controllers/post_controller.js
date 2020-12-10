@@ -104,6 +104,7 @@ async function removeComment(commentData) {
 
 // Like post
 async function likePost(postData) {
+  console.log('postData', postData.body)
   const postID = postData.body.postid;
   const userID = postData.body.user;
   const liked = postData.body.liked;
