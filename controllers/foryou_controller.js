@@ -53,7 +53,8 @@ async function getPosts(post) {
     finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo))
   }));
 
-  console.log('finalPosts', finalPosts)
+  // console.log('finalPosts', finalPosts)
+  console.log("getting posts with this params", post.query.timestamp)
 
   return {results: finalPosts}
 }
