@@ -55,6 +55,10 @@ async function getPosts(post) {
 
   // console.log('finalPosts', finalPosts)
   console.log("getting posts with this params", post.query.timestamp)
+  console.log("final posts", finalPosts)
+  if(finalPosts.length == 0) {
+    console.log('fish ahahaha u sux')
+  }
 
   return {results: finalPosts}
 }
@@ -91,6 +95,7 @@ async function getPrompts(prompt) {
   await Promise.all(prompts.docs.map(async (doc) => {
     var answers = []
     if(doc.data().numAnswers) {
+      console.log('docid', doc.id)
       answers = await getSurveyAnswers(doc.id);
       console.log('answers here', answers)
     }
