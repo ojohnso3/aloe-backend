@@ -19,6 +19,11 @@ async function checkLikedPost(postData) {
     userId = ''
   }
   const postUsers = db.collection('posts').doc(postID).collection('likes');
+  console.log('pp', postUsers)
+  if(postsUsers == undefined) {
+    console.log('no likes collection yet')
+    return false;
+  }
   const userDoc = await postUsers.where('userID', '==', userID).get();
   if (userDoc.empty) {
     console.log('User has not liked.');
