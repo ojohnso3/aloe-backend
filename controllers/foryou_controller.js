@@ -34,9 +34,14 @@ async function getComments(parentData) {
 }
 
 // Get ForYou posts
-async function getPosts() {
+async function getPosts(post) {
   const posts = db.collection('posts');
-  const forYou = await posts.orderBy('timestamp').limit(10).get(); // .startAt(lastPost)
+  var forYou = []
+  if(post.body.timestamp) {
+    forYou = await posts.orderBy('timestamp').startAfter(post.body.timestamp).limit(3).get()
+  } else {
+    forYou = await posts.orderBy('timestamp').limit(10).get()
+  }
   if (forYou.empty) {
     console.log('No matching documents.');
     return;
@@ -66,9 +71,14 @@ async function getSurveyAnswers(promptID) {
 }
 
 // Get prompts for feed
-async function getPrompts() {
+async function getPrompts(prompt) {
   const collection = db.collection('prompts');
-  const prompts = await collection.orderBy('timestamp').limit(5).get();
+  var prompts = []
+  if(prompt.body.timestamp) {
+    prompts = await collection.orderBy('timestamp').startAfter(prompt.body.timestamp).limit(2).get()
+  } else {
+    prompts = await collection.orderBy('timestamp').limit(2).get()
+  }
   if (prompts.empty) {
     console.log('No matching documents.');
     return;
@@ -115,6 +125,28 @@ module.exports = {
 
 
 
+// async function getFeed(post, prompt) {
+//   const posts = await getPosts(post)
+//   const prompts = await getPrompts(prompt)
+
+//   const numPosts = posts.results.length
+//   console.log('num', numPosts)
+
+//   var finalFeed = []
+  
+//   finalFeed.push(posts.results.slice(0, numPosts/2))
+//   if(prompts.results.length > 0) {
+//     finalFeed.push(prompts.results[1])
+//   }
+//   finalFeed.push(posts.results.slice(numPosts/2, numPosts))
+//   if(prompts.results.length > 1) { // == 2
+//     finalFeed.push(prompts.results[1])
+//   }
+
+//   console.log('fin', finalFeed)
+
+//   return {results: finalFeed}
+// }
 
 
 
