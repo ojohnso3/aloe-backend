@@ -17,6 +17,9 @@ async function checkLikedPost(parentData) {
   console.log('check user', userID)
   console.log('check type', type)
 
+  const item = await db.collection(type).doc(parentID).get()
+  console.log('item data', item.data())
+
   const likedUsers = db.collection(type).doc(parentID).collection('likes');
 
   // postUsers.limit(1).get().
