@@ -36,7 +36,8 @@ async function getComments(parentData) {
 // Get ForYou posts
 async function getPosts(post) {
   const posts = db.collection('posts');
-  var forYou = await posts.orderBy('timestamp').startAfter(post.body.timestamp).limit(3).get()
+  console.log('params post', post.params.timestamp)
+  var forYou = await posts.orderBy('timestamp').startAfter(post.params.timestamp).limit(3).get()
   // if(post.body.timestamp) {
   //   forYou = await posts.orderBy('timestamp').startAfter(post.body.timestamp).limit(3).get()
   // } else {
@@ -74,7 +75,8 @@ async function getSurveyAnswers(promptID) {
 async function getPrompts(prompt) {
   const collection = db.collection('prompts');
   // var prompts = []
-  const prompts = await collection.orderBy('timestamp').startAfter(prompt.body.timestamp).limit(2).get()
+  console.log('params prompt', prompt.params.timestamp)
+  const prompts = await collection.orderBy('timestamp').startAfter(prompt.params.timestamp).limit(2).get()
   if (prompts.empty) {
     console.log('No matching documents.');
     return;
