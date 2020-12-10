@@ -27,7 +27,7 @@ async function checkLikedPost(parentData) {
 
   const userDoc = await likedUsers.where('userID', '==', userID).get();
 
-  console.log('empty', userDoc.empty)
+  // console.log('empty', userDoc.empty)
 
   if (userDoc.empty) {
     console.log('User has not liked.');
@@ -117,34 +117,34 @@ async function removeComment(commentData) {
 }
 
 // Like post
-async function likePost(postData) {
-  console.log('postData', postData.body)
-  console.log('liked', postData.body.liked)
-  const postID = postData.body.postid;
-  const userID = postData.body.user;
-  const liked = postData.body.liked;
-  const timestamp = postData.body.timestamp;
+async function likePost(parentData) {
+  console.log('parentData', parentData.body)
 
-  const post = db.collection('posts').doc(postID);
+  const parentID = parentData.body.id;
+  const userID = parentData.body.user;
+  const liked = parentData.body.liked;
+  const timestamp = parentData.body.timestamp;
+  const type = parentData.query.type; // posts / comments
+
+  const parent = db.collection(type).doc(parentID);
 
   var res = null;
 
   if(liked == '1') {
-    const docArr = await post.collection('likes').where('userID','==', userID).get();
+    const docArr = await poparentst.collection('likes').where('userID','==', userID).get();
     if (docArr.size != 1) {
-      // console.log('No matching document.');
       console.log('ERROR: should like once');
       return null;
     }
     docArr.forEach(function(doc) {
       res = doc.ref.delete();
     });
-    await post.update({numLikes: decrement});
+    await parent.update({numLikes: decrement});
     return res;
   } else {
-    res = await post.collection('likes').add({userID: userID, timestamp: timestamp});
-    console.log('im adding to sublikes', res)
-    await post.update({numLikes: increment});
+    res = await parent.collection('likes').add({userID: userID, timestamp: timestamp});
+    // console.log('im adding to sublikes', res)
+    await parent.update({numLikes: increment});
     return res;
   }
 }
