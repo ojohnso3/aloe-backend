@@ -12,20 +12,17 @@ async function checkLikedPost(postData) {
   console.log('the farm starts here.')
   const postID = postData.query.postid;
   const userID = postData.query.userid;
-  // if(userID == 'no user2') {
-  //   console.log('user id is wrong sidney sux')
-  //   userId = ''
-  // }
+
   console.log('postid pig', postID)
   console.log('userid chick', userID)
+
   const postUsers = db.collection('posts').doc(postID).collection('likes');
-  console.log('pp', postUsers)
-  // if(postsUsers == undefined) {
-  //   console.log('no likes collection yet')
-  //   return false;
-  // }
   const userDoc = await postUsers.where('userID', '==', userID).get();
-  console.log('dd', userDoc)
+
+  // console.log('pp', postUsers)
+  console.log('empty', userDoc.empty)
+
+
   if (userDoc.empty) {
     console.log('User has not liked.');
     return false;
@@ -34,6 +31,15 @@ async function checkLikedPost(postData) {
     return true;
   }
 }
+
+  // if(userID == 'no user2') {
+  //   console.log('user id is wrong sidney sux')
+  //   userId = ''
+  // }
+    // if(postsUsers == undefined) {
+  //   console.log('no likes collection yet')
+  //   return false;
+  // }
 
 // Check if user has liked comment
 async function checkLikedComment(commentData) {
