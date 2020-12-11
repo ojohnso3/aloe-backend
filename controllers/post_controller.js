@@ -126,7 +126,7 @@ async function removeComment(commentData) {
 
 // Like post
 async function likePost(parentData) {
-  console.log('parentData', parentData.body)
+  // console.log('parentData', parentData.body)
 
   const parentID = parentData.body.id;
   const userID = parentData.body.user;
@@ -136,14 +136,16 @@ async function likePost(parentData) {
 
   const parent = db.collection(type).doc(parentID);
 
-  const item = await parent.get();
-
+  // const item = await parent.get();
   // console.log('check item here', item.data())
 
   var res = null;
 
   if(liked == '1') {
-    // console.log('getting into remove like func')
+    console.log('type', type)
+    console.log('parent coll', parent)
+    console.log('parentID', parentID)
+    console.log('userID', userID)
     const docArr = await parent.collection('likes').where('userID','==', userID).get();
     console.log('check size', docArr.size)
     if (docArr.size != 1) {
