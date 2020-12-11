@@ -145,6 +145,7 @@ async function likePost(parentData) {
   if(liked == '1') {
     // console.log('getting into remove like func')
     const docArr = await parent.collection('likes').where('userID','==', userID).get();
+    console.log('check size', docArr.size)
     if (docArr.size != 1) {
       console.log('ERROR: should like once');
       return null;
