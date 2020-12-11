@@ -13,10 +13,10 @@ async function checkLikedPost(parentData) {
   const userID = parentData.query.userid;
   const type = parentData.query.type; // posts / comments
 
-  console.log('check id', parentID)
-  console.log('check user', userID)
-  console.log('check type', type)
-  console.log("FINISH BITCH")
+  // console.log('check id', parentID)
+  // console.log('check user', userID)
+  // console.log('check type', type)
+  // console.log("FINISH BITCH")
 
   const item = await db.collection(type).doc(parentID).get()
   // console.log('item data', item.data())
@@ -35,7 +35,7 @@ async function checkLikedPost(parentData) {
 
   const userDoc = await likedUsers.where('userID', '==', userID).get();
 
-  console.log('empty', userDoc.empty)
+  // console.log('empty', userDoc.empty)
 
   if (userDoc.empty) {
     console.log('User has not liked.');
@@ -67,14 +67,14 @@ async function createPost(postData) {
   if(!processedPost) {
     return 'There was an error in post creation';
   }
-  console.log('flying dogs', processedPost)
+  // console.log('flying dogs', processedPost)
 
   const newPost = await db.collection('posts').add(processedPost);
   const doc = await newPost.get();
 
   const userInfo = await helpers.getUserInfo(doc.data().userID);
 
-  console.log('doc id pig', doc.id)
+  // console.log('doc id pig', doc.id)
 
   return {results: middleware.postMiddleware(doc.id, doc.data(), userInfo)}
 }
@@ -88,12 +88,12 @@ async function createComment(commentData) {
 
   const newComment = await db.collection('comments').add(processedComment);
 
-  console.log('new', newComment)
+  // console.log('new', newComment)
   const doc = await newComment.get();
 
   const userInfo = await helpers.getUserInfo(doc.data().userID);
 
-  console.log('check here', doc.data())
+  // console.log('check here', doc.data())
 
   return {results: middleware.commentMiddleware(doc.id, doc.data(), userInfo)}
 }
@@ -138,18 +138,18 @@ async function likePost(parentData) {
 
   const item = await parent.get();
 
-  console.log('check item here', item.data())
+  // console.log('check item here', item.data())
 
   var res = null;
 
   if(liked == '1') {
-    console.log('getting into remove like func')
+    // console.log('getting into remove like func')
     const docArr = await parent.collection('likes').where('userID','==', userID).get();
     if (docArr.size != 1) {
       console.log('ERROR: should like once');
       return null;
     }
-    console.log('size was 1 (thats good)')
+    // console.log('size was 1 (thats good)')
     docArr.forEach(function(doc) {
       res = doc.ref.delete();
     });
