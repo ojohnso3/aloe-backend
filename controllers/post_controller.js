@@ -119,6 +119,15 @@ async function remove(parentData) {
   const archived = doc.data();
   archived['contentType'] = type;
   const res = await db.collection('archive').add(archived);
+
+  const likes = await parent.collection('likes').get();
+  if (likes.empty) {
+    console.log('No likes for this.');
+    return res;
+  }
+  likes.forEach(function(doc) {
+    doc.ref.delete();
+  });
   await parent.delete();
   return res; // TODO return value
 }
