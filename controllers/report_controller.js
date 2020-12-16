@@ -4,11 +4,13 @@ const processing = require("../processing.js")
 
 // Report post/comment/user
 async function reportFromApp(reportData) {
-  const type = reportData.body.type; // POST, COMMENT, USER -- collection
+  const type = reportData.body.type; // posts, comments, users
   const timestamp = reportData.body.timestamp;
-  const reportingUser = reportData.body.user1;
+  const reportingUser = reportData.body.userid;
   const reason = reportData.body.reason;
-  const parentID = reportData.body.parentID;
+  const parentID = reportData.body.id;
+
+  console.log('report', reportData)
 
   const newReport = {
     parentID: parentID,
@@ -19,35 +21,13 @@ async function reportFromApp(reportData) {
     timestamp: timestamp
   }
 
-  switch(type) {
-    case 'POST':
-      const post = db.collection('posts').doc(parentID);
-      if(!(await post.get()).exists) {
-        console.log('No matching post document.'); 
-        return 'error';
-      }
-      await post.update({reported: true});
-      break;
-    case 'COMMENT':
-      const comment = db.collection('comments').doc(parentID);
-      if(!(await comment.get()).exists) {
-        console.log('No matching comment document.'); 
-        return 'error';
-      }
-      await comment.update({reported: true});
-      break;
-    case 'USER':
-      const user = db.collection('users').doc(parentID);
-      if(!(await user.get()).exists) {
-        console.log('No matching user document.'); 
-        return 'error';
-      }
-      await user.update({reported: true});
-      break;
-    default:
-      console.log('ERROR: Reporting type ' + type + ' is invalid.')
-      return 'error';
+  const parent = db.collection(type).doc(parentID);
+  if(!(await parent.get()).exists) {
+    console.log('No matching ' + type + ' document.'); 
+    return 'error';
   }
+  await parent.update({reported: true});
+
   db.collection('reports').add(newReport)
   return 'success'; // return success if success
 }
