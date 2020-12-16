@@ -121,18 +121,17 @@ async function remove(parentData) {
   const res = await db.collection('archive').add(archived);
 
   const likes = await parent.collection('likes').get();
-  if (likes.empty) {
-    console.log('No likes for this.');
-    return res;
+  if (!likes.empty) {
+    console.log('Deleting likes...');
+    likes.forEach(function(doc) {
+      doc.ref.delete();
+    });
   }
-  likes.forEach(function(doc) {
-    doc.ref.delete();
-  });
   await parent.delete();
   return res; // TODO return value
 }
 
-// Delete comment
+// Old Delete
 // async function removeComment(commentData) {
 //   const comment = db.collection('comments').doc(commentData.query.commentID);
 //   const res = await comment.update({removed: true});
