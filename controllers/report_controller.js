@@ -10,7 +10,7 @@ async function reportFromApp(reportData) {
   const reason = reportData.body.reason;
   const parentID = reportData.body.id;
 
-  console.log('report', reportData)
+  console.log('report', reportData.body)
 
   const newReport = {
     parentID: parentID,
