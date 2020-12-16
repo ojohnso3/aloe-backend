@@ -178,9 +178,10 @@ async function likePost(parentData) {
 // Share post
 async function sharePost(postData) {
   console.log('postData.query', postData.query)
-  const postID = postData.query.postid;
-  const userID = postData.query.userid;
-  const timestamp = postData.query.timestamp
+  console.log('postData.query', postData.body)
+  const postID = postData.body.postid;
+  const userID = postData.body.userid;
+  const timestamp = postData.body.timestamp
   const post = db.collection('posts').doc(postID);
   await post.update({numShares: increment});
   return await post.collection('shares').add({userID: userID, timestamp: timestamp});
