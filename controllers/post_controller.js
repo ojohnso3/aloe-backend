@@ -112,7 +112,8 @@ async function editPost(postData) { // remember dot notation (content.title) for
 
 // Delete post
 async function remove(parentData) {
-  console.log('parentData', parentData)
+  console.log('parentData1', parentData.query)
+  console.log('parentData2', parentData.body)
   const id = parentData.query.id;
   const type = parentData.query.type;
   const parent = db.collection(type).doc(id);
