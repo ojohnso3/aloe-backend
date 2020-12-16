@@ -8,7 +8,6 @@ async function reportFromApp(reportData) {
   const timestamp = reportData.body.timestamp;
   const reportingUser = reportData.body.user1;
   const reason = reportData.body.reason;
-
   const parentID = reportData.body.parentID;
 
   const newReport = {

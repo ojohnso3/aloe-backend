@@ -39,9 +39,9 @@ async function getPosts(post) {
   const posts = db.collection('posts');
   var forYou = []
   if(post.query.timestamp) {
-    forYou = await posts.orderBy('timestamp', 'desc').startAfter(post.query.timestamp).limit(3).get()
+    forYou = await posts.orderBy('timestamp', 'desc').startAfter(post.query.timestamp).limit(5).get()
   } else {
-    forYou = await posts.orderBy('timestamp', 'desc').limit(3).get()
+    forYou = await posts.orderBy('timestamp', 'desc').limit(5).get()
   }
   if (forYou.empty) {
     console.log('No matching documents.');
