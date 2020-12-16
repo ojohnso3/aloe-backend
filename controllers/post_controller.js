@@ -111,18 +111,24 @@ async function editPost(postData) { // remember dot notation (content.title) for
 }
 
 // Delete post
-async function removePost(postData) {
-  const post = db.collection('posts').doc(postData.body.postID);
-  const res = await post.update({removed: true});
+async function remove(parentData) {
+  const id = parentData.query.id;
+  const type = parentData.query.type;
+  const parent = db.collection(type).doc(id);
+  const doc = await parent.get();
+  const archived = doc.data();
+  archived['contentType'] = type;
+  const res = await db.collection('archive').add(archived);
+  await parent.delete();
   return res; // TODO return value
 }
 
 // Delete comment
-async function removeComment(commentData) {
-  const comment = db.collection('comments').doc(commentData.body.commentID);
-  const res = await comment.update({removed: true});
-  return res; // TODO return value
-}
+// async function removeComment(commentData) {
+//   const comment = db.collection('comments').doc(commentData.query.commentID);
+//   const res = await comment.update({removed: true});
+//   return res; // TODO return value
+// }
 
 // Like post
 async function likePost(parentData) {
@@ -176,8 +182,7 @@ module.exports = {
   createPost,
   createComment,
   editPost,
-  removePost,
-  removeComment,
+  remove,
   likePost,
   sharePost
 }
