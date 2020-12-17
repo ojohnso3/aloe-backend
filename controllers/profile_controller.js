@@ -77,7 +77,6 @@ async function getLiked(userData) {
   if(timestamp) {
     liked = await user.collection('liked').orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
   } else {
-    console.log('getting user here')
     liked = await user.collection('liked').orderBy('timestamp', 'desc').limit(5).get();
   }
 
@@ -86,16 +85,11 @@ async function getLiked(userData) {
     return {results: []};
   }
 
-  console.log('check liked', liked.size)
-
   const likedPosts = [];
   await Promise.all(liked.docs.map(async (doc) => {
-    console.log('before liked helper', doc.id)
     const likedData = await likedHelper(doc)
     const likedPost = likedData.post;
     const likedUser = likedData.user;
-
-    console.log('after liked helper', likedUser.id)
 
     const userInfo = await helpers.getUserInfo(likedUser.id);
 
