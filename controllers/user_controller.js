@@ -4,9 +4,9 @@ const processing = require("../processing.js")
 
 // Checks if username exists
 async function checkUsername(userData) {
-  console.log("ahhh", userData.params.id)
+  console.log("ahhh", userData.query.username)
   const users = db.collection('users');
-  const userDoc = await users.where('username', '==', userData.params.id).get();
+  const userDoc = await users.where('username', '==', userData.query.username).get();
   if (userDoc.empty) {
     console.log('Username is available.');
     return true;
