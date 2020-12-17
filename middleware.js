@@ -86,6 +86,7 @@ function postMiddleware(id, dbPost, userInfo) {
         id,
         timestamp: dbPost.timestamp,
         status: dbPost.status,
+        userid: userInfo.userID,
         user: username,
         profilePicture: userInfo.profilePic || 'none',
         verified: userInfo.verified || false,

@@ -30,6 +30,7 @@ async function getUserInfo(userID) {
     console.log('No matching user document.'); // return an error here
   } else {
     userInfo = {
+      userID: userID,
       username: userDoc.data().username,
       profilePic: userDoc.data().profilePic,
       verified: userDoc.data().verified,
