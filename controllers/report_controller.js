@@ -31,8 +31,14 @@ async function reportFromApp(reportData) {
       return 'error';
     }
 
-    const userDoc = db.collection(type).doc(user.docs[0].id);
+    const userID = user.docs[0].id
+
+    const userDoc = db.collection(type).doc(userID);
     await userDoc.update({reported: true});
+
+    newReport['parentID'] = userID
+    db.collection('reports').add(newReport)
+
   } else {
     const parent = db.collection(type).doc(parentID);
     if(!(await parent.get()).exists) {
@@ -40,9 +46,9 @@ async function reportFromApp(reportData) {
       return 'error';
     }
     await parent.update({reported: true});
+    db.collection('reports').add(newReport)
   }
 
-  db.collection('reports').add(newReport)
   return 'success'; // return success if success
 }
 
