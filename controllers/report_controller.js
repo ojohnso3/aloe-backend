@@ -22,17 +22,21 @@ async function reportFromApp(reportData) {
   }
 
   // separate username check for user
-  var parent;
   if(type == 'users') {
-    parent = db.collection(type).where('username', '==', parentID);
+    const user = db.collection(type).where('username', '==', parentID);
+    if(!(await user.get()).exists) {
+      console.log('No matching ' + type + ' document.'); 
+      return 'error';
+    }
+    await user.update({reported: true});
   } else {
-    parent = db.collection(type).doc(parentID);
+    const parent = db.collection(type).doc(parentID);
+    if(!(await parent.get()).exists) {
+      console.log('No matching ' + type + ' document.'); 
+      return 'error';
+    }
+    await parent.update({reported: true});
   }
-  if(!(await parent.get()).exists) {
-    console.log('No matching ' + type + ' document.'); 
-    return 'error';
-  }
-  await parent.update({reported: true});
 
   db.collection('reports').add(newReport)
   return 'success'; // return success if success
