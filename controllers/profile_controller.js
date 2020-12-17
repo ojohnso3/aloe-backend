@@ -3,9 +3,11 @@ const middleware = require("../middleware.js");
 const helpers = require("../helpers.js");
 
 // Get Profile
-async function getProfile(username) {  
+async function getProfile(userData) {  
+  console.log('id', userData.params.id)
+  console.log('username', userData.params.username)
   const users = db.collection('users');
-  const profile = await users.where('username', '==', username.params.id).get();
+  const profile = await users.where('username', '==', userData.params.id).get();
   if (profile.empty) {
     console.log('No such user.');
     return;
