@@ -28,6 +28,15 @@ async function getUserInfo(userID) {
   var userInfo = {};
   if (!userDoc.exists) {
     console.log('No matching user document.'); // return an error here
+    const anonID = 'xOi20I8ehuqyhKdwt6wh'
+    const anonDoc = await db.collection('users').doc(anonID).get();
+    // make sure it exists
+    userInfo = {
+      userID: anonID,
+      username: anonDoc.data().username,
+      profilePic: anonDoc.data().profilePic,
+      verified: anonDoc.data().verified,
+    }
   } else {
     userInfo = {
       userID: userID,
