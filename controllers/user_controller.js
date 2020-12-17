@@ -3,9 +3,10 @@ const middleware = require("../middleware.js")
 const processing = require("../processing.js")
 
 // Checks if username exists
-async function checkUsername(data) {
+async function checkUsername(userData) {
+  console.log("ahhh", userData.params.id)
   const users = db.collection('users');
-  const userDoc = await users.where('username', '==', data.body.username).get();
+  const userDoc = await users.where('username', '==', userData.params.id).get();
   if (userDoc.empty) {
     console.log('Username is available.');
     return true;
