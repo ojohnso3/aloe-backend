@@ -69,11 +69,15 @@ async function likedHelper(doc) {
 
 // Load liked posts on profile
 async function getLiked(userData) {
-  const user = db.collection('users').doc(userData.query.id)
-  var liked = []
-  if(userData.query.timestamp) {
-    liked = await user.collection('liked').orderBy('timestamp', 'desc').startAfter(userData.query.timestamp).limit(5).get();
+  console.log("query", userData.query)
+  const userID = userData.query.id;
+  const timestamp = userData.query.timestamp;
+  const user = db.collection('users').doc(userID);
+  var liked = [];
+  if(timestamp) {
+    liked = await user.collection('liked').orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
   } else {
+    console.log('getting user here')
     liked = await user.collection('liked').orderBy('timestamp', 'desc').limit(5).get();
   }
 
@@ -82,17 +86,20 @@ async function getLiked(userData) {
     return {results: []};
   }
 
+  console.log('check liked', liked.size)
+
   const likedPosts = [];
   await Promise.all(liked.docs.map(async (doc) => {
-    // if(!doc.data().removed) {
+    console.log('before liked helper', doc.id)
     const likedData = await likedHelper(doc)
     const likedPost = likedData.post;
     const likedUser = likedData.user;
 
+    console.log('after liked helper', likedUser.id)
+
     const userInfo = await helpers.getUserInfo(likedUser.id);
 
     likedPosts.push(middleware.postMiddleware(likedPost.id, likedPost.data(), userInfo))
-    // }
   }));
 
   return {results: likedPosts};
