@@ -7,17 +7,18 @@ async function getProfile(userData) {
   console.log('id', userData.params.id)
   console.log('username', userData.params.username)
   const users = db.collection('users');
-  const profile = await users.where('username', '==', userData.params.id).get();
-  if (profile.empty) {
+  // const profile = await users.where('username', '==', userData.params.id).get();
+  const profile = await users.doc(userData.params.id).get();
+  if (!profile.exists) {
     console.log('No such user.');
     return;
   }
-  if(profile.docs.length != 1 ) {
-    console.log('ERROR: More than one user with the same username.')
-  }
-  const userDoc = profile.docs[0];
+  // if(profile.docs.length != 1 ) {
+  //   console.log('ERROR: More than one user with the same username.')
+  // }
+  // const userDoc = profile.docs[0];
   // return middleware.userMiddleware(userDoc.id, userDoc.data());
-  return middleware.profileMiddleware(userDoc.id, userDoc.data());
+  return middleware.profileMiddleware(profile.id, profile.data());
 }
 
 // Load created posts on profile
