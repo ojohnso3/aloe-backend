@@ -23,36 +23,27 @@ async function getProfile(userData) {
 
 // Load created posts on profile
 async function getCreated(userData) {
-  console.log('body', userData.body)
-  console.log('query', userData.query)
-  const userID = userData.body.id;
-  const timestamp = userData.body.timestamp;
+  const userID = userData.query.id;
+  const timestamp = userData.query.timestamp;
   const posts = db.collection('posts');
   var created = []; 
-  console.log('before created fnc')
   if(timestamp) {
     created = await posts.where('userID', '==', userID).startAfter(timestamp).limit(5).get(); // .orderBy('timestamp', 'desc')
   } else {
-    console.log('made it to created fnc', userID)
     created = await posts.where('userID', '==', userID).limit(5).get();
-    console.log('after1', created.size)
   }
-  console.log('after2', created.size)
   if (created.empty) {
     console.log('No matching CREATED docs.');
     return;
   }
 
-  console.log('after3', created.size)
-
   const createdPosts = [];
   await Promise.all(created.docs.map(async (doc) => {
-    console.log('inside promise', doc.data())
     const userInfo = await helpers.getUserInfo(userID);
     createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo))
   }));
 
-  console.log('final arra', createdPosts)
+  console.log('final array', createdPosts)
 
   return {results: createdPosts};
   // return helpers.getCreated(userData.body.id, userData.body.timestamp);
