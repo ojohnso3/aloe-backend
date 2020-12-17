@@ -25,7 +25,7 @@ async function reportFromApp(reportData) {
   if(type == 'users') {
     console.log('username', parentID)
     const user = db.collection(type).where('username', '==', parentID);
-    if(!(await user.get()).empty) {
+    if((await user.get()).empty) {
       console.log('No matching ' + type + ' document.'); 
       return 'error';
     }
