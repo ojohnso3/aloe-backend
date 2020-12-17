@@ -164,12 +164,33 @@ function userProcessing(user) {
   return ret;
 }
 
+function profileProcessing(profile) {
+
+  const profileData = JSON.parse(JSON.stringify(profile)); 
+
+  let ret = {
+      email: profileData.email,
+      username: profileData.username,
+      consent: profileData.consent,
+      profilePic: profileData.profilePic,
+      bio: profileData.bio,
+  };
+  for (var key of Object.keys(ret)) {
+    // console.log('key', key, ' - ', ret[key]);
+    if(ret[key] == '' || ret[key] == undefined) {
+      delete ret[key]
+    }
+  }
+  return ret;
+}
+
 module.exports = {
   postProcessing,
   editProcessing,
   commentProcessing,
   promptProcessing,
-  userProcessing
+  userProcessing,
+  profileProcessing
 };
 
 

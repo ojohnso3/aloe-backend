@@ -100,11 +100,14 @@ async function getLiked(userData) {
 }
 
 
-// - Change profile (i.e. pic, bio, username, anonymity, consent) TBD: EMAIL??
+// Change profile
 async function editProfile(profileData) {
+  const processedProfile = processing.profileProcessing(profileData.body)
+  console.log('proc', processedProfile)
+  console.log('id', profileData.body.id)
   const user = db.collection('users').doc(profileData.body.id);
-  // email, username, consent, profilePic, bio
-  const res = await user.update(profileData.body.updates);
+  // username, email, consent, profilePic, bio, anonymity
+  const res = await user.update(processedProfile);
   return res; // TODO: return value
 }
 
