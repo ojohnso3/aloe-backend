@@ -26,12 +26,12 @@ async function reportFromApp(reportData) {
     console.log('username', parentID)
     const userCol = db.collection(type).where('username', '==', parentID);
     const user = await userCol.get()
-    if(user.empty) {
+    if(user.empty) { // user.size == 1
       console.log('No matching ' + type + ' document.'); 
       return 'error';
     }
-    console.log('user[0].id', user[0].id)
-    const userDoc = db.collection(type).doc(user[0].id);
+
+    const userDoc = db.collection(type).doc(user.docs[0].id);
     await userDoc.update({reported: true});
   } else {
     const parent = db.collection(type).doc(parentID);
