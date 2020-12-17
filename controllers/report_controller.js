@@ -21,7 +21,13 @@ async function reportFromApp(reportData) {
     timestamp: timestamp
   }
 
-  const parent = db.collection(type).doc(parentID);
+  // separate username check for user
+  var parent;
+  if(type == 'users') {
+    parent = db.collection(type).where('username', '==', parentID);
+  } else {
+    parent = db.collection(type).doc(parentID);
+  }
   if(!(await parent.get()).exists) {
     console.log('No matching ' + type + ' document.'); 
     return 'error';

@@ -38,7 +38,7 @@ router.post('/post/create', response(postController.createPost)); // works
 router.post('/comment/create', response(postController.createComment)); // works
 router.put('/post/edit', response(postController.editPost)); // works
 router.post('/remove', response(postController.remove)); // works
-router.put('/comment/remove', response(postController.removeComment)); // works
+// router.put('/comment/remove', response(postController.removeComment)); // works
 router.put('/post/like', response(postController.likePost)); // works
 router.put('/post/share', response(postController.sharePost)); // works
 
