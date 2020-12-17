@@ -5,7 +5,6 @@ const helpers = require("../helpers.js");
 // Get Profile
 async function getProfile(userData) {  
   console.log('id', userData.params.id)
-  console.log('username', userData.params.username)
   const users = db.collection('users');
   // const profile = await users.where('username', '==', userData.params.id).get();
   const profile = await users.doc(userData.params.id).get();
@@ -42,8 +41,6 @@ async function getCreated(userData) {
     const userInfo = await helpers.getUserInfo(userID);
     createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo))
   }));
-
-  console.log('final array', createdPosts)
 
   return {results: createdPosts};
   // return helpers.getCreated(userData.body.id, userData.body.timestamp);
