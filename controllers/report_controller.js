@@ -21,7 +21,7 @@ async function reportFromApp(reportData) {
     timestamp: timestamp
   }
 
-  // separate username check for user
+  // separate username check for user (TODO: can just use userID instead)
   if(type == 'users') {
     console.log('username', parentID)
     const userCol = db.collection(type).where('username', '==', parentID);

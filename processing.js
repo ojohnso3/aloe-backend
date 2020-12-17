@@ -42,12 +42,8 @@ function postProcessing(post) {
   for (var key of Object.keys(ret)) {
     console.log('key', key, ' - ', ret[key]);
     if(ret[key] == undefined) {
-      // console.log('here')
       return null
     }
-    // if(ret[key].keys()) {
-    //   console.log('hi')
-    // }
   } 
   return ret;
 }

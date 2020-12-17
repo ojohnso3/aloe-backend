@@ -53,7 +53,7 @@ router.put('/user/delete', response(userController.deleteAccount)); // works
 router.get('/profile/view/:id', response(profileController.getProfile)); // works
 router.get('/profile/created', response(profileController.getCreated)); // works
 router.get('/profile/liked', response(profileController.getLiked)); // works
-router.put('/profile/update', response(profileController.editProfile)); // works
+router.put('/profile/edit', response(profileController.editProfile)); // works
 
 
 // ForYou routes

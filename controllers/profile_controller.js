@@ -20,7 +20,30 @@ async function getProfile(username) {
 
 // Load created posts on profile
 async function getCreated(userData) {
-  return {results: helpers.getCreated(userData.body.userID)};
+  console.log('start')
+  const userID = userData.body.id;
+  const timestamp = userData.body.timestamp;
+  const posts = db.collection('posts');
+  var created = []; 
+  if(timestamp) {
+    created = await posts.where('userID', '==', userID).startAfter(timestamp).limit(5).get(); // .orderBy('timestamp', 'desc')
+  } else {
+    created = await posts.where('userID', '==', userID).limit(5).get();
+  }
+  if (created.empty) {
+    console.log('No matching document.');
+    return;
+  }
+
+  const createdPosts = [];
+  // TODO: fix here
+  await Promise.all(created.docs.map(async (doc) => {
+    const userInfo = await helpers.getUserInfo(userID);
+    createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo))
+  }));
+
+  return {results: createdPosts};
+  // return helpers.getCreated(userData.body.id, userData.body.timestamp);
 
   // Before helper
   // const posts = db.collection('posts');
@@ -34,34 +57,42 @@ async function getCreated(userData) {
 
 async function likedHelper(doc) {
   const posts = db.collection('posts');
-    const postID = doc.data().postID;
-    const likedPost = await posts.doc(postID).get();
-    if (!likedPost.exists) {
-      console.log('No document with postid: ' + postID);
-      return;
-    }
-    const likedUser = await db.collection('users').doc(likedPost.data().userID).get();
-    return {post: likedPost, user: likedUser}
+  const postID = doc.data().postID;
+  const likedPost = await posts.doc(postID).get();
+  if (!likedPost.exists) {
+    console.log('No document with postid: ' + postID);
+    return;
+  }
+  const likedUser = await db.collection('users').doc(likedPost.data().userID).get();
+  return {post: likedPost, user: likedUser}
 }
 
 // Load liked posts on profile
 async function getLiked(userData) {
-  const user = db.collection('users').doc(userData.body.userID)
-  const liked = await user.collection('liked').orderBy('timestamp').limit(5).get();
+  const user = db.collection('users').doc(userData.query.id)
+  var liked = []
+  if(userData.query.timestamp) {
+    liked = await user.collection('liked').orderBy('timestamp', 'desc').startAfter(userData.query.timestamp).limit(5).get();
+  } else {
+    liked = await user.collection('liked').orderBy('timestamp', 'desc').limit(5).get();
+  }
+
   if (liked.empty) {
     console.log('No matching document.');
-    return;
+    return {results: []};
   }
 
   const likedPosts = [];
   await Promise.all(liked.docs.map(async (doc) => {
-    if(!doc.data().removed) {
-      const likedData = await likedHelper(doc)
-      const likedPost = likedData.post;
-      const likedUser = likedData.user;
+    // if(!doc.data().removed) {
+    const likedData = await likedHelper(doc)
+    const likedPost = likedData.post;
+    const likedUser = likedData.user;
 
-      likedPosts.push(middleware.postMiddleware(likedPost.id, likedPost.data(), likedUser.data().username))
-    }
+    const userInfo = await helpers.getUserInfo(likedUser.id);
+
+    likedPosts.push(middleware.postMiddleware(likedPost.id, likedPost.data(), userInfo))
+    // }
   }));
 
   return {results: likedPosts};
@@ -70,8 +101,8 @@ async function getLiked(userData) {
 
 // - Change profile (i.e. pic, bio, username, anonymity, consent) TBD: EMAIL??
 async function editProfile(profileData) {
-  const user = db.collection('users').doc(profileData.body.userID);
-  // probably have processing here to match with database fields
+  const user = db.collection('users').doc(profileData.body.id);
+  // email, username, consent, profilePic, bio
   const res = await user.update(profileData.body.updates);
   return res; // TODO: return value
 }
