@@ -34,7 +34,7 @@ async function getCreated(userData) {
     created = await posts.where('userID', '==', userID).limit(5).get();
   }
   if (created.empty) {
-    console.log('No matching document.');
+    console.log('No matching CREATED docs.');
     return;
   }
 
