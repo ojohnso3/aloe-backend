@@ -29,7 +29,7 @@ async function reportFromApp(reportData) {
       console.log('No matching ' + type + ' document.'); 
       return 'error';
     }
-    console.log('user', user)
+    // console.log('user', user)
     console.log('user2', user.size())
     await user[0].update({reported: true});
   } else {
