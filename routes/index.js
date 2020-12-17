@@ -44,7 +44,7 @@ router.put('/post/share', response(postController.sharePost)); // works
 
 
 // User routes
-router.get('/user/:id', response(userController.checkUsername)); // works
+router.get('/user/username/:id', response(userController.checkUsername)); // works
 router.post('/user/create', response(userController.createAccount)); // works
 router.put('/user/login', response(userController.login)); // works
 router.put('/user/delete', response(userController.deleteAccount)); // works
