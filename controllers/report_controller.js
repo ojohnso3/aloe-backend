@@ -30,7 +30,7 @@ async function reportFromApp(reportData) {
       return 'error';
     }
     // console.log('user', user)
-    console.log('user2', user.size())
+    console.log('user2', user.size)
     await user[0].update({reported: true});
   } else {
     const parent = db.collection(type).doc(parentID);
