@@ -23,7 +23,8 @@ async function getProfile(userData) {
 
 // Load created posts on profile
 async function getCreated(userData) {
-  console.log('start')
+  console.log('body', userData.body)
+  console.log('query', userData.query)
   const userID = userData.body.id;
   const timestamp = userData.body.timestamp;
   const posts = db.collection('posts');
@@ -32,15 +33,17 @@ async function getCreated(userData) {
   if(timestamp) {
     created = await posts.where('userID', '==', userID).startAfter(timestamp).limit(5).get(); // .orderBy('timestamp', 'desc')
   } else {
-    console.log('made it to created fnc')
+    console.log('made it to created fnc', userID)
     created = await posts.where('userID', '==', userID).limit(5).get();
+    console.log('after1', created.size)
   }
+  console.log('after2', created.size)
   if (created.empty) {
     console.log('No matching CREATED docs.');
     return;
   }
 
-  console.log('after created fnc', created.size)
+  console.log('after3', created.size)
 
   const createdPosts = [];
   await Promise.all(created.docs.map(async (doc) => {
