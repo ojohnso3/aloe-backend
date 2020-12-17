@@ -28,9 +28,11 @@ async function getCreated(userData) {
   const timestamp = userData.body.timestamp;
   const posts = db.collection('posts');
   var created = []; 
+  console.log('before created fnc')
   if(timestamp) {
     created = await posts.where('userID', '==', userID).startAfter(timestamp).limit(5).get(); // .orderBy('timestamp', 'desc')
   } else {
+    console.log('made it to created fnc')
     created = await posts.where('userID', '==', userID).limit(5).get();
   }
   if (created.empty) {
@@ -38,12 +40,16 @@ async function getCreated(userData) {
     return;
   }
 
+  console.log('after created fnc', created.size)
+
   const createdPosts = [];
-  // TODO: fix here
   await Promise.all(created.docs.map(async (doc) => {
+    console.log('inside promise', doc.data())
     const userInfo = await helpers.getUserInfo(userID);
     createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo))
   }));
+
+  console.log('final arra', createdPosts)
 
   return {results: createdPosts};
   // return helpers.getCreated(userData.body.id, userData.body.timestamp);
