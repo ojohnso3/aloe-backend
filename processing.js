@@ -168,14 +168,12 @@ function profileProcessing(profile) {
 
   const profileData = JSON.parse(JSON.stringify(profile)); 
 
-  const profileUpdates = profileData.updates;
-
   let ret = {
-      email: profileUpdates.email,
-      username: profileUpdates.username,
-      consent: profileUpdates.consent,
-      profilePic: profileUpdates.profilePic,
-      bio: profileUpdates.bio,
+      email: profileData.email,
+      username: profileData.username,
+      consent: profileData.consent,
+      profilePic: profileData.profilePic,
+      bio: profileData.bio,
   };
   for (var key of Object.keys(ret)) {
     console.log('key', key, ' - ', ret[key]);
