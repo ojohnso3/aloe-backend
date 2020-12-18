@@ -106,8 +106,8 @@ async function getLiked(userData) {
 async function editProfile(profileData) {
   // console.log("before processing lol")
   const processedProfile = processing.profileProcessing(profileData.body)
-  // console.log('proc', processedProfile)
-  // console.log('id', profileData.body.id)
+  console.log('proc', processedProfile)
+  console.log('id', profileData.body.id)
   const user = db.collection('users').doc(profileData.body.id);
   // username, email, consent, profilePic, bio, anonymity
   const res = await user.update(processedProfile);
