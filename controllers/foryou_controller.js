@@ -110,7 +110,6 @@ async function getPrompts(prompt) {
 
 // Check if user has chosen survey answer
 async function checkChosenAnswer(surveyData) {
-  console.log('sd', surveyData.query)
   const answerID = surveyData.query.answerid;
   const userID = surveyData.query.userid;
   const surveyUsers = db.collection('answers').doc(answerID).collection('users');
@@ -126,19 +125,16 @@ async function checkChosenAnswer(surveyData) {
 
 // Check if user has chosen survey answer
 async function chooseAnswer(surveyData) {
-  const answerID = surveyData.body.answerID;
-  const userID = surveyData.body.userID;
-  const surveyUsers = db.collection('answers').doc(answerID).collection('users');
-  const userDoc = await surveyUsers.where('userID', '==', userID).get();
-  if (userDoc.empty) {
-    console.log('User has not chosen.');
-    return false;
-  } else {
-    console.log('User has chosen.');
-    return true;
-  }
+  console.log('sd', surveyData.body)
+  const answerID = surveyData.body.answerid;
+  const userID = surveyData.body.userid;
+  const timestamp = surveyData.body.timestamp;
+  const answerUser = {
+    userID: userID,
+    timestamp: timestamp
+  };
+  return await db.collection('answers').doc(answerID).collection('users').add(answerUser);
 }
-
 
 
 module.exports = {
