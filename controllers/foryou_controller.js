@@ -138,8 +138,8 @@ async function chooseAnswer(surveyData) {
 
 // Check if user has chosen survey answer
 async function getSurveyResults(answerData) {
-  console.log('sd', answerData.body)
-  const answerID = answerData.body.answerid;
+  console.log('sd', answerData.query)
+  const answerID = answerData.query.answerid;
 
   const answer = db.collection('answers').doc(answerID);
   const answerDoc = await answer.get()
