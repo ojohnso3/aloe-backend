@@ -165,6 +165,7 @@ function userProcessing(user) {
 }
 
 function profileProcessing(profile) {
+  console.log('heere', profile)
 
   const profileData = JSON.parse(JSON.stringify(profile)); 
 
