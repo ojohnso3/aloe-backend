@@ -165,26 +165,24 @@ function userProcessing(user) {
 }
 
 function profileProcessing(profile) {
-  console.log('heere', profile)
 
   const profileData = JSON.parse(JSON.stringify(profile)); 
 
-  console.log('prod', profileData)
+  const profileUpdates = profileData.updates;
+
   let ret = {
-      email: profileData.email,
-      username: profileData.username,
-      consent: profileData.consent,
-      profilePic: profileData.profilePic,
-      bio: profileData.bio,
+      email: profileUpdates.email,
+      username: profileUpdates.username,
+      consent: profileUpdates.consent,
+      profilePic: profileUpdates.profilePic,
+      bio: profileUpdates.bio,
   };
-  console.log('ret1', ret)
   for (var key of Object.keys(ret)) {
     console.log('key', key, ' - ', ret[key]);
     if(ret[key] == '' || ret[key] == undefined) {
       delete ret[key]
     }
   }
-  console.log('ret2', ret)
   return ret;
 }
 
