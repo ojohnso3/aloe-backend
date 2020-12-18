@@ -109,7 +109,7 @@ async function editProfile(profileData) {
   console.log('proc', processedProfile)
   console.log('id', profileData.body.id)
   const user = db.collection('users').doc(profileData.body.id);
-  // username, email, consent, profilePic, bio, anonymity
+  // username, profilePic, bio, consent
   const res = await user.update(processedProfile);
   return res; // TODO: return value
 }

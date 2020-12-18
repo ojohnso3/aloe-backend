@@ -168,8 +168,14 @@ function profileProcessing(profile) {
 
   const profileData = JSON.parse(JSON.stringify(profile)); 
 
+  if(profileData.consent) {
+    profileData.consent = true
+  } else {
+    profileData.consent = false
+  }
+  console.log('cons', profileData.consent)
+
   let ret = {
-      email: profileData.email,
       username: profileData.username,
       consent: profileData.consent,
       profilePic: profileData.profilePic,
