@@ -102,6 +102,7 @@ async function getLiked(userData) {
 
 // Change profile
 async function editProfile(profileData) {
+  console.log("before processing lol")
   const processedProfile = processing.profileProcessing(profileData.body)
   console.log('proc', processedProfile)
   console.log('id', profileData.body.id)

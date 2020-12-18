@@ -168,6 +168,7 @@ function profileProcessing(profile) {
 
   const profileData = JSON.parse(JSON.stringify(profile)); 
 
+  console.log('prod', profileData)
   let ret = {
       email: profileData.email,
       username: profileData.username,
@@ -175,12 +176,14 @@ function profileProcessing(profile) {
       profilePic: profileData.profilePic,
       bio: profileData.bio,
   };
+  console.log('ret1', ret)
   for (var key of Object.keys(ret)) {
-    // console.log('key', key, ' - ', ret[key]);
+    console.log('key', key, ' - ', ret[key]);
     if(ret[key] == '' || ret[key] == undefined) {
       delete ret[key]
     }
   }
+  console.log('ret2', ret)
   return ret;
 }
 
