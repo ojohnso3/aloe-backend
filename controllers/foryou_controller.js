@@ -145,12 +145,12 @@ async function getSurveyResults(answerData) {
   const answerDoc = await answer.get()
   if(!answerDoc.exists) {
     console.log("error")
-    return [-1]
+    return '-1'
   }
 
   const answerUsers = await answer.collection('users').get();
   console.log("size", answerUsers.size)
-  return [answerUsers.size]
+  return answerUsers.size.toString()
 }
 // async function getSurveyResults(promptData) {
 //   console.log('sd', promptData.body)
