@@ -136,6 +136,53 @@ async function chooseAnswer(surveyData) {
   return await db.collection('answers').doc(answerID).collection('users').add(answerUser);
 }
 
+// Check if user has chosen survey answer
+async function getSurveyResults(answerData) {
+  console.log('sd', answerData.query)
+  const answerID = answerData.query.answerid;
+
+  const answer = db.collection('answers').doc(answerID);
+  const answerDoc = await answer.get()
+  if(!answerDoc.exists) {
+    console.log("error")
+    return {results: -1}
+  }
+
+  const answerUsers = await answer.collection('users').get();
+  console.log("size", answerUsers.size)
+  return {results: answerUsers.size}
+}
+// async function getSurveyResults(promptData) {
+//   console.log('sd', promptData.body)
+//   const promptID = promptData.body.promptid;
+//   const answerID = promptData.body.answerid;
+
+//   const allAnswers = await db.collection('answers').where("promptID", "==", promptID).get();
+//   if(allAnswers.empty) {
+//     console.log("error")
+//     return {results: []}
+//   }
+
+//   const answerResults = [];
+//   var allUsers = 0;
+//   await Promise.all(allAnswers.docs.map(async (doc) => {
+//     const answerUsers = await db.collection('answers').doc(doc.id).collection('users').get();
+//     allUsers += answerUsers.size;
+//     console.log("all", allUsers)
+//     const answerCount = {
+//       id: doc.id,
+//       count: answerUsers.size,
+//       percentage: null,
+//     }
+//     answerResults.push(answerCount)
+//   }));
+//   answerResults.map((answer) => {
+//     answer.percentage = (answer.count / allUsers) * 100;
+//     console.log(".percentage", answer.percentage)
+//   })
+//   return;
+// }
+
 
 module.exports = {
   getRecentPrompt,
@@ -143,7 +190,8 @@ module.exports = {
   getPosts,
   getPrompts,
   checkChosenAnswer,
-  chooseAnswer
+  chooseAnswer,
+  getSurveyResults
 }
 
 
