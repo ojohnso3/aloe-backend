@@ -35,7 +35,7 @@ async function getComments(parentData) {
 }
 
 // Get ForYou posts
-async function getPosts(post) {
+async function getPosts(post) { // ADD MORE QUERIES (APPROVED)
   const posts = db.collection('posts');
   var forYou = []
   if(post.query.timestamp) {
@@ -54,15 +54,15 @@ async function getPosts(post) {
     finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo))
   }));
 
+  return {results: finalPosts}
+}
+
   // console.log('finalPosts', finalPosts)
   // console.log("getting posts with this params", post.query.timestamp)
   // console.log("final posts", finalPosts)
   // if(finalPosts.length == 0) {
   //   console.log('fish ahahaha u sux')
   // }
-
-  return {results: finalPosts}
-}
 
 // Get answers for survey (helper)
 async function getSurveyAnswers(promptID) {

@@ -62,8 +62,8 @@ router.get('/foryou/comments', response(foryouController.getComments)); // works
 router.get('/foryou/posts', response(foryouController.getPosts)); // works
 router.get('/foryou/prompts', response(foryouController.getPrompts)); // works
 router.get('/foryou/chosen', response(foryouController.checkChosenAnswer)); // works
-router.post('/foryou/choose', response(foryouController.chooseAnswer)); // works
 router.get('/foryou/results', response(foryouController.getSurveyResults)); // works
+router.post('/foryou/choose', response(foryouController.chooseAnswer)); // works
 
 
 

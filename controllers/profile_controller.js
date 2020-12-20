@@ -35,7 +35,7 @@ async function getCreated(userData) {
   }
   if (created.empty) {
     console.log('No matching CREATED docs.');
-    return;
+    return {results: []};
   }
 
   const createdPosts = [];
@@ -63,7 +63,7 @@ async function likedHelper(doc) {
   const likedPost = await posts.doc(postID).get();
   if (!likedPost.exists) {
     console.log('No document with postid: ' + postID);
-    return;
+    return null;
   }
   const likedUser = await db.collection('users').doc(likedPost.data().userID).get();
   return {post: likedPost, user: likedUser}
@@ -90,12 +90,15 @@ async function getLiked(userData) {
   const likedPosts = [];
   await Promise.all(liked.docs.map(async (doc) => {
     const likedData = await likedHelper(doc)
-    const likedPost = likedData.post;
-    const likedUser = likedData.user;
 
-    const userInfo = await helpers.getUserInfo(likedUser.id);
-
-    likedPosts.push(middleware.postMiddleware(likedPost.id, likedPost.data(), userInfo))
+    if(likedData != null) {
+      const likedPost = likedData.post;
+      const likedUser = likedData.user;
+  
+      const userInfo = await helpers.getUserInfo(likedUser.id);
+  
+      likedPosts.push(middleware.postMiddleware(likedPost.id, likedPost.data(), userInfo))
+    }
   }));
 
   return {results: likedPosts};
