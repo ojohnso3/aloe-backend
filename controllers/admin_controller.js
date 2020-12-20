@@ -1,11 +1,11 @@
-const db = require("../db.js");
+const db = require("../firebase/db.js");
 const middleware = require("../middleware.js")
 const helpers = require("../helpers.js")
 
 // Load all posts of chosen status
 async function getPostsByStatus(request) {
   const posts = db.collection('posts');
-  const status = request.query.status;
+  const status = request.query.status || 'ALL'; // If the status is undefined, make it 'ALL'
 
   const selected = status === 'ALL' ?
     await posts.orderBy('timestamp').get() :
@@ -36,6 +36,9 @@ async function moderatePost(postData) {
   const newStatus = postData.body.status;
   const timestamp = postData.body.timestamp;
   const reason = postData.body.reason;
+
+  if (!postID || !newStatus || !timestamp || !reason) 
+    return {};
 
   return updatePostStatus(postID, newStatus, reason, timestamp)
 }

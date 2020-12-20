@@ -1,4 +1,4 @@
-const db = require("../db.js");
+const db = require("../firebase/db.js");
 const middleware = require("../middleware.js")
 const processing = require("../processing.js")
 

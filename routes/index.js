@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+var checkIfAuthenticated = require('../firebase/auth');
 
 var adminController = require('../controllers/admin_controller.js');
 var postController = require('../controllers/post_controller.js');
@@ -19,14 +20,14 @@ function response(handler) {
 }
 
 // Admin routes
-router.get('/admin/posts', response(adminController.getPostsByStatus)); // works
+router.get('/admin/posts', checkIfAuthenticated, response(adminController.getPostsByStatus)); // works
 // router.get('/admin/reported/:id', response(adminController.getReportedByType)); // 
 // router.get('/admin/banned', response(adminController.getBannedUsers));
-router.put('/admin/moderate', response(adminController.moderatePost)); // done but check
-router.put('/admin/postreport', response(adminController.reportPost)); // done but check
-router.put('/admin/commentreport', response(adminController.reportComment)); // done but check
-router.put('/admin/userreport', response(adminController.reportUser)); // done but check
-router.post('/admin/prompt', response(adminController.createPrompt)); // done but check
+router.put('/admin/moderate', checkIfAuthenticated, response(adminController.moderatePost)); // done but check
+router.put('/admin/postreport', checkIfAuthenticated, response(adminController.reportPost)); // done but check
+router.put('/admin/commentreport', checkIfAuthenticated, response(adminController.reportComment)); // done but check
+router.put('/admin/userreport', checkIfAuthenticated, response(adminController.reportUser)); // done but check
+router.post('/admin/prompt', checkIfAuthenticated, response(adminController.createPrompt)); // done but check
 
 // Reporting routes
 router.post('/report', response(reportController.reportFromApp));  // works
