@@ -35,7 +35,7 @@ async function getCreated(userData) {
   }
   if (created.empty) {
     console.log('No matching CREATED docs.');
-    return;
+    return {results: []};
   }
 
   const createdPosts = [];
@@ -63,7 +63,7 @@ async function likedHelper(doc) {
   const likedPost = await posts.doc(postID).get();
   if (!likedPost.exists) {
     console.log('No document with postid: ' + postID);
-    return;
+    return null;
   }
   const likedUser = await db.collection('users').doc(likedPost.data().userID).get();
   return {post: likedPost, user: likedUser};
