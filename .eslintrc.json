@@ -19,6 +19,8 @@
         "strict":"off",
         "max-len":"off",
         "new-cap":"off",
-        "semi":["error", "always"]
+        "semi":["error", "always"],
+        "no-unused-vars": "warn",
+        "require-jsdoc":"off"
     }
 }
