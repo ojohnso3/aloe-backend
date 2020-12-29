@@ -27,6 +27,7 @@ router.put('/admin/postreport', response(adminController.reportPost)); // done b
 router.put('/admin/commentreport', response(adminController.reportComment)); // done but check
 router.put('/admin/userreport', response(adminController.reportUser)); // done but check
 router.post('/admin/prompt', response(adminController.createPrompt)); // done but check
+router.post('/website/email', response(adminController.addEmail)); // works
 
 // Reporting routes
 router.post('/report', response(reportController.reportFromApp));  // works

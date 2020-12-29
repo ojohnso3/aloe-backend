@@ -177,6 +177,20 @@ async function createPrompt(promptData) {
 //   });
 // }
 
+// Add email to db
+async function addEmail(emailData) {
+  const emailInfo = emailData.body;
+
+  const emailDoc = await db.collection('emails').where('email', '==', emailInfo.email).get();
+  if (emailDoc.empty) {
+    console.log('Email not already in db');
+    const email = await db.collection('emails').add(emailInfo);
+    return email;
+  } else {
+    console.log('Email already in db');
+    return 'Already exists';
+  }
+}
 
 
 
@@ -187,10 +201,11 @@ module.exports = {
   reportComment,
   reportUser,
   unbanUser,
-  createPrompt
+  createPrompt,
   // getReportedByType,
   // getReportsByID,
   // getBannedUsers,
+  addEmail
 }
 
 
