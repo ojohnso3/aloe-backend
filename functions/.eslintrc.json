@@ -21,6 +21,7 @@
         "new-cap":"off",
         "semi":["error", "always"],
         "no-unused-vars": "warn",
-        "require-jsdoc":"off"
+        "require-jsdoc":"off",
+        "guard-for-in":"warn"
     }
 }

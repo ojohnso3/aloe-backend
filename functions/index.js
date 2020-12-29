@@ -9,6 +9,6 @@ const functions = require('firebase-functions');
 //   response.send("Hello from Firebase!");
 // });
 
-var app = require('../app');
+const app = require('./src/app');
 
 exports.app = functions.https.onRequest(app);
