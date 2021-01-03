@@ -20,6 +20,7 @@ function response(handler) {
 }
 
 // Admin routes
+router.get('/admin/login/:id', response(adminController.adminLogin)); // tbd
 router.get('/admin/posts', checkIfAuthenticated, response(adminController.getPostsByStatus)); // works
 // router.get('/admin/reported/:id', response(adminController.getReportedByType)); //
 // router.get('/admin/banned', response(adminController.getBannedUsers));

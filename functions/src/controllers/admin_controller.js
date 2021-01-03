@@ -2,6 +2,31 @@ const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
 const helpers = require('../helpers.js');
 
+// Login as admnin
+async function adminLogin(adminData) {
+  const email = adminData.params.id;
+  const users = db.collection('users');
+  const adminUser = await users.where('email', '==', email).get();
+
+  if (adminUser.empty) {
+    console.log('No such user.');
+    return {};
+  }
+  if (adminUser.docs.length != 1 ) {
+    console.log('ERROR: More than one user with the same email.');
+    return {};
+  }
+
+  const userDoc = adminUser.docs[0];
+
+  if(userDoc.data().type != 'ADMIN') {
+    console.log('ERROR: User is not an Admin.');
+    return {};
+  }
+
+  return middleware.userMiddleware(userDoc.id, userDoc.data());
+}
+
 // Load all posts of chosen status
 async function getPostsByStatus(request) {
   const posts = db.collection('posts');
@@ -196,6 +221,7 @@ async function addEmail(emailData) {
 }
 
 module.exports = {
+  adminLogin,
   getPostsByStatus,
   moderatePost,
   reportPost,
