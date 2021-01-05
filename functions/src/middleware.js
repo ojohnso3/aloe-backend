@@ -77,6 +77,7 @@ function adminMiddleware(id, dbPost, userInfo) {
 }
 
 function postMiddleware(id, dbPost, userInfo) {
+  // anonymous shit
   let username = userInfo.username; ;
   if (dbPost.anonymous || !username) {
     username = 'Anonymous';
@@ -90,7 +91,9 @@ function postMiddleware(id, dbPost, userInfo) {
     user: username,
     profilePicture: userInfo.profilePic || 'none',
     verified: userInfo.verified || false,
-    type: dbPost.type,
+    age: userInfo.age, // adding more info
+    gender: userInfo.gender,
+    sexuality: userInfo.sexuality,
     title: dbPost.content.title || 'No title.',
     content: dbPost.content.body,
     image: dbPost.content.image || 'none',
@@ -190,6 +193,9 @@ function userMiddleware(id, dbUser) {
     verified: dbUser.verified,
     profilePicture: dbUser.profilePic || 'none',
     bio: dbUser.bio || 'none',
+    age: dbUser.age || '22', // adding more info
+    gender: dbUser.gender || 'male',
+    sexuality: dbUser.sexuality || 'asexual',
     type: dbUser.type,
     email: dbUser.email,
     doc: dbUser.signupTime,
@@ -210,7 +216,9 @@ function profileMiddleware(id, dbUser) {
     profilePicture: dbUser.profilePic || 'none',
     bio: dbUser.bio || 'none',
     doc: dbUser.signupTime,
-    // posts: []
+    age: dbUser.age || '19', // adding more info
+    gender: dbUser.gender || 'female',
+    sexuality: dbUser.sexuality || 'gay',
   };
   return ret;
 }

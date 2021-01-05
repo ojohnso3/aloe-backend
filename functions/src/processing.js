@@ -137,9 +137,12 @@ function userProcessing(user) {
     signupTime: userData.loginTime,
     loginTime: userData.loginTime,
     type: 'MEMBER',
-    consent: true,
+    consent: true, // change maybe?
     verified: false,
     profilePic: '',
+    age: userData.age || '20', // adding more info
+    gender: userData.gender || 'female',
+    sexuality: userData.sexuality || 'bisexual',
     bio: '',
     banned: {
       duration: 0,

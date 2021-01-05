@@ -44,9 +44,12 @@ async function getUserInfo(userID) {
   } else {
     userInfo = {
       userID: userID,
-      username: userDoc.data().username,
+      username: userDoc.data().username, // anonymous!!
       profilePic: userDoc.data().profilePic,
       verified: userDoc.data().verified,
+      age: userDoc.data().age || '20', // adding more info
+      gender: userDoc.data().gender || 'female',
+      sexuality: userDoc.data().sexuality || 'bisexual',
     };
   }
   return userInfo;
