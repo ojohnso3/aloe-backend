@@ -30,7 +30,7 @@ router.put('/admin/postreport', checkIfAuthenticated, response(adminController.r
 router.put('/admin/commentreport', checkIfAuthenticated, response(adminController.reportComment)); // done but check
 router.put('/admin/userreport', checkIfAuthenticated, response(adminController.reportUser)); // done but check
 router.post('/admin/prompt', checkIfAuthenticated, response(adminController.createPrompt)); // done but check
-router.post('/website/email', checkIfAuthenticated, response(adminController.addEmail)); // works
+router.post('/website/email', response(adminController.addEmail)); // works
 
 // Reporting routes
 router.post('/report', response(reportController.reportFromApp)); // works
