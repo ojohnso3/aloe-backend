@@ -17,7 +17,6 @@ async function getRecentPrompt() {
 // Get Comments by ID
 async function getComments(parentData) {
   const collection = db.collection('comments');
-  // console.log('check parent id', parentData.query.id)
   const comments = await collection.where('parentID', '==', parentData.query.id).get();
   if (comments.empty) {
     console.log('No matching document for comment.');
@@ -31,21 +30,23 @@ async function getComments(parentData) {
   }));
 
   return {results: finalComments};
-  // return {results: postComments.docs.map((doc) => middleware.commentMiddleware(doc.id, doc.data(), 'sidthekid'))};
 }
+
+// return {results: postComments.docs.map((doc) => middleware.commentMiddleware(doc.id, doc.data(), 'sidthekid'))};
+
 
 // Get ForYou posts
 async function getPosts(post) { // ADD MORE QUERIES (APPROVED)
   const posts = db.collection('posts');
   let forYou = [];
   if (post.query.timestamp) {
-    forYou = await posts.orderBy('timestamp', 'desc').startAfter(post.query.timestamp).limit(5).get();
+    forYou = await posts.where('status', '==', 'APPROVED').orderBy('timestamp', 'desc').startAfter(post.query.timestamp).limit(5).get();
   } else {
-    forYou = await posts.orderBy('timestamp', 'desc').limit(5).get();
+    forYou = await posts.where('status', '==', 'APPROVED').orderBy('timestamp', 'desc').limit(5).get();
   }
   if (forYou.empty) {
     console.log('No matching documents.');
-    return {results: []}; // TODO: add this everywhere (don't return nothing)
+    return {results: []};
   }
 
   const finalPosts = [];
@@ -56,13 +57,6 @@ async function getPosts(post) { // ADD MORE QUERIES (APPROVED)
 
   return {results: finalPosts}
 }
-
-  // console.log('finalPosts', finalPosts)
-  // console.log("getting posts with this params", post.query.timestamp)
-  // console.log("final posts", finalPosts)
-  // if(finalPosts.length == 0) {
-  //   console.log('fish ahahaha u sux')
-  // }
 
 // Get answers for survey (helper)
 async function getSurveyAnswers(promptID) {
@@ -83,7 +77,7 @@ async function getPrompts(prompt) {
   const collection = db.collection('prompts');
   let prompts = [];
   if (prompt.query.timestamp) {
-    prompts = await collection.orderBy('timestamp', 'desc').startAfter(prompt.query.timestamp).limit(2).get();
+    prompts = await collection.orderBy('timestamp', 'desc').startAfter(prompt.query.timestamp).limit(2).get(); // 2
   } else {
     prompts = await collection.orderBy('timestamp', 'desc').limit(2).get();
   }
@@ -183,6 +177,30 @@ async function getSurveyResults(answerData) {
 //   return;
 // }
 
+// Get posts by topic
+async function getPostsByTopic(post) { // (APPROVED)
+  console.log('topicc', post.body)
+  const posts = db.collection('posts');
+  let forYou = [];
+  if (post.query.timestamp) { // query
+    forYou = await posts.where('content.topics', 'array-contains', post.query.topic).orderBy('timestamp', 'desc').startAfter(post.query.timestamp).limit(5).get();
+  } else {
+    forYou = await posts.where('content.topics', 'array-contains', post.query.topic).orderBy('timestamp', 'desc').limit(5).get()
+  }
+  if (forYou.empty) {
+    console.log('No matching documents.');
+    return {results: []};
+  }
+
+  const finalPosts = [];
+  await Promise.all(forYou.docs.map(async (doc) => {
+    const userInfo = await helpers.getUserInfo(doc.data().userID);
+    finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
+  }));
+
+  return {results: finalPosts}
+}
+
 
 module.exports = {
   getRecentPrompt,
@@ -192,6 +210,8 @@ module.exports = {
   checkChosenAnswer,
   chooseAnswer,
   getSurveyResults,
+  getPostsByTopic,
+
 };
 
 
