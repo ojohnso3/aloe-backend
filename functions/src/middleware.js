@@ -53,26 +53,25 @@ const fakeAnswers = [
 
 
 function adminMiddleware(id, dbPost, userInfo) {
+
   const ret = {
     id,
     timestamp: dbPost.timestamp,
     status: dbPost.status,
-    statusNotes: dbPost.statusNotes, // only difference?
+    notes: dbPost.adminNotes,
     userID: dbPost.userID,
     username: userInfo.username || 'No Corresponding User',
     profilePic: userInfo.profilePic || 'none',
-    verified: userInfo.verified || false,
-    type: dbPost.type,
-    title: dbPost.content.title,
+    verified: userInfo.verified || false, // unecessary
     content: dbPost.content.body,
-    image: dbPost.content.image || 'none',
-    video: dbPost.content.video || 'none',
-    audio: dbPost.content.audio || 'none',
+    media: dbPost.content.image || 'none',
     topics: dbPost.content.topics,
-    likes: dbPost.numLikes,
-    shares: dbPost.numShares,
-    comments: dbPost.numComments,
+    anonymous: dbPost.topics
+    // likes: dbPost.numLikes,
+    // shares: dbPost.numShares,
+    // comments: dbPost.numComments
   };
+
   return ret;
 }
 
@@ -94,7 +93,6 @@ function postMiddleware(id, dbPost, userInfo) {
     age: userInfo.age, // adding more info
     gender: userInfo.gender,
     sexuality: userInfo.sexuality,
-    title: dbPost.content.title || 'No title.',
     content: dbPost.content.body,
     image: dbPost.content.image || 'none',
     video: dbPost.content.video || 'none',

@@ -99,7 +99,7 @@ async function createComment(commentData) {
 }
 
 // Edit post
-async function editPost(postData) { // remember dot notation (content.title) for nested fields
+async function editPost(postData) { // remember dot notation (content.body) for nested fields
   const processedEdits = processing.editProcessing(postData.body);
   if (!processedEdits.post) {
     return 'There was an error in post editing';

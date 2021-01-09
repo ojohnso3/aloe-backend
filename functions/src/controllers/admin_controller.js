@@ -40,6 +40,7 @@ async function getPostsByStatus(request) {
     return [];
   }
 
+
   const finalPosts = [];
   await Promise.all(selected.docs.map(async (doc) => {
     const userInfo = await helpers.getUserInfo(doc.data().userID);
@@ -49,24 +50,41 @@ async function getPostsByStatus(request) {
   return finalPosts;
 }
 
-async function updatePostStatus(postID, newStatus, reason, timestamp) {
-  const post = db.collection('posts').doc(postID);
-  const res = await post.update({status: newStatus, statusNotes: reason, updatedTimestamp: timestamp});
-  return res;
-}
+// async function updatePostStatus(postData) {
+//   const updates = postData.body; 
+//   console.log('pd', updates)
+//   const post = db.collection('posts').doc(postID);
+//   const res = await post.update({status: updates.newStatus, updatedTimestamp: updates.timestamp});
+//   return res;
+// }
 
 // Change status of post
 async function moderatePost(postData) {
-  const postID = postData.body.postID;
-  const newStatus = postData.body.status;
-  const timestamp = postData.body.timestamp;
-  const reason = postData.body.reason;
+  const updates = postData.body; 
+  console.log('pd', updates)
+  const post = db.collection('posts').doc(updates.id);
+  const res = await post.update({status: updates.status, adminNotes: updates.notes, updatedTimestamp: updates.timestamp});
+  return res;
 
-  if (!postID || !newStatus || !timestamp || !reason) {
-    return {};
-  }
+  // const postID = postData.body.postID;
+  // const newStatus = postData.body.status;
+  // const timestamp = postData.body.timestamp;
+  // const reason = postData.body.reason;
 
-  return updatePostStatus(postID, newStatus, reason, timestamp);
+  // // if (!postID || !newStatus || !timestamp || !reason) {
+  // //   return {};
+  // // }
+
+  // return updatePostStatus(postID, newStatus, reason, timestamp);
+}
+
+// Change notes
+async function updateNotes(postData) {
+  const updates = postData.body; 
+  console.log('pd', updates)
+  const post = db.collection('posts').doc(updates.id);
+  const res = await post.update({adminNotes: updates.notes, updatedTimestamp: updates.timestamp});
+  return res;
 }
 
 // Report post
@@ -224,6 +242,7 @@ module.exports = {
   adminLogin,
   getPostsByStatus,
   moderatePost,
+  updateNotes,
   reportPost,
   reportComment,
   reportUser,

@@ -24,14 +24,14 @@ async function getProfile(userData) {
 
 // Load created posts on profile
 async function getCreated(userData) {
-  const userID = userData.query.id;
-  const timestamp = userData.query.timestamp;
+  const userID = userData.body.id;
+  const timestamp = userData.body.timestamp;
   const posts = db.collection('posts');
   let created = [];
   if (timestamp) {
-    created = await posts.where('userID', '==', userID).startAfter(timestamp).limit(5).get(); // .orderBy('timestamp', 'desc')
+    created = await posts.where('userID', '==', userID).orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
   } else {
-    created = await posts.where('userID', '==', userID).limit(5).get();
+    created = await posts.where('userID', '==', userID).orderBy('timestamp', 'desc').limit(5).get();
   }
   if (created.empty) {
     console.log('No matching CREATED docs.');

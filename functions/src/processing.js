@@ -24,7 +24,6 @@ function postProcessing(post) {
     type: postData.type,
     status: postData.status,
     content: {
-      title: postData.title,
       body: postData.content,
       image: postData.image || '',
       video: postData.video || '',
@@ -37,6 +36,7 @@ function postProcessing(post) {
     reported: false,
     anonymous: false, // postData.anonymous ||
     removed: false,
+    adminNotes: ''
   };
   for (const key of Object.keys(ret)) {
     console.log('key', key, ' - ', ret[key]);
@@ -53,7 +53,6 @@ function editProcessing(post) {
   const ret = {
     'updatedTimestamp': postData.timestamp,
     'type': postData.type,
-    'content.title': postData.title,
     'content.body': postData.content,
     'content.image': postData.image,
     'content.video': postData.video,

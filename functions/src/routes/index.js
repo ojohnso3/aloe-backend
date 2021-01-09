@@ -26,6 +26,7 @@ router.get('/admin/posts', checkIfAuthenticated, response(adminController.getPos
 // router.get('/admin/banned', response(adminController.getBannedUsers));
 
 router.put('/admin/moderate', checkIfAuthenticated, response(adminController.moderatePost)); // done but check
+router.put('/admin/notes', checkIfAuthenticated, response(adminController.updateNotes)); // done but check
 router.put('/admin/postreport', checkIfAuthenticated, response(adminController.reportPost)); // done but check
 router.put('/admin/commentreport', checkIfAuthenticated, response(adminController.reportComment)); // done but check
 router.put('/admin/userreport', checkIfAuthenticated, response(adminController.reportUser)); // done but check
