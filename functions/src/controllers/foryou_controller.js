@@ -179,7 +179,7 @@ async function getSurveyResults(answerData) {
 
 // Get posts by topic
 async function getPostsByTopic(post) { // (APPROVED)
-  console.log('topicc', post.body)
+  console.log('topicc', post.query)
   const posts = db.collection('posts');
   let forYou = [];
   if (post.query.timestamp) { // query
