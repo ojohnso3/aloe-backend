@@ -19,7 +19,12 @@ function postProcessing(post) {
 
   const postData = JSON.parse(JSON.stringify(post));
 
-  console.log('PIG 1.2 postdata', postdata)
+  const anonymous = true;
+  if (postData.anonymous == '0') {
+    anonymous = false;
+  }
+
+  console.log('PIG 1.2 postdata', postData)
 
   const ret = {
     userID: postData.userid,
@@ -38,10 +43,11 @@ function postProcessing(post) {
     numShares: 0,
     numComments: 0,
     reported: false,
-    anonymous: false, // postData.anonymous ||
+    anonymous: anonymous,
     removed: false,
     adminNotes: ''
   };
+  console.log("post ret", ret);
   for (const key of Object.keys(ret)) {
     console.log('key', key, ' - ', ret[key]);
     if (ret[key] == undefined) {
