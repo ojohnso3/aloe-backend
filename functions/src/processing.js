@@ -15,19 +15,20 @@ function answerProcessing(answerString) {
 }
 
 function postProcessing(post) {
-  console.log('PIG 1.1 post', post)
-  console.log("try 1", JSON.stringify(post))
-  const bob = JSON.stringify(post);
-  console.log("try 2", JSON.parse(bob))
+  console.log("before")
 
   const postData = JSON.parse(JSON.stringify(post));
+
+  console.log("try guys", postData)
+  console.log("anon", postData.anonymous)
+
 
   const anonymous = true;
   if (postData.anonymous == '0') {
     anonymous = false;
   }
 
-  console.log('PIG 1.2 postdata', postData)
+  console.log('PIG 1.2 postdata', anonymous)
 
   const ret = {
     userID: postData.userid,
@@ -153,7 +154,7 @@ function userProcessing(user) {
     verified: false,
     profilePic: '',
     age: userData.age || '20', // adding more info
-    gender: userData.gender || 'female',
+    pronouns: userData.pronouns || 'female',
     sexuality: userData.sexuality || 'bisexual',
     bio: '',
     banned: {

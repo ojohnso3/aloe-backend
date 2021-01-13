@@ -91,7 +91,7 @@ function postMiddleware(id, dbPost, userInfo) {
     profilePicture: userInfo.profilePic || 'none',
     verified: userInfo.verified || false,
     age: userInfo.age, // adding more info
-    gender: userInfo.gender,
+    pronouns: userInfo.pronouns,
     sexuality: userInfo.sexuality,
     content: dbPost.content.body,
     image: dbPost.content.image || 'none',
@@ -192,7 +192,7 @@ function userMiddleware(id, dbUser) {
     profilePicture: dbUser.profilePic || 'none',
     bio: dbUser.bio || 'none',
     age: dbUser.age || '22', // adding more info
-    gender: dbUser.gender || 'male',
+    pronouns: dbUser.pronouns || 'male',
     sexuality: dbUser.sexuality || 'asexual',
     type: dbUser.type,
     email: dbUser.email,
@@ -215,7 +215,7 @@ function profileMiddleware(id, dbUser) {
     bio: dbUser.bio || 'none',
     doc: dbUser.signupTime,
     age: dbUser.age || '19', // adding more info
-    gender: dbUser.gender || 'female',
+    pronouns: dbUser.pronouns || 'female',
     sexuality: dbUser.sexuality || 'gay',
   };
   return ret;

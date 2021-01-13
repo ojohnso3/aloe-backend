@@ -48,7 +48,7 @@ async function getUserInfo(userID) {
       profilePic: userDoc.data().profilePic,
       verified: userDoc.data().verified,
       age: userDoc.data().age || '20', // adding more info
-      gender: userDoc.data().gender || 'female',
+      pronouns: userDoc.data().pronouns || 'she/her',
       sexuality: userDoc.data().sexuality || 'bisexual',
     };
   }
