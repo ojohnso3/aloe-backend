@@ -18,12 +18,10 @@ function postProcessing(post) {
 
   const postData = JSON.parse(JSON.stringify(post));
 
-  const anonymous = true;
+  var anonymous = true;
   if (postData.anonymous == '0') {
     anonymous = false;
   }
-
-  console.log('okay', anonymous)
 
   const ret = {
     userID: postData.userid,
@@ -148,7 +146,7 @@ function userProcessing(user) {
     verified: false,
     profilePic: '',
     age: userData.age || '20', // adding more info
-    pronouns: userData.pronouns || 'female',
+    pronouns: userData.pronouns || 'pronouns',
     sexuality: userData.sexuality || 'bisexual',
     bio: '',
     banned: {

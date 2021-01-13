@@ -215,7 +215,7 @@ function profileMiddleware(id, dbUser) {
     bio: dbUser.bio || 'none',
     doc: dbUser.signupTime,
     age: dbUser.age || '19', // adding more info
-    pronouns: dbUser.pronouns || 'female',
+    pronouns: dbUser.pronouns || 'pronouns',
     sexuality: dbUser.sexuality || 'gay',
   };
   return ret;
