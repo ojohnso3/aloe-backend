@@ -36,7 +36,7 @@ async function getComments(parentData) {
 
 
 // Get ForYou posts
-async function getPosts(post) { // ADD MORE QUERIES (APPROVED)
+async function getPosts(post) {
   const posts = db.collection('posts');
   let forYou = [];
   if (post.query.timestamp) {
@@ -179,10 +179,10 @@ async function getSurveyResults(answerData) {
 
 // Get posts by topic
 async function getPostsByTopic(post) { // (APPROVED)
-  console.log('topicc', post.query)
+  console.log('topic', post.query)
   const posts = db.collection('posts');
   let forYou = [];
-  if (post.query.timestamp) { // query
+  if (post.query.timestamp) {
     forYou = await posts.where('content.topics', 'array-contains', post.query.topic).orderBy('timestamp', 'desc').startAfter(post.query.timestamp).limit(5).get();
   } else {
     forYou = await posts.where('content.topics', 'array-contains', post.query.topic).orderBy('timestamp', 'desc').limit(5).get()
