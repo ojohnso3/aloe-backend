@@ -16,6 +16,9 @@ function answerProcessing(answerString) {
 
 function postProcessing(post) {
   console.log('PIG 1.1 post', post)
+  console.log("try 1", JSON.stringify(post))
+  const bob = JSON.stringify(post);
+  console.log("try 2", JSON.parse(bob))
 
   const postData = JSON.parse(JSON.stringify(post));
 
@@ -31,7 +34,7 @@ function postProcessing(post) {
     timestamp: postData.timestamp,
     updatedTimestamp: postData.timestamp,
     type: postData.type,
-    status: postData.status,
+    status: 'PENDING',
     content: {
       body: postData.content,
       image: postData.image || '',
