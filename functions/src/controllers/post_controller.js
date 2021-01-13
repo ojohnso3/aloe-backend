@@ -63,7 +63,7 @@ async function checkLikedComment(commentData) {
 
 // Create new post
 async function createPost(postData) {
-  console.log("PIG 1")
+  console.log("PIG 1", postData.body)
   const processedPost = processing.postProcessing(postData.body);
   if (!processedPost) {
     return 'There was an error in post creation';

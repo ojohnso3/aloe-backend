@@ -15,9 +15,11 @@ function answerProcessing(answerString) {
 }
 
 function postProcessing(post) {
+  console.log('PIG 1.1 post', post)
+
   const postData = JSON.parse(JSON.stringify(post));
 
-  console.log('PIG 0 postdata', postdata)
+  console.log('PIG 1.2 postdata', postdata)
 
   const ret = {
     userID: postData.userid,
