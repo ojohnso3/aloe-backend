@@ -17,6 +17,8 @@ function answerProcessing(answerString) {
 function postProcessing(post) {
   const postData = JSON.parse(JSON.stringify(post));
 
+  console.log('PIG 0 postdata', postdata)
+
   const ret = {
     userID: postData.userid,
     timestamp: postData.timestamp,
