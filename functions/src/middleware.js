@@ -192,7 +192,7 @@ function userMiddleware(id, dbUser) {
     profilePicture: dbUser.profilePic || 'none',
     bio: dbUser.bio || 'none',
     age: dbUser.age || '22', // adding more info
-    pronouns: dbUser.pronouns || 'male',
+    pronouns: dbUser.pronouns || 'her/him',
     sexuality: dbUser.sexuality || 'asexual',
     type: dbUser.type,
     email: dbUser.email,
@@ -215,7 +215,7 @@ function profileMiddleware(id, dbUser) {
     bio: dbUser.bio || 'none',
     doc: dbUser.signupTime,
     age: dbUser.age || '19', // adding more info
-    pronouns: dbUser.pronouns || 'pronouns',
+    pronouns: dbUser.pronouns || 'she/her',
     sexuality: dbUser.sexuality || 'gay',
   };
   return ret;

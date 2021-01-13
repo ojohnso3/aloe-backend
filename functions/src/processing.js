@@ -142,12 +142,12 @@ function userProcessing(user) {
     signupTime: userData.loginTime,
     loginTime: userData.loginTime,
     type: 'MEMBER',
-    consent: true, // change maybe?
+    consent: true, // change eventually?
     verified: false,
     profilePic: '',
-    age: userData.age || '20', // adding more info
-    pronouns: userData.pronouns || 'pronouns',
-    sexuality: userData.sexuality || 'bisexual',
+    age: userData.age || '',
+    pronouns: userData.pronouns || '',
+    sexuality: userData.sexuality || '',
     bio: '',
     banned: {
       duration: 0,
@@ -170,7 +170,7 @@ function userProcessing(user) {
 function profileProcessing(profile) {
   const profileData = JSON.parse(JSON.stringify(profile));
 
-  if (profileData.consent) {
+  if (profileData.consent) { // 0 vs 1 CHECK
     profileData.consent = true;
   } else {
     profileData.consent = false;
