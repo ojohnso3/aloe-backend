@@ -22,13 +22,13 @@ function postProcessing(post) {
   console.log("try guys", postData)
   console.log("anon", postData.anonymous)
 
-
   const anonymous = true;
   if (postData.anonymous == '0') {
+    console.log("check 0", postData.anonymous)
     anonymous = false;
   }
 
-  console.log('PIG 1.2 postdata', anonymous)
+  console.log('oop', anonymous)
 
   const ret = {
     userID: postData.userid,
