@@ -80,17 +80,17 @@ function editProcessing(post) {
 function commentProcessing(comment) {
   const commentData = JSON.parse(JSON.stringify(comment));
 
-  console.log('commendData', commentData);
+  console.log('commentData', commentData);
 
   const ret = {
     userID: commentData.userid,
-    // parentType: commentData.parentType,
     parentID: commentData.id,
     timestamp: commentData.timestamp,
     body: commentData.body,
     numLikes: 0,
     reported: false,
     removed: false,
+    top: false // TODO design
   };
   for (const key of Object.keys(ret)) {
     console.log('key pee', ret[key]);

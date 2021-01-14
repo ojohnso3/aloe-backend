@@ -106,7 +106,7 @@ function postMiddleware(id, dbPost, userInfo) {
   return ret;
 }
 
-function promptMiddleware(id, dbPrompt, answers) {
+function promptMiddleware(id, dbPrompt, topComment, answers) {
   const ret = {
     id,
     timestamp: dbPrompt.timestamp,
@@ -118,6 +118,7 @@ function promptMiddleware(id, dbPrompt, answers) {
     shares: dbPrompt.numShares,
     comments: dbPrompt.numResponses,
     answers: answers || [],
+    topComment: topComment
   };
   return ret;
 }
@@ -159,6 +160,7 @@ function commentMiddleware(id, dbComment, userInfo) {
     content: dbComment.body,
     likes: dbComment.numLikes,
     timestamp: dbComment.timestamp,
+    top: false, // TODO design
   };
   return ret;
 }

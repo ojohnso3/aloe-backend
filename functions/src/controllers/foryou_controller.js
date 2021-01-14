@@ -77,9 +77,9 @@ async function getPrompts(prompt) {
   const collection = db.collection('prompts');
   let prompts = [];
   if (prompt.query.timestamp) {
-    prompts = await collection.orderBy('timestamp', 'desc').startAfter(prompt.query.timestamp).limit(2).get(); // 2
+    prompts = await collection.orderBy('timestamp', 'desc').startAfter(prompt.query.timestamp).limit(3).get(); // 2
   } else {
-    prompts = await collection.orderBy('timestamp', 'desc').limit(1).get();
+    prompts = await collection.orderBy('timestamp', 'desc').limit(3).get(); // 2
   }
   if (prompts.empty) {
     console.log('No matching documents.');
@@ -94,12 +94,30 @@ async function getPrompts(prompt) {
       answers = await getSurveyAnswers(doc.id);
       // console.log('answers here', answers)
     }
-    finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), answers)); // survey middleware
+    const topComment = await getTopComment(doc.id);
+
+    finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), topComment, answers)); // survey middleware
   }));
 
   // console.log('final', finalPrompts)
 
   return {results: finalPrompts};
+}
+
+// Get posts by topic
+async function getTopComment(promptID) {
+  console.log('promptID', promptID)
+  const comments = db.collection('comments');
+  const top = await comments.where('parentID', '==', promptID).orderBy('numLikes', 'desc').limit(1).get();
+  
+  if (top.empty) {
+    console.log('No matching documents.');
+    return '';
+  }
+
+  const topComment = top.docs[0];
+
+  return topComment.data().body;
 }
 
 // Check if user has chosen survey answer
@@ -211,7 +229,6 @@ module.exports = {
   chooseAnswer,
   getSurveyResults,
   getPostsByTopic,
-
 };
 
 
