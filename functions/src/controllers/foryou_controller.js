@@ -76,9 +76,8 @@ async function getSurveyAnswers(promptID) {
 async function getPrompts(prompt) {
   const collection = db.collection('prompts');
   let prompts = [];
-  console.log('prompt', prompt.body)
-  if (prompt.body.timestamp) {
-    prompts = await collection.orderBy('timestamp', 'desc').startAfter(prompt.body.timestamp).limit(2).get(); // 2
+  if (prompt.query.timestamp) {
+    prompts = await collection.orderBy('timestamp', 'desc').startAfter(prompt.query.timestamp).limit(2).get(); // 2
   } else {
     prompts = await collection.orderBy('timestamp', 'desc').limit(2).get();
   }
