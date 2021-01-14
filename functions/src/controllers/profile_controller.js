@@ -24,15 +24,25 @@ async function getProfile(userData) {
 
 // Load created posts on profile
 async function getCreated(userData) {
-  const userID = userData.body.id;
-  const timestamp = userData.body.timestamp;
+  const userID = userData.query.id;
+  const timestamp = userData.query.timestamp;
+  const internal = userData.query.internal;
   const posts = db.collection('posts');
   let created = [];
-  if (timestamp) {
-    created = await posts.where('userID', '==', userID).orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+  if(internal) {
+    if (timestamp) {
+      created = await posts.where('userID', '==', userID).orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+    } else {
+      created = await posts.where('userID', '==', userID).orderBy('timestamp', 'desc').limit(5).get();
+    }
   } else {
-    created = await posts.where('userID', '==', userID).orderBy('timestamp', 'desc').limit(5).get();
+    if (timestamp) {
+      created = await posts.where('userID', '==', userID).where('status', '==', 'APPROVED').orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+    } else {
+      created = await posts.where('userID', '==', userID).where('status', '==', 'APPROVED').orderBy('timestamp', 'desc').limit(5).get();
+    }
   }
+
   if (created.empty) {
     console.log('No matching CREATED docs.');
     return {results: []};
@@ -45,6 +55,8 @@ async function getCreated(userData) {
   }));
 
   return {results: createdPosts};
+}
+
   // return helpers.getCreated(userData.body.id, userData.body.timestamp);
 
   // Before helper
@@ -55,7 +67,6 @@ async function getCreated(userData) {
   //   return;
   // }
   // return {results: created.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};
-}
 
 async function likedHelper(doc) {
   const posts = db.collection('posts');
@@ -65,13 +76,17 @@ async function likedHelper(doc) {
     console.log('No document with postid: ' + postID);
     return null;
   }
+  if (likedPost.data().status != 'APPROVED') {
+    console.log('Post is not approved: ' + postID);
+    return null;
+  }
+
   const likedUser = await db.collection('users').doc(likedPost.data().userID).get();
   return {post: likedPost, user: likedUser};
 }
 
 // Load liked posts on profile
 async function getLiked(userData) {
-  console.log('query', userData.query);
   const userID = userData.query.id;
   const timestamp = userData.query.timestamp;
   const user = db.collection('users').doc(userID);
@@ -90,12 +105,14 @@ async function getLiked(userData) {
   const likedPosts = [];
   await Promise.all(liked.docs.map(async (doc) => {
     const likedData = await likedHelper(doc);
-    const likedPost = likedData.post;
-    const likedUser = likedData.user;
-
-    const userInfo = await helpers.getUserInfo(likedUser.id);
-
-    likedPosts.push(middleware.postMiddleware(likedPost.id, likedPost.data(), userInfo));
+    if(likedData) {
+      const likedPost = likedData.post;
+      const likedUser = likedData.user;
+  
+      const userInfo = await helpers.getUserInfo(likedUser.id);
+  
+      likedPosts.push(middleware.postMiddleware(likedPost.id, likedPost.data(), userInfo));
+    }
   }));
 
   return {results: likedPosts};
