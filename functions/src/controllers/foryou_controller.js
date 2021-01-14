@@ -79,7 +79,7 @@ async function getPrompts(prompt) {
   if (prompt.query.timestamp) {
     prompts = await collection.orderBy('timestamp', 'desc').startAfter(prompt.query.timestamp).limit(2).get(); // 2
   } else {
-    prompts = await collection.orderBy('timestamp', 'desc').limit(2).get();
+    prompts = await collection.orderBy('timestamp', 'desc').limit(1).get();
   }
   if (prompts.empty) {
     console.log('No matching documents.');
