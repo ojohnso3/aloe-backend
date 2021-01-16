@@ -1,4 +1,4 @@
-const db = require('../../db.js');
+const db = require('../../firebase/db.js');
 const userJSON = require('../json/users');
 const postJSON = require('../json/subPost');
 // const reportJSON = require('./json/reports');
@@ -17,7 +17,7 @@ const createUsers = async () => {
         });
   }
 
-  addUserSubcollections();
+  // addUserSubcollections();
 };
 
 async function addUserSubcollections() {

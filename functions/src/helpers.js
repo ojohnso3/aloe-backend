@@ -28,7 +28,7 @@ async function getUserInfo(userID) {
   let userInfo = {};
   if (!userDoc.exists) {
     console.log('No matching user document.'); // return an error here
-    const anonID = 'xOi20I8ehuqyhKdwt6wh'; // current user for Anonymous
+    const anonID = 'FtmFW0Qavf1jTmaggHbv'; // current user for Anonymous
     const anonDoc = await db.collection('users').doc(anonID).get();
     if (!anonDoc.exists) {
       console.log('ERROR: no Anonymous account');
