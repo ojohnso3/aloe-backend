@@ -1,5 +1,6 @@
 const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
+const processing = require('../processing.js');
 const helpers = require('../helpers.js');
 
 // Login as admnin
@@ -238,6 +239,62 @@ async function addEmail(emailData) {
   }
 }
 
+// Add topics to db
+async function addTopic(topicData) {
+
+  const processedTopic = processing.topicsProcessing(topicData.body)
+  if(!processedTopic) {
+    return false; // if error
+  }
+
+  // Not necessary -- just a fail safe that I can activate if necessary
+  const topicDoc = await db.collection('topics').where('topic', '==', processedTopic.topic).get();
+  if (!topicDoc.empty) {
+    console.log('Topic already in db');
+    return true;
+  }
+
+  await db.collection('topics').add(processedTopic);
+  return true; // res?
+
+}
+
+// Remove topics to db
+async function removeTopic(topicData) {
+  const topic = topicData.body.topic;
+  if(!topic) {
+    return false; // if error
+  }
+
+  const topicDoc = await db.collection('topics').where('topic', '==', topic).get();
+  if (topicDoc.empty) {
+    console.log("No such topic.")
+    return true;
+  }
+
+  // Just in case there are duplicates
+  await Promise.all(topicDoc.docs.map(async (doc) => {
+    db.collection('topics').doc(doc.id).delete();
+  }));
+
+  return true; // res?
+}
+
+// Get all topics
+async function getTopics() {
+  const topics = await db.collection('topics').orderBy('topic', 'asc').get();
+  if (topics.empty) {
+    console.log('Topic get failed.');
+    return [];
+  }
+
+  var topicTags = [];
+  await Promise.all(topics.docs.map(async (doc) => {
+    topicTags.push(doc.data().topic);
+  }));
+  return topicTags;
+}
+
 module.exports = {
   adminLogin,
   getPostsByStatus,
@@ -251,7 +308,10 @@ module.exports = {
   // getReportedByType,
   // getReportsByID,
   // getBannedUsers,
-  addEmail
+  addEmail,
+  addTopic,
+  removeTopic,
+  getTopics,
 };
 
 

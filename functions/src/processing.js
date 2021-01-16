@@ -141,7 +141,7 @@ function userProcessing(user) {
     doc: userData.loginTime,
     signupTime: userData.loginTime,
     loginTime: userData.loginTime,
-    type: 'MEMBER',
+    type: 'USER',
     consent: true, // change eventually?
     verified: false,
     profilePic: '',
@@ -192,6 +192,22 @@ function profileProcessing(profile) {
   return ret;
 }
 
+function topicsProcessing(topics) {
+  const topicsData = JSON.parse(JSON.stringify(topics));
+  
+  if(!topicsData.topic) {
+    return null;
+  }
+
+  const ret = {
+    topic: topicsData.topic,
+    timestamp: topicsData.timestamp || new Date(),
+    source: topicsData.source || 'USER',
+  };
+
+  return ret;
+}
+
 module.exports = {
   postProcessing,
   editProcessing,
@@ -199,6 +215,7 @@ module.exports = {
   promptProcessing,
   userProcessing,
   profileProcessing,
+  topicsProcessing
 };
 
 

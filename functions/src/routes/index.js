@@ -22,6 +22,9 @@ function response(handler) {
 // Admin routes
 router.get('/admin/login/:id', response(adminController.adminLogin)); // tbd
 router.get('/admin/posts', checkIfAuthenticated, response(adminController.getPostsByStatus)); // works
+router.get('/admin/topics', checkIfAuthenticated, response(adminController.getTopics)); // works
+router.post('/admin/topic', checkIfAuthenticated, response(adminController.addTopic)); // works
+router.delete('/admin/topic', checkIfAuthenticated, response(adminController.removeTopic)); // works
 // router.get('/admin/reported/:id', response(adminController.getReportedByType)); //
 // router.get('/admin/banned', response(adminController.getBannedUsers));
 

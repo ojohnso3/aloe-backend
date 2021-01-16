@@ -13,9 +13,9 @@ const UserSchema = {
   },
   type: {
     type: String,
-    enum: ['MEMBER', 'ADMIN', 'MODERATOR'],
+    enum: ['USER', 'ADMIN', 'MODERATOR'],
     required: true,
-    default: 'MEMBER',
+    default: 'USER',
   },
   image: {
     type: String,
