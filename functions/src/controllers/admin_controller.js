@@ -285,14 +285,15 @@ async function getTopics() {
   const topics = await db.collection('topics').orderBy('topic', 'asc').get();
   if (topics.empty) {
     console.log('Topic get failed.');
-    return [];
+    return {results: []};
   }
 
   var topicTags = [];
   await Promise.all(topics.docs.map(async (doc) => {
-    topicTags.push(doc.data().topic);
+    const description = doc.data().description || 'Description here.';
+    topicTags.push({topic: doc.data().topic, description: description});
   }));
-  return topicTags;
+  return {results: topicTags};
 }
 
 module.exports = {
