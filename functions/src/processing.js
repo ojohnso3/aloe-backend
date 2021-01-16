@@ -201,6 +201,7 @@ function topicsProcessing(topics) {
 
   const ret = {
     topic: topicsData.topic,
+    description: topicsData.description || 'User-added Topic. Definition will be uploaded soon!',
     timestamp: topicsData.timestamp || new Date(),
     source: topicsData.source || 'USER',
   };

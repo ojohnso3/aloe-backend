@@ -244,18 +244,18 @@ async function addTopic(topicData) {
 
   const processedTopic = processing.topicsProcessing(topicData.body)
   if(!processedTopic) {
-    return false; // if error
+    return -1; // if error
   }
 
   // Not necessary -- just a fail safe that I can activate if necessary
   const topicDoc = await db.collection('topics').where('topic', '==', processedTopic.topic).get();
   if (!topicDoc.empty) {
     console.log('Topic already in db');
-    return true;
+    return 0;
   }
 
   await db.collection('topics').add(processedTopic);
-  return true; // res?
+  return 1; // res?
 
 }
 
