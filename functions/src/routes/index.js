@@ -25,6 +25,7 @@ router.get('/admin/posts', checkIfAuthenticated, response(adminController.getPos
 router.get('/admin/topics', response(adminController.getTopics)); // works
 router.post('/admin/topic', response(adminController.addTopic)); // works
 router.delete('/admin/topic', response(adminController.removeTopic)); // works
+router.put('/admin/topic', response(adminController.editTopic)); // works
 // router.get('/admin/reported/:id', response(adminController.getReportedByType)); //
 // router.get('/admin/banned', response(adminController.getBannedUsers));
 

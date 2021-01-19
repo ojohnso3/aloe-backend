@@ -241,21 +241,21 @@ async function addEmail(emailData) {
 
 // Add topics to db
 async function addTopic(topicData) {
-
   const processedTopic = processing.topicsProcessing(topicData.body)
+
   if(!processedTopic) {
-    return -1; // if error
+    return 'error1'; // if error
   }
 
   // Not necessary -- just a fail safe that I can activate if necessary
   const topicDoc = await db.collection('topics').where('topic', '==', processedTopic.topic).get();
   if (!topicDoc.empty) {
     console.log('Topic already in db');
-    return 0;
+    return 'error2';
   }
 
   await db.collection('topics').add(processedTopic);
-  return 1; // res?
+  return '1'; // res?
 
 }
 
@@ -263,13 +263,12 @@ async function addTopic(topicData) {
 async function removeTopic(topicData) {
   const topic = topicData.body.topic;
   if(!topic) {
-    return false; // if error
+    return 'error1';
   }
 
   const topicDoc = await db.collection('topics').where('topic', '==', topic).get();
   if (topicDoc.empty) {
-    console.log("No such topic.")
-    return true;
+    return 'error2';
   }
 
   // Just in case there are duplicates
@@ -277,7 +276,25 @@ async function removeTopic(topicData) {
     db.collection('topics').doc(doc.id).delete();
   }));
 
-  return true; // res?
+  return '1';
+}
+
+// Update topic in db
+async function editTopic(topicData) {
+  const topicID = topicData.body.id;
+  const topicInfo = topicData.body.data;
+  if(!topicInfo.topic || !topicID) {
+    return 'error1';
+  }
+
+  const topic = db.collection('topics').doc(topicID);
+  if(!topic.exists) {
+    console.log('Topic does not exist in the database.')
+    return 'error2';
+  }
+
+  const res = await topic.update(topicInfo); // res?
+  return '1';
 }
 
 // Get all topics
@@ -312,6 +329,7 @@ module.exports = {
   addEmail,
   addTopic,
   removeTopic,
+  editTopic,
   getTopics,
 };
 
