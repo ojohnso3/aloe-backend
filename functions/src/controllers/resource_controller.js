@@ -8,9 +8,12 @@ async function getResources(type) {
   const allResources = db.collection('resources');
   const resources = await allResources.where('type', '==', type.params.id).get();
   if (resources.empty) {
-    console.log('No matching documents.');
+    console.log('No matching documents for getResources.');
     return;
   }
+
+  console.log('resources length', resources.docs.length)
+
   return {results: resources.docs.map((doc) => middleware.resourceMiddleware(doc.id, doc.data()))};
 }
 
@@ -64,7 +67,7 @@ async function addResources() {
     })
 }
 
-addResources()
+// addResources()
 
 // MAKING INTO ROUTE (TBD)
 // router.post('/airtabletomongo', memberprofilecontroller.airtableToMongo)

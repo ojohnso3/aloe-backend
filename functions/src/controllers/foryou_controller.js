@@ -45,9 +45,11 @@ async function getPosts(post) {
     forYou = await posts.where('status', '==', 'APPROVED').orderBy('timestamp', 'desc').limit(5).get();
   }
   if (forYou.empty) {
-    console.log('No matching documents.');
+    console.log('No matching documents for getPosts.');
     return {results: []};
   }
+
+  console.log('posts length', forYou.docs.length)
 
   const finalPosts = [];
   await Promise.all(forYou.docs.map(async (doc) => {
@@ -76,7 +78,7 @@ async function getSurveyAnswers(promptID) {
 async function getPrompts(prompt) {
   const collection = db.collection('prompts');
   let prompts = [];
-  const timestamp = prompt.body.timestamp;
+  const timestamp = prompt.query.timestamp;
   if (timestamp) {
     console.log('with timestamp', timestamp)
     prompts = await collection.orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
@@ -85,11 +87,11 @@ async function getPrompts(prompt) {
   }
 
   if (prompts.empty) {
-    console.log('No matching documents.');
+    console.log('No matching documents for getPrompts.');
     return {results: []};
   }
 
-  console.log('size', prompts.docs.length)
+  console.log('prompts length', prompts.docs.length)
 
   const finalPrompts = [];
   await Promise.all(prompts.docs.map(async (doc) => {
