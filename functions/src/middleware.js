@@ -168,20 +168,28 @@ function commentMiddleware(id, dbComment, userInfo) {
 function resourceMiddleware(id, dbResource) {
   const ret = {
     id,
-    type: dbResource.type,
     name: dbResource.name,
-    phone: dbResource.contact.phone || 'none',
-    text: dbResource.contact.text || 'none',
-    email: dbResource.contact.email || 'none',
-    website: dbResource.contact.website || 'none',
-    address: dbResource.contact.address || 'none',
-    summary: dbResource.description.summary,
-    confidentiality: dbResource.description.confidentiality,
-    reporting: dbResource.description.reporting,
-    image: dbResource.image,
+    type: dbResource.type,
+    contact: dbResource.contact,
+    description: dbResource.description,
+    confidentiality: dbResource.confidentiality,
   };
   return ret;
 }
+// const ret = {
+//   id,
+//   type: dbResource.type,
+//   name: dbResource.name,
+//   phone: dbResource.contact.phone || 'none',
+//   text: dbResource.contact.text || 'none',
+//   email: dbResource.contact.email || 'none',
+//   website: dbResource.contact.website || 'none',
+//   address: dbResource.contact.address || 'none',
+//   summary: dbResource.description.summary,
+//   confidentiality: dbResource.description.confidentiality,
+//   reporting: dbResource.description.reporting,
+//   image: dbResource.image,
+// };
 
 
 function userMiddleware(id, dbUser) {
