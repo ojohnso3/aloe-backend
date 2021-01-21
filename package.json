@@ -16,6 +16,7 @@
     "debug": "~2.6.9",
     "eslint-plugin-react": "^7.21.5",
     "express": "~4.16.1",
+    "express-rate-limit": "^5.2.3",
     "firebase-admin": "^9.3.0",
     "http-errors": "~1.6.3",
     "jade": "^1.11.0",

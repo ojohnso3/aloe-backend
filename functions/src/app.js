@@ -13,9 +13,18 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 
-// view engine setup
+// View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+// Rate limiting
+const rateLimit = require("express-rate-limit");
+
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use(limiter);
 
 app.use(logger('dev'));
 app.use(express.json());
