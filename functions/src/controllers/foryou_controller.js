@@ -37,15 +37,19 @@ async function getComments(parentData) {
 
 // Get ForYou posts
 async function getPosts(post) {
+  console.log('we are returning posts now');
   const posts = db.collection('posts');
   let forYou = [];
-  if (post.query.timestamp) {
-    forYou = await posts.where('status', '==', 'APPROVED').orderBy('timestamp', 'desc').startAfter(post.query.timestamp).limit(5).get();
+  const timestamp = post.query.timestamp;
+  if (timestamp) {
+    console.log('with timestamp', timestamp);
+    forYou = await posts.where('status', '==', 'APPROVED').orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
   } else {
+    console.log('without timestamp');
     forYou = await posts.where('status', '==', 'APPROVED').orderBy('timestamp', 'desc').limit(5).get();
   }
   if (forYou.empty) {
-    console.log('No matching documents for getPosts.');
+    console.log('Nothing for getPosts.');
     return {results: []};
   }
 
@@ -57,25 +61,14 @@ async function getPosts(post) {
     finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 
+  console.log('final posts', finalPosts)
+
   return {results: finalPosts}
-}
-
-// Get answers for survey (helper)
-async function getSurveyAnswers(promptID) {
-  const collection = db.collection('answers');
-  const answers = await collection.where('promptID', '==', promptID).get();
-  if (answers.empty) {
-    console.log('No matching documents.');
-    return;
-  }
-
-  const surveyAnswers = answers.docs.map((doc) => middleware.answerMiddleware(doc.id, doc.data()));
-
-  return surveyAnswers;
 }
 
 // Get prompts for feed
 async function getPrompts(prompt) {
+  console.log('we are returning prompts now');
   const collection = db.collection('prompts');
   let prompts = [];
   const timestamp = prompt.query.timestamp;
@@ -83,11 +76,12 @@ async function getPrompts(prompt) {
     console.log('with timestamp', timestamp)
     prompts = await collection.orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
   } else {
+    console.log('without timestamp');
     prompts = await collection.orderBy('timestamp', 'desc').limit(5).get();
   }
 
   if (prompts.empty) {
-    console.log('No matching documents for getPrompts.');
+    console.log('Nothing for getPrompts.');
     return {results: []};
   }
 
@@ -104,12 +98,14 @@ async function getPrompts(prompt) {
     finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), topComment)); // survey middleware
   }));
 
+  console.log('final prompts', finalPrompts)
+
   return {results: finalPrompts};
 }
 
 // Get posts by topic
 async function getTopComment(promptID) {
-  console.log('promptID', promptID)
+  // console.log('promptID', promptID)
   const comments = db.collection('comments');
   const top = await comments.where('parentID', '==', promptID).orderBy('numLikes', 'desc').limit(1).get();
   
@@ -136,6 +132,21 @@ async function checkChosenAnswer(surveyData) {
     console.log('User has chosen.');
     return true;
   }
+}
+
+
+// Get answers for survey (helper)
+async function getSurveyAnswers(promptID) {
+  const collection = db.collection('answers');
+  const answers = await collection.where('promptID', '==', promptID).get();
+  if (answers.empty) {
+    console.log('No matching documents.');
+    return;
+  }
+
+  const surveyAnswers = answers.docs.map((doc) => middleware.answerMiddleware(doc.id, doc.data()));
+
+  return surveyAnswers;
 }
 
 // Check if user has chosen survey answer
