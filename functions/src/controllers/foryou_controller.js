@@ -76,32 +76,31 @@ async function getSurveyAnswers(promptID) {
 async function getPrompts(prompt) {
   const collection = db.collection('prompts');
   let prompts = [];
-  console.log('prompt q', prompt.query)
-  if (prompt.query.timestamp) {
-    console.log('with timestamp', prompt.query.timestamp)
-    prompts = await collection.orderBy('timestamp', 'desc').startAfter(prompt.query.timestamp).limit(5).get(); // 2
+  const timestamp = prompt.body.timestamp;
+  if (timestamp) {
+    console.log('with timestamp', timestamp)
+    prompts = await collection.orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
   } else {
-    prompts = await collection.orderBy('timestamp', 'desc').limit(5).get(); // 2
+    prompts = await collection.orderBy('timestamp', 'desc').limit(5).get();
   }
+
   if (prompts.empty) {
     console.log('No matching documents.');
     return {results: []};
   }
 
+  console.log('size', prompts.docs.length)
+
   const finalPrompts = [];
   await Promise.all(prompts.docs.map(async (doc) => {
-    let answers = [];
-    if (doc.data().numAnswers) {
-      // console.log('docid', doc.id)
-      answers = await getSurveyAnswers(doc.id);
-      // console.log('answers here', answers)
-    }
+    // let answers = [];
+    // if (doc.data().numAnswers) {
+    //   answers = await getSurveyAnswers(doc.id);
+    // }
     const topComment = await getTopComment(doc.id);
 
-    finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), topComment, answers)); // survey middleware
+    finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), topComment)); // survey middleware
   }));
-
-  // console.log('final', finalPrompts)
 
   return {results: finalPrompts};
 }
