@@ -8,50 +8,15 @@ const increment = FieldValue.increment(1);
 const decrement = FieldValue.increment(-1);
 
 // Check if user has liked post
-async function checkLikedPost(parentData) {
+async function checkLiked(parentData) {
   const parentID = parentData.query.id;
   const userID = parentData.query.userid;
-  const type = parentData.query.type; // posts / comments
-
-  // console.log('check id', parentID)
-  // console.log('check user', userID)
-  // console.log('check type', type)
-  // console.log("FINISH BITCH")
-
-  const item = await db.collection(type).doc(parentID).get();
-  // console.log('item data', item.data())
+  const type = parentData.query.type; // posts, prompts, responses
 
   const likedUsers = db.collection(type).doc(parentID).collection('likes');
 
-  // postUsers.limit(1).get().
-  // then(sub => {
-  //   if (sub.docs.length > 0) {
-  //     console.log('subcollection exists');
-  //   } else {
-  //     console.log('subcollection is NOT there, so user has not liked');
-  //     return false;
-  //   }
-  // });
-
   const userDoc = await likedUsers.where('userID', '==', userID).get();
 
-  // console.log('empty', userDoc.empty)
-
-  if (userDoc.empty) {
-    console.log('User has not liked.');
-    return false;
-  } else {
-    console.log('User has liked.');
-    return true;
-  }
-}
-
-// Check if user has liked comment
-async function checkLikedComment(commentData) {
-  const commentID = commentData.body.commentID;
-  const userID = commentData.body.userID;
-  const commentUsers = db.collection('comments').doc(commentID).collection('likes');
-  const userDoc = await commentUsers.where('userID', '==', userID).get();
   if (userDoc.empty) {
     console.log('User has not liked.');
     return false;
@@ -78,7 +43,7 @@ async function createPost(postData) {
 }
 
 // Create new comment
-async function createComment(commentData) {
+async function createResponse(commentData) {
   const processedComment = processing.commentProcessing(commentData.body);
   if (!processedComment) {
     return 'There was an error in comment creation';
@@ -86,18 +51,15 @@ async function createComment(commentData) {
 
   const newComment = await db.collection('comments').add(processedComment);
 
-  // console.log('new', newComment)
   const doc = await newComment.get();
 
   const userInfo = await helpers.getUserInfo(doc.data().userID, false);
 
-  // console.log('check here', doc.data())
-
-  return {results: middleware.commentMiddleware(doc.id, doc.data(), userInfo)};
+  return {results: middleware.responseMiddleware(doc.id, doc.data(), userInfo)};
 }
 
 // Edit post
-async function editPost(postData) { // remember dot notation (content.body) for nested fields
+async function editPost(postData) {
   const processedEdits = processing.editProcessing(postData.body);
   if (!processedEdits.post) {
     return 'There was an error in post editing';
@@ -108,48 +70,39 @@ async function editPost(postData) { // remember dot notation (content.body) for 
   return res;
 }
 
-// Delete post
-async function remove(parentData) {
+// Remove post/response
+async function removeContent(parentData) {
   const id = parentData.body.id;
-  const type = parentData.body.type;
+  const type = parentData.body.type; // posts or responses
+
   const parent = db.collection(type).doc(id);
   const doc = await parent.get();
   const archived = doc.data();
   archived['contentType'] = type;
-  const res = await db.collection('archive').add(archived);
+  await db.collection('archive').doc(id).set(archived);
 
   const likes = await parent.collection('likes').get();
   if (!likes.empty) {
-    console.log('Deleting likes...');
-    likes.forEach(function(doc) {
-      doc.ref.delete();
+    console.log('Transferring likes...');
+    likes.docs.map(async (likeDoc) => {
+      await db.collection('archive').doc(id).collection('likes').add(likeDoc.data());
+      await likeDoc.ref.delete();
     });
   }
   await parent.delete();
-  return res; // TODO return value
+  return 'success'; // TODO return value
 }
 
-// Old Delete
-// async function removeComment(commentData) {
-//   const comment = db.collection('comments').doc(commentData.query.commentID);
-//   const res = await comment.update({removed: true});
-//   return res; // TODO return value
-// }
-
-// Like post
-async function likePost(parentData) {
-  console.log('parentData', parentData.body);
+// Like content
+async function likeContent(parentData) {
 
   const parentID = parentData.body.id;
   const userID = parentData.body.user;
   const liked = parentData.body.liked;
   const timestamp = parentData.body.timestamp;
-  const type = parentData.body.type; // posts / comments
+  const type = parentData.body.type;
 
   const parent = db.collection(type).doc(parentID);
-
-  // const item = await parent.get();
-  // console.log('check item here', item.data())
 
   let res = null;
 
@@ -159,7 +112,6 @@ async function likePost(parentData) {
       console.log('ERROR: should like once');
       return null;
     }
-    // console.log('size was 1 (thats good)')
     docArr.forEach(function(doc) {
       res = doc.ref.delete();
     });
@@ -167,35 +119,59 @@ async function likePost(parentData) {
     return res;
   } else {
     res = await parent.collection('likes').add({userID: userID, timestamp: timestamp});
-    // console.log('im adding to sublikes', res)
     await parent.update({numLikes: increment});
     return res;
   }
 }
 
 // Share post
-async function sharePost(postData) {
-  console.log('postData.query', postData.query);
-  console.log('postData.query', postData.body);
-  const postID = postData.body.postid;
-  const userID = postData.body.userid;
+async function shareContent(parentData) {
+  const parentID = parentData.body.postid;
+  const userID = parentData.body.userid;
+  const type = parentData.body.type;
   const timestamp = postData.body.timestamp;
-  const post = db.collection('posts').doc(postID);
-  await post.update({numShares: increment});
-  return await post.collection('shares').add({userID: userID, timestamp: timestamp});
+
+  const sharedContent = db.collection(type).doc(parentID);
+  await sharedContent.update({numShares: increment});
+  return await sharedContent.collection('shares').add({userID: userID, timestamp: timestamp});
 }
 
-
 module.exports = {
-  checkLikedPost,
-  checkLikedComment,
+  checkLiked,
   createPost,
-  createComment,
+  createResponse,
   editPost,
-  remove,
-  likePost,
-  sharePost,
+  removeContent,
+  likeContent,
+  shareContent,
 };
+
+
+
+
+
+
+
+// // Delete post (TBD)
+// async function remove(parentData) {
+//   const id = parentData.body.id;
+//   const type = parentData.body.type;
+//   const parent = db.collection(type).doc(id);
+//   const doc = await parent.get();
+//   const archived = doc.data();
+//   archived['contentType'] = type;
+//   const res = await db.collection('archive').add(archived);
+
+//   const likes = await parent.collection('likes').get();
+//   if (!likes.empty) {
+//     console.log('Deleting likes...');
+//     likes.forEach(function(doc) {
+//       doc.ref.delete();
+//     });
+//   }
+//   await parent.delete();
+//   return res; // TODO return value
+// }
 
 
 // async function getUserInfo(userID) {
@@ -373,4 +349,37 @@ module.exports = {
 //   const res = await post.update({saves: doc.data().saves + 1});
 //   // also add to users saved subcollection (cloud function?)
 //   return res;
+// }
+
+// const item = await db.collection(type).doc(parentID).get();
+  // postUsers.limit(1).get().
+  // then(sub => {
+  //   if (sub.docs.length > 0) {
+  //     console.log('subcollection exists');
+  //   } else {
+  //     console.log('subcollection is NOT there, so user has not liked');
+  //     return false;
+  //   }
+  // });
+
+  // Old Delete
+// async function removeComment(commentData) {
+//   const comment = db.collection('comments').doc(commentData.query.commentID);
+//   const res = await comment.update({removed: true});
+//   return res; // TODO return value
+// }
+
+// Check if user has liked comment
+// async function checkLikedComment(commentData) {
+//   const commentID = commentData.body.commentID;
+//   const userID = commentData.body.userID;
+//   const commentUsers = db.collection('comments').doc(commentID).collection('likes');
+//   const userDoc = await commentUsers.where('userID', '==', userID).get();
+//   if (userDoc.empty) {
+//     console.log('User has not liked.');
+//     return false;
+//   } else {
+//     console.log('User has liked.');
+//     return true;
+//   }
 // }

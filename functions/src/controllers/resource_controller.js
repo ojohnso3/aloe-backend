@@ -11,8 +11,7 @@ async function getResources(type) {
     console.log('No matching documents for getResources.');
     return;
   }
-
-  console.log('resources length', resources.docs.length)
+  // console.log('resources length', resources.docs.length)
 
   return {results: resources.docs.map((doc) => middleware.resourceMiddleware(doc.id, doc.data()))};
 }
@@ -39,7 +38,7 @@ async function parseCSV(csvData) {
 
     allResources.push(resource);
   }
-  // console.log('len', allResources.length)
+  console.log('resources #: ', allResources.length)
   return allResources;
 }
 
@@ -58,7 +57,6 @@ const createResources = async (csvData) => {
   });
 };
 
-// TODO: DELETE CURRENT RESOURCES BEFORE RUNNING
 async function addResources() {
   csvtojson()
     .fromFile("./functions/src/resources.csv")
@@ -67,15 +65,8 @@ async function addResources() {
     })
 }
 
-// addResources()
-
-// MAKING INTO ROUTE (TBD)
-// router.post('/airtabletomongo', memberprofilecontroller.airtableToMongo)
-// airtableToMongo(req,res,next) {
-//   addResources();
-// }
-
 
 module.exports = {
   getResources,
+  addResources
 };

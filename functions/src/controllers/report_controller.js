@@ -1,6 +1,6 @@
 const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
-const processing = require('../processing.js');
+const constants = require('../constants.js');
 
 // Report post/comment/user
 async function reportFromApp(reportData) {
@@ -17,7 +17,7 @@ async function reportFromApp(reportData) {
     type: type,
     userID: reportingUser,
     reason: reason,
-    status: 'PENDING',
+    status: constants.PENDING,
     timestamp: timestamp,
   };
 

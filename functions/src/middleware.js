@@ -1,7 +1,6 @@
 const helpers = require('./helpers.js');
 
 function adminMiddleware(id, dbPost, userInfo) {
-
   const ret = {
     id,
     timestamp: dbPost.timestamp,
@@ -13,51 +12,75 @@ function adminMiddleware(id, dbPost, userInfo) {
     verified: userInfo.verified || false, // unecessary
     content: dbPost.content.body,
     topics: dbPost.content.topics,
-    anonymous: dbPost.anonymous
-    // likes: dbPost.numLikes,
-    // shares: dbPost.numShares,
+    anonymous: dbPost.anonymous,
+    likes: dbPost.numLikes,
+    shares: dbPost.numShares, // TBD
   };
 
+  return ret;
+}
+
+function userMiddleware(id, dbUser) {
+  const ret = {
+    userid: id,
+    username: dbUser.username,
+    verified: dbUser.verified,
+    profilePicture: dbUser.profilePic || '',
+    dob: dbUser.dob || '',
+    age: helpers.getAge(dbUser.dob),
+    pronouns: dbUser.pronouns || '',
+    sexuality: dbUser.sexuality || '',
+    email: dbUser.email,
+    doc: dbUser.signupTime,
+    consentSetting: dbUser.consent,
+    notifSettings: dbUser.notifications || true,
+  };
+  return ret;
+}
+
+function profileMiddleware(id, dbUser) {
+  const ret = {
+    userid: id,
+    username: dbUser.username,
+    verified: dbUser.verified || false,
+    profilePicture: dbUser.profilePic || '',
+    doc: dbUser.signupTime,
+    age: helpers.getAge(dbUser.dob),
+    pronouns: dbUser.pronouns || '',
+    sexuality: dbUser.sexuality || '',
+  };
   return ret;
 }
 
 function postMiddleware(id, dbPost, userInfo) {
-
-  // TODO: figure out anonymity
-  let username = userInfo.username;
-  if (dbPost.anonymous || !username) {
-    username = 'Anonymous';
-  };
-
   const ret = {
     id,
-    timestamp: dbPost.timestamp,
+    timestamp: dbPost.timestamp, // updated too?
     status: dbPost.status,
     userid: userInfo.userID,
-    user: username,
-    profilePicture: userInfo.profilePic || 'none',
+    user: userInfo.username,
+    profilePicture: userInfo.profilePic || '',
     verified: userInfo.verified || false,
-    age: userInfo.age,
-    pronouns: userInfo.pronouns,
-    sexuality: userInfo.sexuality,
+    age: userInfo.age || '',
+    pronouns: userInfo.pronouns || '',
+    sexuality: userInfo.sexuality || '',
     content: dbPost.content.body,
-    image: dbPost.content.image || 'none',
-    video: dbPost.content.video || 'none',
-    audio: dbPost.content.audio || 'none',
     topics: dbPost.content.topics,
+    anonymous: dbPost.anonymous,
     likes: dbPost.numLikes,
     shares: dbPost.numShares,
-    comments: dbPost.numComments,
-    anonymous: dbPost.anonymous,
   };
   return ret;
 }
 
-function promptMiddleware(id, dbPrompt, topComment, answers) {
+function promptMiddleware(id, dbPrompt, userInfo, topComment) {
   const ret = {
     id,
     timestamp: dbPrompt.timestamp,
-    // username: 'aloe_official',
+    userid: userInfo.userID,
+    user: userInfo.username,
+    profilePicture: userInfo.profilePic || '',
+    verified: userInfo.verified || false,
     question: dbPrompt.prompt,
     image: dbPrompt.image,
     topics: dbPrompt.topics,
@@ -70,39 +93,11 @@ function promptMiddleware(id, dbPrompt, topComment, answers) {
   return ret;
 }
 
-// function surveyMiddleware(id, dbPrompt, answers) {
-
-//     let ret = {
-//         id,
-//         timestamp: dbPrompt.timestamp,
-//         question: dbPrompt.prompt,
-//         image: dbPrompt.image,
-//         topics: dbPrompt.topics,
-//         numLikes: dbPrompt.numLikes,
-//         numShares: dbPrompt.numShares,
-//         numAnswers: dbPrompt.numAnswers,
-//         numResponses: dbPrompt.numResponses,
-//         answers: answers,
-//     };
-//     return ret;
-// }
-
-function answerMiddleware(id, dbAnswer) {
+function responseMiddleware(id, dbComment, userInfo) {
   const ret = {
     id,
-    // timestamp: dbAnswer.timestamp,
-    content: dbAnswer.content,
-    choice: dbAnswer.choice,
-    // users later
-  };
-  return ret;
-}
-
-function commentMiddleware(id, dbComment, userInfo) {
-  const ret = {
-    id,
-    user: userInfo.username || 'Anonymous',
-    profilePicture: userInfo.profilePic || 'none',
+    user: userInfo.username,
+    profilePicture: userInfo.profilePic || '',
     verified: userInfo.verified || false,
     content: dbComment.body,
     likes: dbComment.numLikes,
@@ -123,71 +118,45 @@ function resourceMiddleware(id, dbResource) {
   };
   return ret;
 }
-// const ret = {
-//   id,
-//   type: dbResource.type,
-//   name: dbResource.name,
-//   phone: dbResource.contact.phone || 'none',
-//   text: dbResource.contact.text || 'none',
-//   email: dbResource.contact.email || 'none',
-//   website: dbResource.contact.website || 'none',
-//   address: dbResource.contact.address || 'none',
-//   summary: dbResource.description.summary,
-//   confidentiality: dbResource.description.confidentiality,
-//   reporting: dbResource.description.reporting,
-//   image: dbResource.image,
-// };
-
-
-function userMiddleware(id, dbUser) {
-  // const created = helpers.getCreated(id);
-
-  const ret = {
-    userid: id,
-    username: dbUser.username,
-    verified: dbUser.verified,
-    profilePicture: dbUser.profilePic || '',
-    bio: dbUser.bio || '',
-    dob: dbUser.dob || '',
-    age: helpers.getAge(dbUser.dob),
-    pronouns: dbUser.pronouns || '',
-    sexuality: dbUser.sexuality || '',
-    type: dbUser.type,
-    email: dbUser.email,
-    doc: dbUser.signupTime,
-    consentSetting: dbUser.consent,
-    notifSettings: dbUser.notifSettings,
-  };
-  return ret;
-}
-
-function profileMiddleware(id, dbUser) {
-  const ret = {
-    userid: id,
-    username: dbUser.username,
-    verified: dbUser.verified,
-    profilePicture: dbUser.profilePic || 'none',
-    bio: dbUser.bio || 'none',
-    doc: dbUser.signupTime,
-    age: dbUser.age || '19', // adding more info
-    pronouns: dbUser.pronouns || 'she/her',
-    sexuality: dbUser.sexuality || 'gay',
-  };
-  return ret;
-}
 
 
 module.exports = {
   adminMiddleware,
-  postMiddleware,
-  promptMiddleware,
-  answerMiddleware,
-  commentMiddleware,
-  resourceMiddleware,
   userMiddleware,
   profileMiddleware,
+  postMiddleware,
+  promptMiddleware,
+  responseMiddleware,
+  resourceMiddleware,
 };
 
+// function surveyMiddleware(id, dbPrompt, answers) {
+
+// //     let ret = {
+// //         id,
+// //         timestamp: dbPrompt.timestamp,
+// //         question: dbPrompt.prompt,
+// //         image: dbPrompt.image,
+// //         topics: dbPrompt.topics,
+// //         numLikes: dbPrompt.numLikes,
+// //         numShares: dbPrompt.numShares,
+// //         numAnswers: dbPrompt.numAnswers,
+// //         numResponses: dbPrompt.numResponses,
+// //         answers: answers,
+// //     };
+// //     return ret;
+// // }
+
+// function answerMiddleware(id, dbAnswer) {
+//   const ret = {
+//     id,
+//     // timestamp: dbAnswer.timestamp,
+//     content: dbAnswer.content,
+//     choice: dbAnswer.choice,
+//     // users later
+//   };
+//   return ret;
+// }
 
 // liked: dbPost.likes.includes(user) ? true :
 
@@ -260,3 +229,18 @@ module.exports = {
 //     users: ['oj', 'sid'],
 //   },
 // ];
+
+// const ret = {
+//   id,
+//   type: dbResource.type,
+//   name: dbResource.name,
+//   phone: dbResource.contact.phone || 'none',
+//   text: dbResource.contact.text || 'none',
+//   email: dbResource.contact.email || 'none',
+//   website: dbResource.contact.website || 'none',
+//   address: dbResource.contact.address || 'none',
+//   summary: dbResource.description.summary,
+//   confidentiality: dbResource.description.confidentiality,
+//   reporting: dbResource.description.reporting,
+//   image: dbResource.image,
+// };

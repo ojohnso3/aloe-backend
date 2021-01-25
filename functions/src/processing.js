@@ -1,117 +1,12 @@
-const helpers = require('./helpers.js');
+const constants = require('./constants.js');
 
-function topicProcessing(topicString) {
+function topicParser(topicString) {
   if (topicString != undefined) {
     return topicString.split('//');
   } else {
     return undefined;
   }
 }
-
-function postProcessing(post) {
-  const postData = JSON.parse(JSON.stringify(post));
-
-  var anonymous = true;
-  if (postData.anonymous == '0') {
-    anonymous = false;
-  }
-
-  const ret = {
-    userID: postData.userid,
-    timestamp: postData.timestamp,
-    updatedTimestamp: postData.timestamp,
-    status: 'PENDING',
-    content: {
-      body: postData.content,
-      topics: topicProcessing(postData.topics),
-    },
-    numLikes: 0,
-    numShares: 0,
-    numComments: 0,
-    anonymous: anonymous,
-    reported: false,
-    removed: false,
-    adminNotes: ''
-  };
-
-  for (const key of Object.keys(ret)) {
-    // console.log('key', key, ' - ', ret[key]);
-    if (ret[key] == undefined) {
-      return null;
-    }
-  }
-  return ret;
-}
-
-function editProcessing(post) {
-  const postData = JSON.parse(JSON.stringify(post));
-
-  const ret = {
-    'updatedTimestamp': postData.timestamp,
-    'content.body': postData.content,
-    'content.topics': topicProcessing(postData.topics),
-    'anonymous': postData.anonymous,
-    'removed': postData.removed,
-  };
-  for (const key of Object.keys(ret)) {
-    // console.log('key', key, ' - ', ret[key]);
-    if (ret[key] == undefined) {
-      delete ret[key];
-    }
-  }
-
-  return {id: postData.postID, post: ret};
-}
-
-function commentProcessing(comment) {
-  const commentData = JSON.parse(JSON.stringify(comment));
-
-  console.log('commentData', commentData);
-
-  const ret = {
-    userID: commentData.userid,
-    parentID: commentData.id,
-    timestamp: commentData.timestamp,
-    body: commentData.body,
-    numLikes: 0,
-    reported: false,
-    removed: false,
-    top: false // TODO design
-  };
-  for (const key of Object.keys(ret)) {
-    // console.log('key', ret[key]);
-    if (ret[key] == undefined) {
-      return null;
-    }
-  }
-  return ret;
-}
-
-function promptProcessing(prompt) {
-  const promptData = JSON.parse(JSON.stringify(prompt));
-
-  const ret = {
-    timestamp: promptData.timestamp,
-    updatedTimestamp: promptData.timestamp,
-    userID: helpers.aloeID,
-    prompt: promptData.prompt,
-    image: promptData.image,
-    topics: promptData.topics,
-    numLikes: 0,
-    numShares: 0,
-    numResponses: 0,
-    removed: false,
-  };
-  for (const key of Object.keys(ret)) {
-    if (ret[key] == undefined) {
-      return null;
-    }
-  }
-  return {prompt: ret};
-}
-  // numAnswers: promptData.numAnswers, answers: answers
-  // const answers = []; // assemble
-
 
 function userProcessing(user) {
   const userData = JSON.parse(JSON.stringify(user));
@@ -172,6 +67,108 @@ function profileProcessing(profile) {
   return ret;
 }
 
+function postProcessing(post) {
+  const postData = JSON.parse(JSON.stringify(post));
+
+  var anonymous = true;
+  if (postData.anonymous == '0') {
+    anonymous = false;
+  }
+
+  const ret = {
+    userID: postData.userid,
+    timestamp: postData.timestamp,
+    updatedTimestamp: postData.timestamp,
+    status: constants.PENDING,
+    content: {
+      body: postData.content,
+      topics: topicParser(postData.topics),
+    },
+    numLikes: 0,
+    numShares: 0,
+    numComments: 0,
+    anonymous: anonymous,
+    reported: false,
+    removed: false,
+    adminNotes: ''
+  };
+
+  for (const key of Object.keys(ret)) {
+    // console.log('key', key, ' - ', ret[key]);
+    if (ret[key] == undefined) {
+      return null;
+    }
+  }
+  return ret;
+}
+
+function editProcessing(post) {
+  const postData = JSON.parse(JSON.stringify(post));
+
+  const ret = {
+    'updatedTimestamp': postData.timestamp,
+    'content.body': postData.content,
+    'content.topics': topicParser(postData.topics),
+    'anonymous': postData.anonymous,
+    'removed': postData.removed,
+  };
+  for (const key of Object.keys(ret)) {
+    // console.log('key', key, ' - ', ret[key]);
+    if (ret[key] == undefined) {
+      delete ret[key];
+    }
+  }
+
+  return {id: postData.postID, post: ret};
+}
+
+function commentProcessing(comment) {
+  const commentData = JSON.parse(JSON.stringify(comment));
+
+  console.log('commentData', commentData);
+
+  const ret = {
+    userID: commentData.userid,
+    parentID: commentData.id,
+    timestamp: commentData.timestamp,
+    body: commentData.body,
+    numLikes: 0,
+    reported: false,
+    removed: false,
+    top: false // TODO design
+  };
+  for (const key of Object.keys(ret)) {
+    // console.log('key', ret[key]);
+    if (ret[key] == undefined) {
+      return null;
+    }
+  }
+  return ret;
+}
+
+function promptProcessing(prompt) {
+  const promptData = JSON.parse(JSON.stringify(prompt));
+
+  const ret = {
+    timestamp: promptData.timestamp,
+    updatedTimestamp: promptData.timestamp,
+    userID: constants.ALOE_ID,
+    prompt: promptData.prompt,
+    image: promptData.image,
+    topics: promptData.topics,
+    numLikes: 0,
+    numShares: 0,
+    numResponses: 0,
+    removed: false,
+  };
+  for (const key of Object.keys(ret)) {
+    if (ret[key] == undefined) {
+      return null;
+    }
+  }
+  return {prompt: ret};
+}
+
 function topicsProcessing(topics) {
   const topicsData = JSON.parse(JSON.stringify(topics));
   
@@ -190,13 +187,13 @@ function topicsProcessing(topics) {
 }
 
 module.exports = {
+  userProcessing,
+  profileProcessing,
   postProcessing,
   editProcessing,
   commentProcessing,
   promptProcessing,
-  userProcessing,
-  profileProcessing,
-  topicsProcessing
+  topicsProcessing,
 };
 
 
@@ -208,3 +205,6 @@ module.exports = {
 //     return undefined;
 //   }
 // }
+
+  // numAnswers: promptData.numAnswers, answers: answers
+  // const answers = []; // assemble

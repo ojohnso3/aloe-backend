@@ -17,9 +17,9 @@ async function getProfile(userData) {
 
 // Load created posts on profile
 async function getCreated(userData) {
-  const userID = userData.body.id;
-  const timestamp = userData.body.timestamp;
-  const internal = userData.body.internal;
+  const userID = userData.query.id;
+  const timestamp = userData.query.timestamp;
+  const internal = userData.query.internal;
 
   const posts = db.collection('posts');
   
@@ -32,9 +32,9 @@ async function getCreated(userData) {
     }
   } else {
     if (timestamp) {
-      created = await posts.where('userID', '==', userID).where('status', '==', 'APPROVED').where('anonymous', '==', false).orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+      created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
     } else {
-      created = await posts.where('userID', '==', userID).where('status', '==', 'APPROVED').where('anonymous', '==', false).orderBy('timestamp', 'desc').limit(5).get();
+      created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('timestamp', 'desc').limit(5).get();
     }
   }
 
@@ -49,7 +49,7 @@ async function getCreated(userData) {
     createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 
-  // console.log('created size: ', createdPosts.length)
+  console.log('created size: ', createdPosts.length)
 
   return {results: createdPosts};
 }
@@ -62,7 +62,7 @@ async function likedHelper(doc) {
     console.log('No document with postid: ' + postID);
     return null;
   }
-  if (likedPost.data().status != 'APPROVED') {
+  if (likedPost.data().status !=  constants.APPROVED) {
     console.log('Post is not approved: ' + postID);
     return null;
   }
@@ -104,15 +104,11 @@ async function getLiked(userData) {
   return {results: likedPosts};
 }
 
-
-// Change profile
+// Update profile
 async function editProfile(profileData) {
-  // console.log("before processing lol")
   const processedProfile = processing.profileProcessing(profileData.body);
-  console.log('proc', processedProfile);
-  console.log('id', profileData.body.id);
+
   const user = db.collection('users').doc(profileData.body.id);
-  // username, profilePic, bio, consent
   const res = await user.update(processedProfile);
   return res; // TODO: return value
 }

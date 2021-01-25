@@ -2,6 +2,8 @@ const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
 const processing = require('../processing.js');
 const helpers = require('../helpers.js');
+const constants = require('../constants.js');
+
 
 // Login as admin
 async function adminLogin(adminData) {
@@ -75,13 +77,17 @@ async function createPrompt(promptData) {
   //   createAnswers(doc.id, processedPrompt.answers);
   // }
 
-  const userInfo = await helpers.getUserInfo(doc.data().userID, false);
+  if(doc.data().userID != constants.ALOE_ID) {
+    console.log('ERROR: ids do not match');
+  }
+  const userInfo = await helpers.getUserInfo(constants.ALOE_ID, false);
 
-  return {results: middleware.promptMiddleware(doc.id, doc.data(), userInfo)};
+  return {results: middleware.promptMiddleware(doc.id, doc.data(), userInfo, '')};
 }
 
 // Edit prompt
 async function editPrompt(promptData) {
+  // TBD
 }
 
 // Add topics to db
