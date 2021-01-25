@@ -4,5 +4,5 @@ module.exports = Object.freeze({
   REJECTED: 'REJECTED',
 
   ALOE_ID: 'rvmrSMFUbZfjqpE7aSFd',
-  ANONYMOUS_ID: 'FtmFW0Qavf1jTmaggHbv ',
+  ANONYMOUS_ID: 'FtmFW0Qavf1jTmaggHbv',
 });
