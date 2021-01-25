@@ -126,7 +126,7 @@ async function likeContent(parentData) {
 
 // Share post
 async function shareContent(parentData) {
-  const parentID = parentData.body.postid;
+  const parentID = parentData.body.id;
   const userID = parentData.body.userid;
   const type = parentData.body.type;
   const timestamp = postData.body.timestamp;
