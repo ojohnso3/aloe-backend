@@ -72,7 +72,7 @@ async function createPost(postData) {
   const newPost = await db.collection('posts').add(processedPost);
   const doc = await newPost.get();
 
-  const userInfo = await helpers.getUserInfo(doc.data().userID);
+  const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
 
   return {results: middleware.postMiddleware(doc.id, doc.data(), userInfo)};
 }
@@ -89,7 +89,7 @@ async function createComment(commentData) {
   // console.log('new', newComment)
   const doc = await newComment.get();
 
-  const userInfo = await helpers.getUserInfo(doc.data().userID);
+  const userInfo = await helpers.getUserInfo(doc.data().userID, false);
 
   // console.log('check here', doc.data())
 

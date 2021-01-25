@@ -4,7 +4,7 @@ const processing = require('../processing.js');
 
 // Checks if username exists
 async function checkUsername(userData) {
-  console.log('ahhh', userData.query.username);
+  console.log('username here: ', userData.query.username);
   const users = db.collection('users');
   const userDoc = await users.where('username', '==', userData.query.username).get();
   if (userDoc.empty) {
@@ -28,7 +28,7 @@ async function login(loginData) {
   const email = loginData.body.email;
   const loginTime = loginData.body.loginTime;
   const users = db.collection('users');
-  const currUser = await users.where('email', '==', email).get();
+  const currUser = await users.where('email', '==', email).where('removed', '==', false).get();
 
   if (currUser.empty) {
     console.log('No such user.');
@@ -47,14 +47,35 @@ async function login(loginData) {
   return middleware.userMiddleware(updatedUser.id, updatedUser.data());
 }
 
-// Delete Account (soft)
-async function deleteAccount(data) {
-  const user = db.collection('users').doc(data.body.userID);
-  if (user.get().empty) {
+// Soft delete user account (hide user and make posts anonymous)
+async function deleteAccount(userData) {
+  const user = db.collection('users').doc(userData.body.userID);
+  const userDoc = await user.get();
+  if (!userDoc.exists) {
     console.log('No such user.');
     return;
   }
   const res = await user.update({removed: true});
+
+  const createdPosts = await db.collection('posts').where('userID', '==', userDoc.id).get();
+  if (createdPosts.empty) {
+    console.log('No created post docs.');
+  } else {
+    createdPosts.docs.map(async (post) => {
+      if(!post.data().anonymous) {
+        const postData = db.collection('posts').doc(post.id);
+        const postDoc = postData.get();
+        if (postDoc.exists) {
+          console.log('No such post.');
+        } else {
+          console.log('changing post' + postDoc.id + 'to anonymous')
+          await postData.update({anonymous: true});
+        }
+      } else {
+        console.log('post ' + post.id + 'is already anonymous')
+      }
+    })
+  }
   return res; // TODO: return value
 }
 

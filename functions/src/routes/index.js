@@ -20,25 +20,28 @@ function response(handler) {
 }
 
 // Admin routes
-router.get('/admin/login/:id', response(adminController.adminLogin)); // tbd
+router.get('/admin/login/:id', response(adminController.adminLogin)); // works
 router.get('/admin/posts', checkIfAuthenticated, response(adminController.getPostsByStatus)); // works
-router.get('/admin/topics', response(adminController.getTopics)); // works
-router.post('/admin/topic', response(adminController.addTopic)); // works
-router.delete('/admin/topic', response(adminController.removeTopic)); // works
-router.put('/admin/topic', response(adminController.editTopic)); // works
-// router.get('/admin/reported/:id', response(adminController.getReportedByType)); //
-// router.get('/admin/banned', response(adminController.getBannedUsers));
-
 router.put('/admin/moderate', checkIfAuthenticated, response(adminController.moderatePost)); // done but check
-router.put('/admin/notes', checkIfAuthenticated, response(adminController.updateNotes)); // done but check
-router.put('/admin/postreport', checkIfAuthenticated, response(adminController.reportPost)); // done but check
-router.put('/admin/commentreport', checkIfAuthenticated, response(adminController.reportComment)); // done but check
-router.put('/admin/userreport', checkIfAuthenticated, response(adminController.reportUser)); // done but check
 router.post('/admin/prompt', checkIfAuthenticated, response(adminController.createPrompt)); // done but check
+router.put('/admin/prompt', checkIfAuthenticated, response(adminController.editPrompt)); // done but check
+router.get('/admin/topics', checkIfAuthenticated, response(adminController.getTopics)); // works
+router.post('/admin/topic', checkIfAuthenticated, response(adminController.addTopic)); // works
+router.put('/admin/topic', checkIfAuthenticated, response(adminController.editTopic)); // works
+router.delete('/admin/topic', checkIfAuthenticated, response(adminController.removeTopic)); // works
 router.post('/website/email', response(adminController.addEmail)); // works
+// router.put('/admin/notes', checkIfAuthenticated, response(adminController.updateNotes)); // done but check
 
 // Reporting routes
 router.post('/report', response(reportController.reportFromApp)); // works
+router.put('/admin/reactivate', response(reportController.reactivateUser)); // try
+router.get('/reported/:id', response(reportController.getReportedByType)); //
+router.get('/admin/banned', response(reportController.getBannedUsers));
+router.put('/post/report', checkIfAuthenticated, response(reportController.reportPost)); // done but check
+router.put('/response/report', checkIfAuthenticated, response(reportController.reportComment)); // done but check
+router.put('/user/report', checkIfAuthenticated, response(reportController.reportUser)); // done but check
+
+
 
 // Post routes
 router.get('/post/liked', response(postController.checkLikedPost)); // works

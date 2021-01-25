@@ -1,6 +1,9 @@
 const db = require('./firebase/db.js');
 const middleware = require('./middleware.js');
 
+const anonymousID = 'FtmFW0Qavf1jTmaggHbv';
+const aloeID = 'rvmrSMFUbZfjqpE7aSFd';
+
 async function getCreated(userID, timestamp) {
   const posts = db.collection('posts');
   let created = [];
@@ -23,31 +26,34 @@ async function getCreated(userID, timestamp) {
   return {results: createdPosts};
 }
 
-async function getUserInfo(userID) {
+async function getUserInfo(userID, anonymous) {
   const userDoc = await db.collection('users').doc(userID).get();
   let userInfo = {};
-  if (!userDoc.exists) {
-    // console.log('No matching user document.'); // return an error here
-    const anonID = 'FtmFW0Qavf1jTmaggHbv'; // current user for Anonymous
-    const anonDoc = await db.collection('users').doc(anonID).get();
+  if (anonymous || !userDoc.exists) {
+    const anonDoc = await db.collection('users').doc(anonymousID).get();
     if (!anonDoc.exists) {
       console.log('ERROR: no Anonymous account');
-    } else {
-      // make sure it exists
       userInfo = {
-        userID: anonID,
+        userID: anonymousID,
+        username: 'Anonymous',
+        profilePic: 'aloe.jpg', // link to image
+        verified: true,
+      };
+    } else {
+      userInfo = {
+        userID: anonymousID,
         username: anonDoc.data().username,
         profilePic: anonDoc.data().profilePic,
-        verified: anonDoc.data().verified,
+        verified: true,
       };
     }
   } else {
     userInfo = {
       userID: userID,
-      username: userDoc.data().username, // anonymous!!
+      username: userDoc.data().username,
       profilePic: userDoc.data().profilePic,
       verified: userDoc.data().verified,
-      age: userDoc.data().age,
+      age: getAge(userDoc.data().dob),
       pronouns: userDoc.data().pronouns,
       sexuality: userDoc.data().sexuality,
     };
@@ -55,7 +61,20 @@ async function getUserInfo(userID) {
   return userInfo;
 }
 
+function getAge(dob) {
+  if(!dob) {
+    return '';
+  }
+  var diff_ms = Date.now() - dob.getTime();
+  var age_dt = new Date(diff_ms); 
+
+  return Math.abs(age_dt.getUTCFullYear() - 1970);
+}
+
 module.exports = {
   getCreated,
   getUserInfo,
+  getAge,
+  anonymousID,
+  aloeID
 };

@@ -1,57 +1,5 @@
 const helpers = require('./helpers.js');
 
-
-// add image later + content instead of body
-const fakeComments = [
-  {
-    id: '123',
-    user: 'sidthekid',
-    content: 'You are so strong <3',
-    likes: ['oj', 'sid'],
-    timestamp: 'November Yomama',
-  },
-  {
-    id: '0001',
-    user: 'sidthekid',
-    content: 'This is amazing!',
-    likes: ['yomama', 'sid', 'porky', 'joebiden'],
-    timestamp: 'October Yodada',
-  },
-];
-
-const fakeResponses = [
-  {
-    id: '123',
-    user: 'sidthekid',
-    content: 'I think Euphoria romanticized unhealthy relationships.',
-    likes: ['oj', 'sid'],
-    timestamp: 'November Yomama',
-  },
-  {
-    id: '0001',
-    user: 'sidthekid',
-    content: 'Episode 5 really triggered me.',
-    likes: ['yomama', 'sid', 'porky', 'joebiden'],
-    timestamp: 'October Yodada',
-  },
-];
-
-const fakeAnswers = [
-  {
-    id: '123',
-    choice: 'A',
-    content: 'Yes!',
-    users: ['oj', 'cam'],
-  },
-  {
-    id: '999',
-    choice: 'B',
-    content: 'No.',
-    users: ['oj', 'sid'],
-  },
-];
-
-
 function adminMiddleware(id, dbPost, userInfo) {
 
   const ret = {
@@ -60,24 +8,23 @@ function adminMiddleware(id, dbPost, userInfo) {
     status: dbPost.status,
     notes: dbPost.adminNotes,
     userID: dbPost.userID,
-    username: userInfo.username || 'No Corresponding User',
+    username: userInfo.username || 'No Corresponding User', // TODO: fix
     profilePic: userInfo.profilePic || 'none',
     verified: userInfo.verified || false, // unecessary
     content: dbPost.content.body,
-    media: dbPost.content.image || 'none',
     topics: dbPost.content.topics,
-    anonymous: dbPost.topics
+    anonymous: dbPost.anonymous
     // likes: dbPost.numLikes,
     // shares: dbPost.numShares,
-    // comments: dbPost.numComments
   };
 
   return ret;
 }
 
 function postMiddleware(id, dbPost, userInfo) {
-  // anonymous shit
-  let username = userInfo.username; ;
+
+  // TODO: figure out anonymity
+  let username = userInfo.username;
   if (dbPost.anonymous || !username) {
     username = 'Anonymous';
   };
@@ -90,7 +37,7 @@ function postMiddleware(id, dbPost, userInfo) {
     user: username,
     profilePicture: userInfo.profilePic || 'none',
     verified: userInfo.verified || false,
-    age: userInfo.age, // adding more info
+    age: userInfo.age,
     pronouns: userInfo.pronouns,
     sexuality: userInfo.sexuality,
     content: dbPost.content.body,
@@ -199,19 +146,17 @@ function userMiddleware(id, dbUser) {
     userid: id,
     username: dbUser.username,
     verified: dbUser.verified,
-    profilePicture: dbUser.profilePic || 'none',
-    bio: dbUser.bio || 'none',
-    age: dbUser.age || '22', // adding more info
-    pronouns: dbUser.pronouns || 'her/him',
-    sexuality: dbUser.sexuality || 'asexual',
+    profilePicture: dbUser.profilePic || '',
+    bio: dbUser.bio || '',
+    dob: dbUser.dob || '',
+    age: helpers.getAge(dbUser.dob),
+    pronouns: dbUser.pronouns || '',
+    sexuality: dbUser.sexuality || '',
     type: dbUser.type,
     email: dbUser.email,
     doc: dbUser.signupTime,
     consentSetting: dbUser.consent,
     notifSettings: dbUser.notifSettings,
-    posts: [], // created
-    liked: [], // remove
-
   };
   return ret;
 }
@@ -236,7 +181,6 @@ module.exports = {
   adminMiddleware,
   postMiddleware,
   promptMiddleware,
-  // surveyMiddleware,
   answerMiddleware,
   commentMiddleware,
   resourceMiddleware,
@@ -264,3 +208,55 @@ module.exports = {
 //     };
 //     return ret;
 // }
+
+
+
+// add image later + content instead of body
+// const fakeComments = [
+//   {
+//     id: '123',
+//     user: 'sidthekid',
+//     content: 'You are so strong <3',
+//     likes: ['oj', 'sid'],
+//     timestamp: 'November Yomama',
+//   },
+//   {
+//     id: '0001',
+//     user: 'sidthekid',
+//     content: 'This is amazing!',
+//     likes: ['yomama', 'sid', 'porky', 'joebiden'],
+//     timestamp: 'October Yodada',
+//   },
+// ];
+
+// const fakeResponses = [
+//   {
+//     id: '123',
+//     user: 'sidthekid',
+//     content: 'I think Euphoria romanticized unhealthy relationships.',
+//     likes: ['oj', 'sid'],
+//     timestamp: 'November Yomama',
+//   },
+//   {
+//     id: '0001',
+//     user: 'sidthekid',
+//     content: 'Episode 5 really triggered me.',
+//     likes: ['yomama', 'sid', 'porky', 'joebiden'],
+//     timestamp: 'October Yodada',
+//   },
+// ];
+
+// const fakeAnswers = [
+//   {
+//     id: '123',
+//     choice: 'A',
+//     content: 'Yes!',
+//     users: ['oj', 'cam'],
+//   },
+//   {
+//     id: '999',
+//     choice: 'B',
+//     content: 'No.',
+//     users: ['oj', 'sid'],
+//   },
+// ];

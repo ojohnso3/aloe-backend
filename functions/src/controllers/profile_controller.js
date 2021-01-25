@@ -4,30 +4,25 @@ const helpers = require('../helpers.js');
 const processing = require('../processing.js');
 
 
-// Get Profile
+// Get external profile
 async function getProfile(userData) {
-  console.log('id', userData.params.id);
-  const users = db.collection('users');
-  // const profile = await users.where('username', '==', userData.params.id).get();
-  const profile = await users.doc(userData.params.id).get();
+  const profile = await db.collection('users').doc(userData.params.id).get();
   if (!profile.exists) {
-    console.log('No such user.');
+    console.log('No such user profile.');
     return;
   }
-  // if(profile.docs.length != 1 ) {
-  //   console.log('ERROR: More than one user with the same username.')
-  // }
-  // const userDoc = profile.docs[0];
-  // return middleware.userMiddleware(userDoc.id, userDoc.data());
+
   return middleware.profileMiddleware(profile.id, profile.data());
 }
 
 // Load created posts on profile
 async function getCreated(userData) {
-  const userID = userData.query.id;
-  const timestamp = userData.query.timestamp;
-  const internal = userData.query.internal;
+  const userID = userData.body.id;
+  const timestamp = userData.body.timestamp;
+  const internal = userData.body.internal;
+
   const posts = db.collection('posts');
+  
   let created = [];
   if(internal) {
     if (timestamp) {
@@ -37,9 +32,9 @@ async function getCreated(userData) {
     }
   } else {
     if (timestamp) {
-      created = await posts.where('userID', '==', userID).where('status', '==', 'APPROVED').orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+      created = await posts.where('userID', '==', userID).where('status', '==', 'APPROVED').where('anonymous', '==', false).orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
     } else {
-      created = await posts.where('userID', '==', userID).where('status', '==', 'APPROVED').orderBy('timestamp', 'desc').limit(5).get();
+      created = await posts.where('userID', '==', userID).where('status', '==', 'APPROVED').where('anonymous', '==', false).orderBy('timestamp', 'desc').limit(5).get();
     }
   }
 
@@ -50,23 +45,14 @@ async function getCreated(userData) {
 
   const createdPosts = [];
   await Promise.all(created.docs.map(async (doc) => {
-    const userInfo = await helpers.getUserInfo(userID);
+    const userInfo = await helpers.getUserInfo(userID, false);
     createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 
+  // console.log('created size: ', createdPosts.length)
+
   return {results: createdPosts};
 }
-
-  // return helpers.getCreated(userData.body.id, userData.body.timestamp);
-
-  // Before helper
-  // const posts = db.collection('posts');
-  // const created = await posts.where('userID', '==', userData.body.userID).get(); // .where('removed', '==', false)
-  // if (created.empty) {
-  //   console.log('No matching document.');
-  //   return;
-  // }
-  // return {results: created.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};
 
 async function likedHelper(doc) {
   const posts = db.collection('posts');
@@ -109,7 +95,7 @@ async function getLiked(userData) {
       const likedPost = likedData.post;
       const likedUser = likedData.user;
   
-      const userInfo = await helpers.getUserInfo(likedUser.id);
+      const userInfo = await helpers.getUserInfo(likedUser.id, likedPost.data().anonymous);
   
       likedPosts.push(middleware.postMiddleware(likedPost.id, likedPost.data(), userInfo));
     }
@@ -151,3 +137,21 @@ module.exports = {
 //   middleware.postMiddleware(likedPost.id, likedPost.data(), likedUser.data().username)
 // }))
 // returns null ??
+
+  // if(profile.docs.length != 1 ) {
+  //   console.log('ERROR: More than one user with the same username.')
+  // }
+  // const userDoc = profile.docs[0];
+  // return middleware.userMiddleware(userDoc.id, userDoc.data());
+
+   // return helpers.getCreated(userData.body.id, userData.body.timestamp);
+
+
+  // Before helper
+  // const posts = db.collection('posts');
+  // const created = await posts.where('userID', '==', userData.body.userID).get(); // .where('removed', '==', false)
+  // if (created.empty) {
+  //   console.log('No matching document.');
+  //   return;
+  // }
+  // return {results: created.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};

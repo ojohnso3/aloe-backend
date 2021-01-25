@@ -3,11 +3,11 @@ const middleware = require('../middleware.js');
 const processing = require('../processing.js');
 const helpers = require('../helpers.js');
 
-// Login as admnin
+// Login as admin
 async function adminLogin(adminData) {
   const email = adminData.params.id;
   const users = db.collection('users');
-  const adminUser = await users.where('email', '==', email).get();
+  const adminUser = await users.where('email', '==', email).where('removed', '==', false).get();
 
   if (adminUser.empty) {
     console.log('No such user.');
@@ -41,100 +41,26 @@ async function getPostsByStatus(request) {
     return [];
   }
 
-
   const finalPosts = [];
   await Promise.all(selected.docs.map(async (doc) => {
-    const userInfo = await helpers.getUserInfo(doc.data().userID);
+    const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
     finalPosts.push(middleware.adminMiddleware(doc.id, doc.data(), userInfo));
   }));
 
   return finalPosts;
 }
 
-// async function updatePostStatus(postData) {
-//   const updates = postData.body; 
-//   console.log('pd', updates)
-//   const post = db.collection('posts').doc(postID);
-//   const res = await post.update({status: updates.newStatus, updatedTimestamp: updates.timestamp});
-//   return res;
-// }
-
 // Change status of post
 async function moderatePost(postData) {
   const updates = postData.body; 
-  console.log('pd', updates)
   const post = db.collection('posts').doc(updates.id);
   const res = await post.update({status: updates.status, adminNotes: updates.notes, updatedTimestamp: updates.timestamp});
   return res;
-
-  // const postID = postData.body.postID;
-  // const newStatus = postData.body.status;
-  // const timestamp = postData.body.timestamp;
-  // const reason = postData.body.reason;
-
-  // // if (!postID || !newStatus || !timestamp || !reason) {
-  // //   return {};
-  // // }
-
-  // return updatePostStatus(postID, newStatus, reason, timestamp);
 }
 
-// Change notes
-async function updateNotes(postData) {
-  const updates = postData.body; 
-  console.log('pd', updates)
-  const post = db.collection('posts').doc(updates.id);
-  const res = await post.update({adminNotes: updates.notes, updatedTimestamp: updates.timestamp});
-  return res;
-}
-
-// Report post
-async function reportPost(reportData) {
-  return updatePostStatus(reportData.postID, 'REJECTED', 'REPORT: ' + reportData.reason, reportData.timestamp);
-}
-
-// Report comment
-async function reportComment(reportData) {
-  const comment = db.collection('comments').doc(reportData.body.commentID);
-  const res = await comment.update({removed: true});
-
-  return res;
-}
-
-// Report User
-async function reportUser(reportData) {
-  const userID = reportData.body.userID;
-  const reason = reportData.body.reason;
-  const duration = reportData.body.duration;
-  const timestamp = reportData.body.timestamp;
-
-  const user = db.collection('users').doc(userID);
-  const res = await user.update({banned: {duration: duration, timestamp: timestamp, reason: reason}});
-  console.log('reason: ', reason); // how to self-check??
-  return res;
-}
-
-// Unban a user
-async function unbanUser(userData) {
-  const user = db.collection('users').doc(userData.body.userID);
-  const userDoc = await user.get();
-  const banned = userDoc.data().banned;
-
-  const res = await user.update({banned: {duration: 0, reason: 'Unbanned. Previous ban was on ' + banned.timestamp + ' for ' + banned.duration + ' days because' + banned.reason}});
-  return res;
-}
-
-async function createAnswers(promptID, answersData) {
-  await Promise.all(answersData.map(async (answer) => {
-    answer.promptID = promptID;
-    await db.collection('answers').add(answer);
-  }));
-  return 'works';
-}
-
-// Create new post
+// Create new prompt
 async function createPrompt(promptData) {
-  const processedPrompt = processing.promptProcessing(promptData.body); // might have to be query
+  const processedPrompt = processing.promptProcessing(promptData.body);
   if (!processedPrompt.prompt) {
     return 'There was an error in prompt creation';
   }
@@ -142,101 +68,20 @@ async function createPrompt(promptData) {
   const newPrompt = await db.collection('prompts').add(processedPrompt.prompt);
   const doc = await newPrompt.get();
 
-  if (doc.data().numAnswers > 0) {
-    if (!processedPrompt.answers) {
-      return 'There was an error in prompt answer creation';
-    }
-    createAnswers(doc.id, processedPrompt.answers);
-  }
+  // if (doc.data().numAnswers > 0) {
+  //   if (!processedPrompt.answers) {
+  //     return 'There was an error in prompt answer creation';
+  //   }
+  //   createAnswers(doc.id, processedPrompt.answers);
+  // }
 
-  const userInfo = await helpers.getUserInfo(doc.data().userID);
+  const userInfo = await helpers.getUserInfo(doc.data().userID, false);
 
   return {results: middleware.promptMiddleware(doc.id, doc.data(), userInfo)};
 }
 
-// // Load reported posts
-// async function getReportedByType(reportType) {
-//   const type = reportType.params.id; // POST, COMMENT, USER
-//   console.log('type', type);
-
-//   switch(type) {
-//     case 'POST':
-//       const posts = db.collection('posts');
-//       const reportedPosts = await posts.where('reported', '==', true).get();
-//       if (reportedPosts.empty) {
-//         console.log('No matching documents.');
-//         return;
-//       }
-//       var reported = []
-//       // array of {post data + array of reports on post}
-//       return reportedPosts.docs.map(async (doc) => {
-//         const reportDocs = await db.collection('posts').doc(doc.id).collection('reports').get();
-//         var allReports = []
-//         reported.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
-//       });
-//     case 'COMMENT':
-//       // complicated
-//       break;
-//     case 'USER':
-//       const users = db.collection('users');
-//       const reportedUsers = await users.where('reported', '==', true).get();
-//       if (reportedUsers.empty) {
-//         console.log('No matching documents.');
-//         return;
-//       }
-//       var reported = []
-//       // array of {user data + array of reports on user}
-//       return reportedUsers.docs.map(async (doc) => {
-//         const reportDocs = await db.collection('users').doc(doc.id).collection('reports').get();
-//         var allReports = []
-//         reported.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
-//       });
-//     default:
-//       // error -- return failure if error
-//       console.log('ERROR: Reporting type ' + type + ' is invalid.')
-//       break;
-//   }
-//   return; // what??
-// }
-
-// // Get all reports for a specific post/comment/user
-// async function getReportsByID() {
-//   // TBD
-// }
-//
-// // Get all banned users
-// async function getBannedUsers() {
-//   const users = db.collection('users');
-//   const bannedUsers = await users.where('banned', '!=', null).get();
-
-//   const banned = [];
-//   await Promise.all(selected.docs.map(async (doc) => {
-//     const userInfo = await helpers.getUserInfo(doc.data().userID);
-//     banned.push(middleware.userMiddleware(doc.id, doc.data(), userInfo))
-//   }));
-
-//   // TODO: make below into helper function
-
-//   return bannedUsers.docs.map(async (doc) => {
-//     const reportDocs = await db.collection('users').doc(doc.id).collection('reports').get();
-//     var allReports = []
-//     banned.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
-//   });
-// }
-
-// Add email to db
-async function addEmail(emailData) {
-  const emailInfo = emailData.body;
-
-  const emailDoc = await db.collection('emails').where('email', '==', emailInfo.email).get();
-  if (emailDoc.empty) {
-    console.log('Email not already in db');
-    const email = await db.collection('emails').add(emailInfo);
-    return email;
-  } else {
-    console.log('Email already in db');
-    return 'Already exists';
-  }
+// Edit prompt
+async function editPrompt(promptData) {
 }
 
 // Add topics to db
@@ -313,26 +158,53 @@ async function getTopics() {
   return {results: topicTags};
 }
 
+// Add email to db
+async function addEmail(emailData) {
+  const emailInfo = emailData.body;
+
+  const emailDoc = await db.collection('emails').where('email', '==', emailInfo.email).get();
+  if (emailDoc.empty) {
+    console.log('Email not already in db');
+    const email = await db.collection('emails').add(emailInfo);
+    return email;
+  } else {
+    console.log('Email already in db');
+    return 'Already exists';
+  }
+}
+
 module.exports = {
   adminLogin,
   getPostsByStatus,
   moderatePost,
-  updateNotes,
-  reportPost,
-  reportComment,
-  reportUser,
-  unbanUser,
   createPrompt,
-  // getReportedByType,
-  // getReportsByID,
-  // getBannedUsers,
-  addEmail,
-  addTopic,
-  removeTopic,
-  editTopic,
+  editPrompt,
   getTopics,
+  addTopic,
+  editTopic,
+  removeTopic,
+  addEmail,
 };
 
+
+  // const postID = postData.body.postID;
+  // const newStatus = postData.body.status;
+  // const timestamp = postData.body.timestamp;
+  // const reason = postData.body.reason;
+
+  // // if (!postID || !newStatus || !timestamp || !reason) {
+  // //   return {};
+  // // }
+
+  // return updatePostStatus(postID, newStatus, reason, timestamp);
+
+// async function updatePostStatus(postData) {
+//   const updates = postData.body; 
+//   console.log('pd', updates)
+//   const post = db.collection('posts').doc(postID);
+//   const res = await post.update({status: updates.newStatus, updatedTimestamp: updates.timestamp});
+//   return res;
+// }
 
 // // - view a post — /post
 // async function viewPost(postID) {
@@ -387,4 +259,20 @@ module.exports = {
 //     console.log(doc.id, '=>', doc.data());
 //   });
 //   return "Testing!";
+// }
+
+// async function createAnswers(promptID, answersData) {
+//   await Promise.all(answersData.map(async (answer) => {
+//     answer.promptID = promptID;
+//     await db.collection('answers').add(answer);
+//   }));
+//   return 'works';
+// }
+
+// Change notes (HERE)
+// async function updateNotes(postData) {
+//   const updates = postData.body; 
+//   const post = db.collection('posts').doc(updates.id);
+//   const res = await post.update({adminNotes: updates.notes, updatedTimestamp: updates.timestamp});
+//   return res;
 // }

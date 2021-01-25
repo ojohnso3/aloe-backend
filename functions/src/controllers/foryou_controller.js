@@ -25,7 +25,7 @@ async function getComments(parentData) {
 
   const finalComments = [];
   await Promise.all(comments.docs.map(async (doc) => {
-    const userInfo = await helpers.getUserInfo(doc.data().userID);
+    const userInfo = await helpers.getUserInfo(doc.data().userID, false);
     finalComments.push(middleware.commentMiddleware(doc.id, doc.data(), userInfo));
   }));
 
@@ -53,11 +53,11 @@ async function getPosts(post) {
     return {results: []};
   }
 
-  console.log('posts length', forYou.docs.length)
+  // console.log('posts length', forYou.docs.length)
 
   const finalPosts = [];
   await Promise.all(forYou.docs.map(async (doc) => {
-    const userInfo = await helpers.getUserInfo(doc.data().userID);
+    const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
     finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 
@@ -226,7 +226,7 @@ async function getPostsByTopic(post) { // (APPROVED)
 
   const finalPosts = [];
   await Promise.all(forYou.docs.map(async (doc) => {
-    const userInfo = await helpers.getUserInfo(doc.data().userID);
+    const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
     finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 

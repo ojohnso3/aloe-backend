@@ -52,11 +52,145 @@ async function reportFromApp(reportData) {
 }
 
 
+// Report post
+async function reportPost(reportData) {
+  return updatePostStatus(reportData.postID, 'REJECTED', 'REPORT: ' + reportData.reason, reportData.timestamp);
+}
+
+// Report comment
+async function reportComment(reportData) {
+  const comment = db.collection('comments').doc(reportData.body.commentID);
+  const res = await comment.update({removed: true});
+
+  return res;
+}
+
+// Report User
+async function reportUser(reportData) {
+  const userID = reportData.body.userID;
+  const reason = reportData.body.reason;
+  const duration = reportData.body.duration;
+  const timestamp = reportData.body.timestamp;
+
+  const user = db.collection('users').doc(userID);
+  const res = await user.update({banned: {duration: duration, timestamp: timestamp, reason: reason}});
+  console.log('reason: ', reason); // how to self-check??
+  return res;
+}
+
+// Unban a user
+async function unbanUser(userData) {
+  const user = db.collection('users').doc(userData.body.userID);
+  const userDoc = await user.get();
+  const banned = userDoc.data().banned;
+
+  const res = await user.update({banned: {duration: 0, reason: 'Unbanned. Previous ban was on ' + banned.timestamp + ' for ' + banned.duration + ' days because' + banned.reason}});
+  return res;
+}
+
+// Load reported posts
+async function getReportedByType(reportType) {
+  const type = reportType.params.id; // POST, RESPONSE, USER
+  console.log('type', type);
+
+  switch(type) {
+    case 'POST':
+      const posts = db.collection('posts');
+      const reportedPosts = await posts.where('reported', '==', true).get();
+      if (reportedPosts.empty) {
+        console.log('No matching documents.');
+        return;
+      }
+      var reported = []
+      // array of {post data + array of reports on post}
+      return reportedPosts.docs.map(async (doc) => {
+        const reportDocs = await db.collection('posts').doc(doc.id).collection('reports').get();
+        var allReports = []
+        reported.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
+      });
+    case 'COMMENT':
+      // complicated
+      break;
+    case 'USER':
+      const users = db.collection('users');
+      const reportedUsers = await users.where('reported', '==', true).get();
+      if (reportedUsers.empty) {
+        console.log('No matching documents.');
+        return;
+      }
+      var reported = []
+      // array of {user data + array of reports on user}
+      return reportedUsers.docs.map(async (doc) => {
+        const reportDocs = await db.collection('users').doc(doc.id).collection('reports').get();
+        var allReports = []
+        reported.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
+      });
+    default:
+      // error -- return failure if error
+      console.log('ERROR: Reporting type ' + type + ' is invalid.')
+      break;
+  }
+  return; // what??
+}
+
+// Get all reports for a specific post/comment/user
+async function getReportsByID() {
+  // TBD
+}
+
+// Get all banned users
+async function getBannedUsers() {
+  const users = db.collection('users');
+  const bannedUsers = await users.where('banned', '!=', null).get();
+
+  const banned = [];
+  await Promise.all(selected.docs.map(async (doc) => {
+    const userInfo = await helpers.getUserInfo(doc.data().userID, false); // TBD on anon
+    banned.push(middleware.userMiddleware(doc.id, doc.data(), userInfo))
+  }));
+
+  // TODO: make below into helper function
+
+  return bannedUsers.docs.map(async (doc) => {
+    const reportDocs = await db.collection('users').doc(doc.id).collection('reports').get();
+    var allReports = []
+    banned.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
+  });
+}
+
+// Reactivate user
+async function reactivateUser(emailData) {
+  const users = db.collection('users').where('email', '==', emailData.body.email);
+  const userDoc = await users.get();
+  if (userDoc.empty || userDoc.docs.length > 1) {
+    console.log('No such user or toom many.');
+    return null;
+  }
+
+  const userData = userDoc.docs[0];
+
+  if(!userData.data().removed) {
+    console.log('User is currently active!')
+    return null;
+  }
+
+  const user = db.collection('users').doc(userData.id);
+
+  const res = await user.update({removed: false});
+  return res; // TODO: return
+}
+
+
 module.exports = {
   reportFromApp,
-  // reportPost,
-  // reportComment,
-  // reportUser
+  getReportedByType,
+  getReportsByID,
+  getBannedUsers,
+  reportPost,
+  reportComment,
+  reportUser,
+  unbanUser,
+  reactivateUser
 };
 
 // switch(type) {
@@ -80,3 +214,7 @@ module.exports = {
 //     console.log('ERROR: Reporting type ' + type + ' is invalid.')
 //     break;
 // }
+
+  // reportPost,
+  // reportComment,
+  // reportUser

@@ -1,3 +1,5 @@
+const helpers = require('./helpers.js');
+
 function topicProcessing(topicString) {
   if (topicString != undefined) {
     return topicString.split('//');
@@ -6,16 +8,7 @@ function topicProcessing(topicString) {
   }
 }
 
-function answerProcessing(answerString) {
-  if (answerString != undefined) {
-    return answerString.split('//');
-  } else {
-    return undefined;
-  }
-}
-
 function postProcessing(post) {
-
   const postData = JSON.parse(JSON.stringify(post));
 
   var anonymous = true;
@@ -30,22 +23,19 @@ function postProcessing(post) {
     status: 'PENDING',
     content: {
       body: postData.content,
-      image: postData.image || '',
-      video: postData.video || '',
-      audio: postData.audio || '',
       topics: topicProcessing(postData.topics),
     },
     numLikes: 0,
     numShares: 0,
     numComments: 0,
-    reported: false,
     anonymous: anonymous,
+    reported: false,
     removed: false,
     adminNotes: ''
   };
-  console.log("post ret", ret);
+
   for (const key of Object.keys(ret)) {
-    console.log('key', key, ' - ', ret[key]);
+    // console.log('key', key, ' - ', ret[key]);
     if (ret[key] == undefined) {
       return null;
     }
@@ -58,22 +48,18 @@ function editProcessing(post) {
 
   const ret = {
     'updatedTimestamp': postData.timestamp,
-    'type': postData.type,
     'content.body': postData.content,
-    'content.image': postData.image,
-    'content.video': postData.video,
-    'content.audio': postData.audio,
     'content.topics': topicProcessing(postData.topics),
     'anonymous': postData.anonymous,
     'removed': postData.removed,
   };
   for (const key of Object.keys(ret)) {
-    console.log('key', key, ' - ', ret[key]);
+    // console.log('key', key, ' - ', ret[key]);
     if (ret[key] == undefined) {
       delete ret[key];
     }
   }
-  console.log('ret', ret);
+
   return {id: postData.postID, post: ret};
 }
 
@@ -93,9 +79,8 @@ function commentProcessing(comment) {
     top: false // TODO design
   };
   for (const key of Object.keys(ret)) {
-    console.log('key pee', ret[key]);
+    // console.log('key', ret[key]);
     if (ret[key] == undefined) {
-      console.log('whyy', ret[key]);
       return null;
     }
   }
@@ -105,31 +90,27 @@ function commentProcessing(comment) {
 function promptProcessing(prompt) {
   const promptData = JSON.parse(JSON.stringify(prompt));
 
-
   const ret = {
     timestamp: promptData.timestamp,
     updatedTimestamp: promptData.timestamp,
-    userID: 'xOi20I8ehuqyhKdwt6wh',
+    userID: helpers.aloeID,
     prompt: promptData.prompt,
     image: promptData.image,
     topics: promptData.topics,
     numLikes: 0,
     numShares: 0,
     numResponses: 0,
-    numAnswers: promptData.numAnswers,
-
     removed: false,
   };
   for (const key of Object.keys(ret)) {
-    console.log('key', key, ' - ', ret[key]);
     if (ret[key] == undefined) {
-      // console.log('here')
       return null;
     }
   }
-  const answers = []; // assemble
-  return {prompt: ret, answers: answers};
+  return {prompt: ret};
 }
+  // numAnswers: promptData.numAnswers, answers: answers
+  // const answers = []; // assemble
 
 
 function userProcessing(user) {
@@ -142,13 +123,12 @@ function userProcessing(user) {
     signupTime: userData.loginTime,
     loginTime: userData.loginTime,
     type: 'USER',
-    consent: true, // change eventually?
+    consent: userData.consent || true, // change eventually?
     verified: false,
     profilePic: '',
-    age: userData.age || '',
+    dob: userData.dob || '',
     pronouns: userData.pronouns || '',
     sexuality: userData.sexuality || '',
-    bio: '',
     banned: {
       duration: 0,
       timestamp: '',
@@ -158,9 +138,8 @@ function userProcessing(user) {
     removed: false,
   };
   for (const key of Object.keys(ret)) {
-    console.log('key', key, ' - ', ret[key]);
+    // console.log('key', key, ' - ', ret[key]);
     if (ret[key] == undefined) {
-      console.log('here');
       return null;
     }
   }
@@ -175,16 +154,17 @@ function profileProcessing(profile) {
   } else {
     profileData.consent = false;
   }
-  console.log('cons', profileData.consent);
 
   const ret = {
     username: profileData.username,
     consent: profileData.consent,
     profilePic: profileData.profilePic,
-    bio: profileData.bio,
+    dob: profileData.dob,
+    pronouns: profileData.pronouns,
+    sexuality: profileData.sexuality,
   };
   for (const key of Object.keys(ret)) {
-    console.log('key', key, ' - ', ret[key]);
+    // console.log('key', key, ' - ', ret[key]);
     if (ret[key] == '' || ret[key] == undefined) {
       delete ret[key];
     }
@@ -221,3 +201,10 @@ module.exports = {
 
 
 // liked: dbPost.likes.includes(user) ? true : false
+// function answerProcessing(answerString) {
+//   if (answerString != undefined) {
+//     return answerString.split('//');
+//   } else {
+//     return undefined;
+//   }
+// }
