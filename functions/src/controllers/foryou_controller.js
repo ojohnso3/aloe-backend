@@ -69,10 +69,11 @@ async function getTopComment(promptID) {
 }
 
 // Get prompts for feed
-async function getPrompts(prompt) {
+async function getPrompts(promptData) {
+  console.log('get prompts', promptData.query)
   const collection = db.collection('prompts');
   let prompts = [];
-  const timestamp = prompt.query.timestamp;
+  const timestamp = promptData.query.timestamp;
   if (timestamp) {
     prompts = await collection.orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
   } else {

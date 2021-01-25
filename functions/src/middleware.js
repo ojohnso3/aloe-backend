@@ -86,8 +86,7 @@ function promptMiddleware(id, dbPrompt, userInfo, topComment) {
     topics: dbPrompt.topics,
     likes: dbPrompt.numLikes,
     shares: dbPrompt.numShares,
-    comments: dbPrompt.numResponses,
-    answers: answers || [],
+    responses: dbPrompt.numResponses,
     topComment: topComment
   };
   return ret;
