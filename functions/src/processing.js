@@ -169,7 +169,7 @@ function promptProcessing(prompt) {
   return {prompt: ret};
 }
 
-function topicsProcessing(topics) {
+function topicProcessing(topics) {
   const topicsData = JSON.parse(JSON.stringify(topics));
   
   if(!topicsData.topic) {
@@ -178,10 +178,17 @@ function topicsProcessing(topics) {
 
   const ret = {
     topic: topicsData.topic,
-    description: topicsData.description || 'User-added Topic. Definition will be uploaded soon!',
-    timestamp: topicsData.timestamp || new Date(),
-    source: topicsData.source || 'USER',
+    description: topicsData.description || 'Definition will be uploaded soon!',
+    timestamp: topicsData.timestamp,
+    updatedTimestamp: topicsData.updatedTimestamp || new Date(),
+    source: topicsData.source,
   };
+
+  for (const key of Object.keys(ret)) {
+    if (ret[key] == undefined) {
+      delete ret[key];
+    }
+  }
 
   return ret;
 }
@@ -193,7 +200,7 @@ module.exports = {
   editProcessing,
   commentProcessing,
   promptProcessing,
-  topicsProcessing,
+  topicProcessing,
 };
 
 

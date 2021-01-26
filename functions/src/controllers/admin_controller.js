@@ -92,7 +92,7 @@ async function editPrompt(promptData) {
 
 // Add topics to db
 async function addTopic(topicData) {
-  const processedTopic = processing.topicsProcessing(topicData.body)
+  const processedTopic = processing.topicProcessing(topicData.body)
 
   if(!processedTopic) {
     return 'error1'; // if error
@@ -131,20 +131,27 @@ async function removeTopic(topicData) {
 }
 
 // Update topic in db
+// NOTE: be careful because topics in posts will NOT be automatically updated
 async function editTopic(topicData) {
-  const topicID = topicData.body.id;
+  const original = topicData.body.original;
   const topicInfo = topicData.body.data;
-  if(!topicInfo.topic || !topicID) {
+  const processedTopic = processing.topicProcessing(topicInfo)
+
+  console.log('new pr', processedTopic)
+
+  if(!processedTopic.topic || !original) {
     return 'error1';
   }
 
-  const topic = db.collection('topics').doc(topicID);
-  if(!topic.exists) {
+  const topic = await db.collection('topics').where('topic', '==', original).get();
+
+  if(topic.empty) { // check for duplicates
     console.log('Topic does not exist in the database.')
     return 'error2';
   }
 
-  const res = await topic.update(topicInfo); // res?
+  const topicDoc = topic.docs[0];
+  const res = await topicDoc.ref.update(processedTopic); // res?
   return '1';
 }
 

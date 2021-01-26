@@ -5,13 +5,14 @@ const constants = require('./constants.js');
 async function getUserInfo(userID, anonymous) {
   const userDoc = await db.collection('users').doc(userID).get();
   let userInfo = {};
+  // TODO: add identity vals **
   if (anonymous || !userDoc.exists) {
     const anonDoc = await db.collection('users').doc(constants.ANONYMOUS_ID).get();
     if (!anonDoc.exists) {
       console.log('ERROR: no Anonymous account');
       userInfo = {
         userID: constants.ANONYMOUS_ID,
-        username: 'Anonymous',
+        username: 'anonymous',
         profilePic: 'aloe.jpg', // link to image
         verified: true,
       };

@@ -31,6 +31,7 @@ router.get('/admin/topics', checkIfAuthenticated, response(adminController.getTo
 router.post('/admin/topic', checkIfAuthenticated, response(adminController.addTopic)); // works
 router.put('/admin/topic', checkIfAuthenticated, response(adminController.editTopic)); // works
 router.delete('/admin/topic', checkIfAuthenticated, response(adminController.removeTopic)); // works
+
 router.post('/website/email', response(adminController.addEmail)); // works
 
 
