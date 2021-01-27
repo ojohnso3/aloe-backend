@@ -73,7 +73,7 @@ router.get('/reported/:id', response(reportController.getReportedByType)); // tb
 router.get('/reports/all', response(reportController.getReports)); // tbd
 router.get('/admin/banned', response(reportController.getBannedUsers)); // tbd
 router.put('/post/report', checkIfAuthenticated, response(reportController.reportPost)); // done but check
-router.put('/response/report', checkIfAuthenticated, response(reportController.reportComment)); // done but check
+router.put('/response/report', checkIfAuthenticated, response(reportController.reportResponse)); // done but check
 router.put('/user/report', checkIfAuthenticated, response(reportController.reportUser)); // done but check
 
 

@@ -2,9 +2,9 @@ const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
 const constants = require('../constants.js');
 
-// Report post/comment/user
+// Report post/response/user
 async function reportFromApp(reportData) {
-  const type = reportData.body.type; // posts, comments, users
+  const type = reportData.body.type; // posts, responses, users
   const timestamp = reportData.body.timestamp;
   const reportingUser = reportData.body.userid;
   const reason = reportData.body.reason;
@@ -57,10 +57,10 @@ async function reportPost(reportData) {
   return updatePostStatus(reportData.postID, 'REJECTED', 'REPORT: ' + reportData.reason, reportData.timestamp);
 }
 
-// Report comment
-async function reportComment(reportData) {
-  const comment = db.collection('comments').doc(reportData.body.commentID);
-  const res = await comment.update({removed: true});
+// Report response
+async function reportResponse(reportData) {
+  const response = db.collection('responses').doc(reportData.body.responseID);
+  const res = await response.update({removed: true});
 
   return res;
 }
@@ -108,7 +108,7 @@ async function getReportedByType(reportType) {
         var allReports = []
         reported.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
       });
-    case 'COMMENT':
+    case 'RESPONSE':
       // complicated
       break;
     case 'USER':
@@ -134,7 +134,7 @@ async function getReportedByType(reportType) {
 }
 
 
-// Get all reports for a specific post/comment/user
+// Get all reports for a specific post/response/user
 async function getReports() {
   const reports = await db.collection('reports').orderBy('timestamp', 'desc').get();
   if (reports.empty) {
@@ -149,7 +149,7 @@ async function getReports() {
   return reportDocs;
 }
 
-// Get all reports for a specific post/comment/user
+// Get all reports for a specific post/response/user
 async function getReportsByID() {
   // TBD
 }
@@ -204,7 +204,7 @@ module.exports = {
   getReportsByID,
   getBannedUsers,
   reportPost,
-  reportComment,
+  reportResponse,
   reportUser,
   unbanUser,
   reactivateUser

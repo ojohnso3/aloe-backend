@@ -1,19 +1,16 @@
 const constants = require('./constants.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 
-// console.log('1', Date())
-// console.log('2', Timestamp.now().toDate())
-// console.log('3', Timestamp.fromDate(new Date()))
 
-function processDate(date) {
-  date = new Date();
-  if(date instanceof Date){
-    console.log("aha it is a date");
-  } else {
-    console.log("NOT a date");
+function dateToTimestamp(date) {
+  if(!date) {
+    return null;
   }
 
-  console.log('date', date)
+  if(!(date instanceof Date)){
+    date = new Date(date);
+  }
+
   return Timestamp.fromDate(date)
 }
 
@@ -21,10 +18,7 @@ function topicParser(topicString) {
   console.log('tp', topicString)
   if (Array.isArray(topicString)) { return topicString; }
   
-  console.log('bad')
-
   if (topicString != undefined) {
-    console.log('very bad')
     return topicString.split('//');
   } else {
     return undefined;
@@ -100,8 +94,8 @@ function postProcessing(post) {
 
   const ret = {
     userID: postData.userid,
-    timestamp: postData.timestamp, // Timestamp.now()
-    updatedTimestamp: postData.timestamp, // Timestamp.now()
+    createdAt: Timestamp.now(), // postData.timestamp
+    updatedAt: Timestamp.now(),
     status: constants.PENDING,
     content: {
       body: postData.content,
@@ -109,7 +103,7 @@ function postProcessing(post) {
     },
     numLikes: 0,
     numShares: 0,
-    numComments: 0,
+    numResponses: 0,
     anonymous: anonymous,
     reported: false,
     removed: false,
@@ -129,14 +123,13 @@ function editProcessing(post) {
   const postData = JSON.parse(JSON.stringify(post));
 
   const ret = {
-    'updatedTimestamp': postData.timestamp,
+    'updatedAt': Timestamp.now(),
     'content.body': postData.content,
     'content.topics': topicParser(postData.topics),
     'anonymous': postData.anonymous,
     'removed': postData.removed,
   };
   for (const key of Object.keys(ret)) {
-    // console.log('key', key, ' - ', ret[key]);
     if (ret[key] == undefined) {
       delete ret[key];
     }
@@ -147,20 +140,19 @@ function editProcessing(post) {
   return {id: postData.postID, post: ret};
 }
 
-function commentProcessing(comment) {
-  const commentData = JSON.parse(JSON.stringify(comment));
-
-  console.log('commentData', commentData);
+function responseProcessing(response) {
+  const responseData = JSON.parse(JSON.stringify(response));
 
   const ret = {
-    userID: commentData.userid,
-    parentID: commentData.id,
-    timestamp: commentData.timestamp,
-    body: commentData.body,
+    userID: responseData.userid,
+    parentID: responseData.id,
+    createdAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
+    body: responseData.body,
     numLikes: 0,
     reported: false,
     removed: false,
-    top: false // TODO design
+    top: false // TODO: design
   };
   for (const key of Object.keys(ret)) {
     // console.log('key', ret[key]);
@@ -175,8 +167,8 @@ function promptProcessing(prompt) {
   const promptData = JSON.parse(JSON.stringify(prompt));
 
   const ret = {
-    timestamp: promptData.timestamp,
-    updatedTimestamp: promptData.timestamp,
+    createdAt: dateToTimestamp(promptData.timestamp) || Timestamp.now(),
+    updatedAt: Timestamp.now(),
     userID: constants.ALOE_ID,
     prompt: promptData.prompt,
     image: promptData.image,
@@ -204,9 +196,8 @@ function topicProcessing(topics) {
   const ret = {
     topic: topicsData.topic,
     description: topicsData.description || 'Definition will be uploaded soon!',
-    timestamp: processDate(topicsData.timestamp),
-    updatedTimestamp: topicsData.updatedTimestamp || new Timestamp().now,
-    // updatedTimestamp: topicsData.updatedTimestamp || new Date(),
+    createdAt: dateToTimestamp(topicsData.timestamp) || Timestamp.now(),
+    updatedAt: Timestamp.now(),
     source: topicsData.source,
   };
 
@@ -216,6 +207,8 @@ function topicProcessing(topics) {
     }
   }
 
+  console.log("check hi", ret)
+
   return ret;
 }
 
@@ -224,7 +217,7 @@ module.exports = {
   profileProcessing,
   postProcessing,
   editProcessing,
-  commentProcessing,
+  responseProcessing,
   promptProcessing,
   topicProcessing,
 };

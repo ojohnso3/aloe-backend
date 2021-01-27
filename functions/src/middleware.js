@@ -1,9 +1,24 @@
 const helpers = require('./helpers.js');
+const Timestamp = require('firebase-admin').firestore.Timestamp;
+
+
+function timestampToDate(timestamp) {
+  if(!timestamp) {
+    return 'No timestamp.';
+  }
+  if(timestamp instanceof Timestamp){
+    console.log("This is correct: Timestamp");
+  } else {
+    console.log("This is WRONG: Timestamp");
+  }
+
+  return timestamp.toDate();
+}
 
 function adminMiddleware(id, dbPost, userInfo) {
   const ret = {
     id,
-    timestamp: dbPost.timestamp,
+    timestamp: timestampToDate(dbPost.createdAt),
     status: dbPost.status,
     notes: dbPost.adminNotes,
     userID: dbPost.userID,
@@ -55,7 +70,7 @@ function profileMiddleware(id, dbUser) {
 function postMiddleware(id, dbPost, userInfo) {
   const ret = {
     id,
-    timestamp: dbPost.timestamp, // updated too?
+    timestamp: timestampToDate(dbPost.createdAt), // updated too?
     status: dbPost.status,
     userid: userInfo.userID,
     user: userInfo.username,
@@ -73,10 +88,10 @@ function postMiddleware(id, dbPost, userInfo) {
   return ret;
 }
 
-function promptMiddleware(id, dbPrompt, userInfo, topComment) {
+function promptMiddleware(id, dbPrompt, userInfo, topResponse) {
   const ret = {
     id,
-    timestamp: dbPrompt.timestamp,
+    timestamp: timestampToDate(dbPrompt.createdAt), // updated too?
     userid: userInfo.userID,
     user: userInfo.username,
     profilePicture: userInfo.profilePic || '',
@@ -87,20 +102,20 @@ function promptMiddleware(id, dbPrompt, userInfo, topComment) {
     likes: dbPrompt.numLikes,
     shares: dbPrompt.numShares,
     responses: dbPrompt.numResponses,
-    topComment: topComment
+    topResponse: topResponse
   };
   return ret;
 }
 
-function responseMiddleware(id, dbComment, userInfo) {
+function responseMiddleware(id, dbResponse, userInfo) {
   const ret = {
     id,
     user: userInfo.username,
     profilePicture: userInfo.profilePic || '',
     verified: userInfo.verified || false,
-    content: dbComment.body,
-    likes: dbComment.numLikes,
-    timestamp: dbComment.timestamp,
+    content: dbResponse.body,
+    likes: dbResponse.numLikes,
+    timestamp: timestampToDate(dbResponse.createdAt),
     top: false, // TODO design
   };
   return ret;
@@ -113,10 +128,10 @@ function reportMiddleware(id, dbReport) {
     parentID: dbReport.parentID,
     type: dbReport.type,
     reason: dbReport.reason || 'What is the reason??',
-    timestamp: dbReport.timestamp,
+    timestamp: timestampToDate(dbReport.createdAt),
     status: dbReport.status,
   };
-  // console.log('report', ret)
+
   return ret;
 }
 

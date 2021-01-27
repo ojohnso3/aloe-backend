@@ -56,7 +56,7 @@ async function getPostsByStatus(request) {
 async function moderatePost(postData) {
   const updates = postData.body; 
   const post = db.collection('posts').doc(updates.id);
-  const res = await post.update({status: updates.status, adminNotes: updates.notes, updatedTimestamp: updates.timestamp});
+  const res = await post.update({status: updates.status, adminNotes: updates.notes, updatedAt: updates.timestamp});
   return res;
 }
 
@@ -215,7 +215,7 @@ module.exports = {
 //   const updates = postData.body; 
 //   console.log('pd', updates)
 //   const post = db.collection('posts').doc(postID);
-//   const res = await post.update({status: updates.newStatus, updatedTimestamp: updates.timestamp});
+//   const res = await post.update({status: updates.newStatus, updatedAt: updates.timestamp});
 //   return res;
 // }
 
@@ -286,6 +286,6 @@ module.exports = {
 // async function updateNotes(postData) {
 //   const updates = postData.body; 
 //   const post = db.collection('posts').doc(updates.id);
-//   const res = await post.update({adminNotes: updates.notes, updatedTimestamp: updates.timestamp});
+//   const res = await post.update({adminNotes: updates.notes, updatedAt: updates.timestamp});
 //   return res;
 // }

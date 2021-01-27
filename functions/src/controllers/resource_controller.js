@@ -1,6 +1,8 @@
 const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
 const csvtojson = require("csvtojson");
+const Timestamp = require('firebase-admin').firestore.Timestamp;
+
 
 // - Get Resources
 async function getResources(type) {
@@ -45,7 +47,8 @@ async function parseCSV(csvData) {
 const createResources = async (csvData) => {
   const parsedResources = await parseCSV(csvData);
   parsedResources.map(async (resource) => {
-    resource['timestamp'] = Date();
+    resource['createdAt'] = Timestamp.now();
+    resource['updatedAt'] = Timestamp.now();
     // console.log("final resource", resource);
     await db.collection('resources').add(resource)
         .then(() => {

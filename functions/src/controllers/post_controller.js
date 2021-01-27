@@ -43,15 +43,15 @@ async function createPost(postData) {
 }
 
 // Create new comment
-async function createResponse(commentData) {
-  const processedComment = processing.commentProcessing(commentData.body);
-  if (!processedComment) {
-    return 'There was an error in comment creation';
+async function createResponse(responseData) {
+  const processedResponse = processing.responseProcessing(responseData.body);
+  if (!processedResponse) {
+    return 'There was an error in response creation';
   }
 
-  const newComment = await db.collection('comments').add(processedComment);
+  const newResponse = await db.collection('responses').add(processedResponse);
 
-  const doc = await newComment.get();
+  const doc = await newResponse.get();
 
   const userInfo = await helpers.getUserInfo(doc.data().userID, false);
 

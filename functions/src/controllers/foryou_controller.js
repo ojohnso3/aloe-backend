@@ -54,18 +54,18 @@ async function getPostsByTopic(post) {
   return {results: finalPosts}
 }
 
-// Get posts by topic
-async function getTopComment(promptID) {
-  const comments = db.collection('comments');
-  const top = await comments.where('parentID', '==', promptID).orderBy('numLikes', 'desc').limit(1).get();
+// Get top response on a prompt
+async function getTopResponse(promptID) {
+  const responses = db.collection('responses');
+  const top = await responses.where('parentID', '==', promptID).orderBy('numLikes', 'desc').limit(1).get();
   
   if (top.empty) {
     console.log('No matching documents.');
     return '';
   }
 
-  const topComment = top.docs[0];
-  return topComment.data().body;
+  const topResponse = top.docs[0];
+  return topResponse.data().body;
 }
 
 // Get prompts for feed
@@ -87,30 +87,30 @@ async function getPrompts(promptData) {
 
   const finalPrompts = [];
   await Promise.all(prompts.docs.map(async (doc) => {
-    const topComment = await getTopComment(doc.id);
+    const topResponse = await getTopResponse(doc.id);
     const userInfo = await helpers.getUserInfo(constants.ALOE_ID, false);
-    finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), userInfo, topComment));
+    finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), userInfo, topResponse));
   }));
 
   return {results: finalPrompts};
 }
 
-// Get Comments by ID
+// Get Responses by ID
 async function getResponses(parentData) {
-  const collection = db.collection('comments');
-  const comments = await collection.where('parentID', '==', parentData.query.id).get();
-  if (comments.empty) {
-    console.log('No matching document for comment.');
+  const collection = db.collection('responses');
+  const responses = await collection.where('parentID', '==', parentData.query.id).get();
+  if (responses.empty) {
+    console.log('No matching document for response.');
     return {results: []};
   }
 
-  const finalComments = [];
-  await Promise.all(comments.docs.map(async (doc) => {
+  const finalResponses = [];
+  await Promise.all(responses.docs.map(async (doc) => {
     const userInfo = await helpers.getUserInfo(doc.data().userID, false);
-    finalComments.push(middleware.responseMiddleware(doc.id, doc.data(), userInfo));
+    finalResponses.push(middleware.responseMiddleware(doc.id, doc.data(), userInfo));
   }));
 
-  return {results: finalComments};
+  return {results: finalResponses};
 }
 
 
