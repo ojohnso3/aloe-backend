@@ -1,4 +1,21 @@
 const constants = require('./constants.js');
+const Timestamp = require('firebase-admin').firestore.Timestamp;
+
+// console.log('1', Date())
+// console.log('2', Timestamp.now().toDate())
+// console.log('3', Timestamp.fromDate(new Date()))
+
+function processDate(date) {
+  date = new Date();
+  if(date instanceof Date){
+    console.log("aha it is a date");
+  } else {
+    console.log("NOT a date");
+  }
+
+  console.log('date', date)
+  return Timestamp.fromDate(date)
+}
 
 function topicParser(topicString) {
   console.log('tp', topicString)
@@ -83,8 +100,8 @@ function postProcessing(post) {
 
   const ret = {
     userID: postData.userid,
-    timestamp: postData.timestamp,
-    updatedTimestamp: postData.timestamp,
+    timestamp: postData.timestamp, // Timestamp.now()
+    updatedTimestamp: postData.timestamp, // Timestamp.now()
     status: constants.PENDING,
     content: {
       body: postData.content,
@@ -183,12 +200,13 @@ function topicProcessing(topics) {
   if(!topicsData.topic) {
     return null;
   }
-
+  
   const ret = {
     topic: topicsData.topic,
     description: topicsData.description || 'Definition will be uploaded soon!',
-    timestamp: topicsData.timestamp,
-    updatedTimestamp: topicsData.updatedTimestamp || new Date(),
+    timestamp: processDate(topicsData.timestamp),
+    updatedTimestamp: topicsData.updatedTimestamp || new Timestamp().now,
+    // updatedTimestamp: topicsData.updatedTimestamp || new Date(),
     source: topicsData.source,
   };
 

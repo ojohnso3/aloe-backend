@@ -2,10 +2,12 @@ const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
 const helpers = require('../helpers.js');
 const processing = require('../processing.js');
+const constants = require('../constants.js');
 
 
 // Get external profile
 async function getProfile(userData) {
+
   const profile = await db.collection('users').doc(userData.params.id).get();
   if (!profile.exists) {
     console.log('No such user profile.');
@@ -15,11 +17,43 @@ async function getProfile(userData) {
   return middleware.profileMiddleware(profile.id, profile.data());
 }
 
+// Load anonymous created posts on profile
+async function getAnonymousCreated(timestamp) {
+
+  const posts = db.collection('posts');
+  
+  let created = [];
+  if (timestamp) {
+    created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+  } else {
+    created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('timestamp', 'desc').limit(5).get();
+  }
+
+  if (created.empty) {
+    console.log('No matching CREATED ANON docs.');
+    return {results: []};
+  }
+
+  const createdPosts = [];
+  await Promise.all(created.docs.map(async (doc) => {
+    const userInfo = await helpers.getUserInfo(constants.ANONYMOUS_ID, false);
+    createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
+  }));
+
+  console.log('ANON created size: ', createdPosts.length)
+
+  return {results: createdPosts};
+}
+
 // Load created posts on profile
 async function getCreated(userData) {
-  const userID = userData.query.id;
-  const timestamp = userData.query.timestamp;
-  const internal = userData.query.internal;
+  const userID = userData.body.id;
+  const timestamp = userData.body.timestamp;
+  const internal = userData.body.internal;
+
+  if(userID == constants.ANONYMOUS_ID) {
+    return getAnonymousCreated(timestamp);
+  }
 
   const posts = db.collection('posts');
   
