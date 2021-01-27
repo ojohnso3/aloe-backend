@@ -1,7 +1,13 @@
 const constants = require('./constants.js');
 
 function topicParser(topicString) {
+  console.log('tp', topicString)
+  if (Array.isArray(topicString)) { return topicString; }
+  
+  console.log('bad')
+
   if (topicString != undefined) {
+    console.log('very bad')
     return topicString.split('//');
   } else {
     return undefined;
@@ -118,6 +124,8 @@ function editProcessing(post) {
       delete ret[key];
     }
   }
+  console.log('ret post', ret)
+
 
   return {id: postData.postID, post: ret};
 }

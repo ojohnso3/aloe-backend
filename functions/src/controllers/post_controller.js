@@ -60,7 +60,11 @@ async function createResponse(commentData) {
 
 // Edit post
 async function editPost(postData) {
+  console.log('postData', postData.body)
   const processedEdits = processing.editProcessing(postData.body);
+
+  console.log('proce', processedEdits)
+
   if (!processedEdits.post) {
     return 'There was an error in post editing';
   }

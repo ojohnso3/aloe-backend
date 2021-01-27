@@ -106,6 +106,20 @@ function responseMiddleware(id, dbComment, userInfo) {
   return ret;
 }
 
+function reportMiddleware(id, dbReport) {
+  const ret = {
+    id,
+    userID: dbReport.userID,
+    parentID: dbReport.parentID,
+    type: dbReport.type,
+    reason: dbReport.reason || 'What is the reason??',
+    timestamp: dbReport.timestamp,
+    status: dbReport.status,
+  };
+  // console.log('report', ret)
+  return ret;
+}
+
 function resourceMiddleware(id, dbResource) {
   const ret = {
     id,
@@ -126,6 +140,7 @@ module.exports = {
   postMiddleware,
   promptMiddleware,
   responseMiddleware,
+  reportMiddleware,
   resourceMiddleware,
 };
 

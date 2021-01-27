@@ -133,6 +133,22 @@ async function getReportedByType(reportType) {
   return; // what??
 }
 
+
+// Get all reports for a specific post/comment/user
+async function getReports() {
+  const reports = await db.collection('reports').orderBy('timestamp', 'desc').get();
+  if (reports.empty) {
+    console.log('No matching report documents.');
+    return;
+  }
+
+  const reportDocs = []
+  await Promise.all(reports.docs.map(async (doc) => {
+    reportDocs.push(middleware.reportMiddleware(doc.id, doc.data()))
+  }));
+  return reportDocs;
+}
+
 // Get all reports for a specific post/comment/user
 async function getReportsByID() {
   // TBD
@@ -184,6 +200,7 @@ async function reactivateUser(emailData) {
 module.exports = {
   reportFromApp,
   getReportedByType,
+  getReports,
   getReportsByID,
   getBannedUsers,
   reportPost,
