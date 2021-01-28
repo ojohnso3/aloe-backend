@@ -15,15 +15,17 @@
   "main": "index.js",
   "dependencies": {
     "cookie-parser": "^1.4.5",
-    "firebase-admin": "^9.2.0",
-    "firebase-functions": "^3.11.0",
-    "morgan": "^1.10.0",
     "cors": "^2.8.5",
+    "csvtojson": "^2.0.10",
     "debug": "~2.6.9",
     "eslint-plugin-react": "^7.21.5",
     "express": "~4.16.1",
+    "express-rate-limit": "^5.2.3",
+    "firebase-admin": "^9.2.0",
+    "firebase-functions": "^3.11.0",
     "http-errors": "~1.6.3",
-    "jade": "^1.11.0"
+    "jade": "^1.11.0",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "acorn": "^8.0.4",
