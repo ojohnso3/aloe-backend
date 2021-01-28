@@ -24,9 +24,9 @@ async function getAnonymousCreated(timestamp) {
   
   let created = [];
   if (timestamp) {
-    created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+    created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
   } else {
-    created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('timestamp', 'desc').limit(5).get();
+    created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('createdAt', 'desc').limit(5).get();
   }
 
   if (created.empty) {
@@ -47,9 +47,9 @@ async function getAnonymousCreated(timestamp) {
 
 // Load created posts on profile
 async function getCreated(userData) {
-  const userID = userData.query.id;
-  const timestamp = userData.query.timestamp;
-  const internal = userData.query.internal;
+  const userID = userData.body.id;
+  const timestamp = userData.body.timestamp;
+  const internal = userData.body.internal;
 
   if(userID == constants.ANONYMOUS_ID) {
     return getAnonymousCreated(timestamp);
@@ -60,15 +60,15 @@ async function getCreated(userData) {
   let created = [];
   if(internal) {
     if (timestamp) {
-      created = await posts.where('userID', '==', userID).orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+      created = await posts.where('userID', '==', userID).orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
     } else {
-      created = await posts.where('userID', '==', userID).orderBy('timestamp', 'desc').limit(5).get();
+      created = await posts.where('userID', '==', userID).orderBy('createdAt', 'desc').limit(5).get();
     }
   } else {
     if (timestamp) {
-      created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+      created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
     } else {
-      created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('timestamp', 'desc').limit(5).get();
+      created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('createdAt', 'desc').limit(5).get();
     }
   }
 

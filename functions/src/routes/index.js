@@ -19,7 +19,7 @@ function response(handler) {
   };
 }
 // TODO:
-// 1) Reporting
+// 1) Finish Reporting, 2) Add Auth to all routes
 
 // Admin routes (CLEAN)
 router.get('/admin/login/:id', response(adminController.adminLogin)); // works
@@ -28,7 +28,7 @@ router.put('/admin/moderate', checkIfAuthenticated, response(adminController.mod
 router.post('/admin/prompt', checkIfAuthenticated, response(adminController.createPrompt)); // done but check
 router.put('/admin/prompt', checkIfAuthenticated, response(adminController.editPrompt)); // done but check
 router.get('/admin/topics', checkIfAuthenticated, response(adminController.getTopics)); // works
-router.post('/admin/topic', response(adminController.addTopic)); // works
+router.post('/admin/topic', checkIfAuthenticated, response(adminController.addTopic)); // works
 router.put('/admin/topic', checkIfAuthenticated, response(adminController.editTopic)); // works
 router.delete('/admin/topic', checkIfAuthenticated, response(adminController.removeTopic)); // works
 
@@ -71,7 +71,7 @@ router.post('/report', response(reportController.reportFromApp)); // works
 router.put('/admin/reactivate', response(reportController.reactivateUser)); // try
 router.get('/reported/:id', response(reportController.getReportedByType)); // tbd
 router.get('/reports/all', response(reportController.getReports)); // tbd
-router.get('/admin/banned', response(reportController.getBannedUsers)); // tbd
+router.get('/admin/banned', checkIfAuthenticated, response(reportController.getBannedUsers)); // tbd
 router.put('/post/report', checkIfAuthenticated, response(reportController.reportPost)); // done but check
 router.put('/response/report', checkIfAuthenticated, response(reportController.reportResponse)); // done but check
 router.put('/user/report', checkIfAuthenticated, response(reportController.reportUser)); // done but check

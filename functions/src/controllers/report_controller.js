@@ -18,7 +18,7 @@ async function reportFromApp(reportData) {
     userID: reportingUser,
     reason: reason,
     status: constants.PENDING,
-    timestamp: timestamp,
+    createdAt: timestamp,
   };
 
   // separate username check for user (TODO: can just use userID instead)
@@ -136,7 +136,7 @@ async function getReportedByType(reportType) {
 
 // Get all reports for a specific post/response/user
 async function getReports() {
-  const reports = await db.collection('reports').orderBy('timestamp', 'desc').get();
+  const reports = await db.collection('reports').orderBy('createdAt', 'desc').get();
   if (reports.empty) {
     console.log('No matching report documents.');
     return;

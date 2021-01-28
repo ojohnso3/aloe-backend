@@ -36,8 +36,8 @@ async function getPostsByStatus(request) {
   const status = request.query.status || 'ALL'; // If the status is undefined, make it 'ALL'
 
   const selected = status === 'ALL' ?
-    await posts.orderBy('timestamp').get() :
-    await posts.where('status', '==', status).orderBy('timestamp').limit(10).get();
+    await posts.orderBy('createdAt', 'desc').get() :
+    await posts.where('status', '==', status).orderBy('createdAt', 'desc').limit(10).get();
   if (selected.empty) {
     console.log('No matching documents.');
     return [];

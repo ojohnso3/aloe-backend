@@ -10,9 +10,9 @@ async function getPosts(post) {
   let forYou = [];
   const timestamp = post.query.timestamp;
   if (timestamp) {
-    forYou = await posts.where('status', '==', constants.APPROVED).orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+    forYou = await posts.where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
   } else {
-    forYou = await posts.where('status', '==', constants.APPROVED).orderBy('timestamp', 'desc').limit(5).get();
+    forYou = await posts.where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').limit(5).get();
   }
   if (forYou.empty) {
     console.log('Nothing for getPosts.');
@@ -36,9 +36,9 @@ async function getPostsByTopic(post) {
   const posts = db.collection('posts');
   let forYou = [];
   if (timestamp) {
-    forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+    forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
   } else {
-    forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('timestamp', 'desc').limit(5).get()
+    forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').limit(5).get()
   }
   if (forYou.empty) {
     console.log('No matching documents.');
@@ -75,9 +75,9 @@ async function getPrompts(promptData) {
   let prompts = [];
   const timestamp = promptData.query.timestamp;
   if (timestamp) {
-    prompts = await collection.orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+    prompts = await collection.orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
   } else {
-    prompts = await collection.orderBy('timestamp', 'desc').limit(5).get();
+    prompts = await collection.orderBy('createdAt', 'desc').limit(5).get();
   }
 
   if (prompts.empty) {
