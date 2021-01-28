@@ -62,19 +62,19 @@ async function deleteAccount(userData) {
     console.log('No created post docs.');
   } else {
     createdPosts.docs.map(async (post) => {
-      if(!post.data().anonymous) {
+      if (!post.data().anonymous) {
         const postData = db.collection('posts').doc(post.id);
         const postDoc = postData.get();
         if (postDoc.exists) {
           console.log('No such post.');
         } else {
-          console.log('changing post' + postDoc.id + 'to anonymous')
+          console.log('changing post' + postDoc.id + 'to anonymous');
           await postData.update({anonymous: true});
         }
       } else {
-        console.log('post ' + post.id + 'is already anonymous')
+        console.log('post ' + post.id + 'is already anonymous');
       }
-    })
+    });
   }
   return res; // TODO: return value
 }

@@ -22,7 +22,7 @@ async function adminLogin(adminData) {
 
   const userDoc = adminUser.docs[0];
 
-  if(userDoc.data().type != 'ADMIN') {
+  if (userDoc.data().type != 'ADMIN') {
     console.log('ERROR: User is not an Admin.');
     return {};
   }
@@ -54,7 +54,7 @@ async function getPostsByStatus(request) {
 
 // Change status of post
 async function moderatePost(postData) {
-  const updates = postData.body; 
+  const updates = postData.body;
   const post = db.collection('posts').doc(updates.id);
   const res = await post.update({status: updates.status, adminNotes: updates.notes, updatedAt: updates.timestamp});
   return res;
@@ -77,7 +77,7 @@ async function createPrompt(promptData) {
   //   createAnswers(doc.id, processedPrompt.answers);
   // }
 
-  if(doc.data().userID != constants.ALOE_ID) {
+  if (doc.data().userID != constants.ALOE_ID) {
     console.log('ERROR: ids do not match');
   }
   const userInfo = await helpers.getUserInfo(constants.ALOE_ID, false);
@@ -92,9 +92,9 @@ async function editPrompt(promptData) {
 
 // Add topics to db
 async function addTopic(topicData) {
-  const processedTopic = processing.topicProcessing(topicData.body)
+  const processedTopic = processing.topicProcessing(topicData.body);
 
-  if(!processedTopic) {
+  if (!processedTopic) {
     return 'error1'; // if error
   }
 
@@ -107,13 +107,12 @@ async function addTopic(topicData) {
 
   await db.collection('topics').add(processedTopic);
   return '1'; // res?
-
 }
 
 // Remove topics to db
 async function removeTopic(topicData) {
   const topic = topicData.body.topic;
-  if(!topic) {
+  if (!topic) {
     return 'error1';
   }
 
@@ -135,18 +134,18 @@ async function removeTopic(topicData) {
 async function editTopic(topicData) {
   const original = topicData.body.original;
   const topicInfo = topicData.body.data;
-  const processedTopic = processing.topicProcessing(topicInfo)
+  const processedTopic = processing.topicProcessing(topicInfo);
 
-  console.log('new pr', processedTopic)
+  console.log('new pr', processedTopic);
 
-  if(!processedTopic.topic || !original) {
+  if (!processedTopic.topic || !original) {
     return 'error1';
   }
 
   const topic = await db.collection('topics').where('topic', '==', original).get();
 
-  if(topic.empty) { // check for duplicates
-    console.log('Topic does not exist in the database.')
+  if (topic.empty) { // check for duplicates
+    console.log('Topic does not exist in the database.');
     return 'error2';
   }
 
@@ -163,7 +162,7 @@ async function getTopics() {
     return {results: []};
   }
 
-  var topicTags = [];
+  const topicTags = [];
   await Promise.all(topics.docs.map(async (doc) => {
     const description = doc.data().description || 'Description here.';
     topicTags.push({topic: doc.data().topic, description: description});
@@ -200,19 +199,19 @@ module.exports = {
 };
 
 
-  // const postID = postData.body.postID;
-  // const newStatus = postData.body.status;
-  // const timestamp = postData.body.timestamp;
-  // const reason = postData.body.reason;
+// const postID = postData.body.postID;
+// const newStatus = postData.body.status;
+// const timestamp = postData.body.timestamp;
+// const reason = postData.body.reason;
 
-  // // if (!postID || !newStatus || !timestamp || !reason) {
-  // //   return {};
-  // // }
+// // if (!postID || !newStatus || !timestamp || !reason) {
+// //   return {};
+// // }
 
-  // return updatePostStatus(postID, newStatus, reason, timestamp);
+// return updatePostStatus(postID, newStatus, reason, timestamp);
 
 // async function updatePostStatus(postData) {
-//   const updates = postData.body; 
+//   const updates = postData.body;
 //   console.log('pd', updates)
 //   const post = db.collection('posts').doc(postID);
 //   const res = await post.update({status: updates.newStatus, updatedAt: updates.timestamp});
@@ -284,7 +283,7 @@ module.exports = {
 
 // Change notes (HERE)
 // async function updateNotes(postData) {
-//   const updates = postData.body; 
+//   const updates = postData.body;
 //   const post = db.collection('posts').doc(updates.id);
 //   const res = await post.update({adminNotes: updates.notes, updatedAt: updates.timestamp});
 //   return res;

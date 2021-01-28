@@ -4,15 +4,15 @@ const Timestamp = require('firebase-admin').firestore.Timestamp;
 
 
 function dateToTimestamp(date) {
-  if(!date) {
+  if (!date) {
     return null;
   }
 
-  if(!(date instanceof Date)){
+  if (!(date instanceof Date)) {
     date = new Date(date);
   }
 
-  return Timestamp.fromDate(date)
+  return Timestamp.fromDate(date);
 }
 
 async function getUserInfo(userID, anonymous) {
@@ -52,13 +52,14 @@ async function getUserInfo(userID, anonymous) {
 }
 
 function getAge(dob) {
-  if(!dob) {
+  if (!dob) {
     return '';
   }
-  var diff_ms = Date.now() - dob.getTime();
-  var age_dt = new Date(diff_ms); 
 
-  return Math.abs(age_dt.getUTCFullYear() - 1970);
+  const diffMs = Date.now() - dob.getTime();
+  const ageDt = new Date(diffMs);
+
+  return Math.abs(ageDt.getUTCFullYear() - 1970);
 }
 
 module.exports = {

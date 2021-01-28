@@ -4,10 +4,11 @@ const helpers = require('./helpers.js');
 
 
 function topicParser(topicString) {
-  console.log('tp', topicString)
-  if (Array.isArray(topicString)) { return topicString; }
-  
-  if (topicString != undefined) {
+  if (Array.isArray(topicString)) {
+    return topicString;
+  }
+
+  if (topicString !== undefined) {
     return topicString.split('//');
   } else {
     return undefined;
@@ -76,7 +77,7 @@ function profileProcessing(profile) {
 function postProcessing(post) {
   const postData = JSON.parse(JSON.stringify(post));
 
-  var anonymous = true;
+  let anonymous = true;
   if (postData.anonymous == '0') {
     anonymous = false;
   }
@@ -96,7 +97,7 @@ function postProcessing(post) {
     anonymous: anonymous,
     reported: false,
     removed: false,
-    adminNotes: ''
+    adminNotes: '',
   };
 
   for (const key of Object.keys(ret)) {
@@ -123,7 +124,6 @@ function editProcessing(post) {
       delete ret[key];
     }
   }
-  console.log('ret post', ret)
 
 
   return {id: postData.postID, post: ret};
@@ -141,7 +141,7 @@ function responseProcessing(response) {
     numLikes: 0,
     reported: false,
     removed: false,
-    top: false // TODO: design
+    top: false, // TODO: design
   };
   for (const key of Object.keys(ret)) {
     // console.log('key', ret[key]);
@@ -177,11 +177,11 @@ function promptProcessing(prompt) {
 
 function topicProcessing(topics) {
   const topicsData = JSON.parse(JSON.stringify(topics));
-  
-  if(!topicsData.topic) {
+
+  if (!topicsData.topic) {
     return null;
   }
-  
+
   const ret = {
     topic: topicsData.topic,
     description: topicsData.description || 'Definition will be uploaded soon!',
@@ -195,8 +195,6 @@ function topicProcessing(topics) {
       delete ret[key];
     }
   }
-
-  console.log("check hi", ret)
 
   return ret;
 }
@@ -221,5 +219,5 @@ module.exports = {
 //   }
 // }
 
-  // numAnswers: promptData.numAnswers, answers: answers
-  // const answers = []; // assemble
+// numAnswers: promptData.numAnswers, answers: answers
+// const answers = []; // assemble

@@ -93,7 +93,7 @@ async function getReportedByType(reportType) {
   const type = reportType.params.id; // POST, RESPONSE, USER
   console.log('type', type);
 
-  switch(type) {
+  switch (type) {
     case 'POST':
       const posts = db.collection('posts');
       const reportedPosts = await posts.where('reported', '==', true).get();
@@ -101,11 +101,11 @@ async function getReportedByType(reportType) {
         console.log('No matching documents.');
         return;
       }
-      var reported = []
+      const reported = [];
       // array of {post data + array of reports on post}
       return reportedPosts.docs.map(async (doc) => {
         const reportDocs = await db.collection('posts').doc(doc.id).collection('reports').get();
-        var allReports = []
+        const allReports = [];
         reported.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
       });
     case 'RESPONSE':
@@ -118,16 +118,16 @@ async function getReportedByType(reportType) {
         console.log('No matching documents.');
         return;
       }
-      var reported = []
+      reported = [];
       // array of {user data + array of reports on user}
       return reportedUsers.docs.map(async (doc) => {
         const reportDocs = await db.collection('users').doc(doc.id).collection('reports').get();
-        var allReports = []
+        const allReports = [];
         reported.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
       });
     default:
       // error -- return failure if error
-      console.log('ERROR: Reporting type ' + type + ' is invalid.')
+      console.log('ERROR: Reporting type ' + type + ' is invalid.');
       break;
   }
   return; // what??
@@ -142,9 +142,9 @@ async function getReports() {
     return;
   }
 
-  const reportDocs = []
+  const reportDocs = [];
   await Promise.all(reports.docs.map(async (doc) => {
-    reportDocs.push(middleware.reportMiddleware(doc.id, doc.data()))
+    reportDocs.push(middleware.reportMiddleware(doc.id, doc.data()));
   }));
   return reportDocs;
 }
@@ -162,14 +162,14 @@ async function getBannedUsers() {
   const banned = [];
   await Promise.all(selected.docs.map(async (doc) => {
     const userInfo = await helpers.getUserInfo(doc.data().userID, false); // TBD on anon
-    banned.push(middleware.userMiddleware(doc.id, doc.data(), userInfo))
+    banned.push(middleware.userMiddleware(doc.id, doc.data(), userInfo));
   }));
 
   // TODO: make below into helper function
 
   return bannedUsers.docs.map(async (doc) => {
     const reportDocs = await db.collection('users').doc(doc.id).collection('reports').get();
-    var allReports = []
+    const allReports = [];
     banned.push(doc.data(), reportDocs.docs.map((doc) => allReports.push(doc.data())));
   });
 }
@@ -185,8 +185,8 @@ async function reactivateUser(emailData) {
 
   const userData = userDoc.docs[0];
 
-  if(!userData.data().removed) {
-    console.log('User is currently active!')
+  if (!userData.data().removed) {
+    console.log('User is currently active!');
     return null;
   }
 
@@ -207,7 +207,7 @@ module.exports = {
   reportResponse,
   reportUser,
   unbanUser,
-  reactivateUser
+  reactivateUser,
 };
 
 // switch(type) {
@@ -232,6 +232,6 @@ module.exports = {
 //     break;
 // }
 
-  // reportPost,
-  // reportComment,
-  // reportUser
+// reportPost,
+// reportComment,
+// reportUser

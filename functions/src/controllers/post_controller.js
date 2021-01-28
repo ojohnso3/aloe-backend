@@ -28,7 +28,6 @@ async function checkLiked(parentData) {
 
 // Create new post
 async function createPost(postData) {
-
   const processedPost = processing.postProcessing(postData.body);
   if (!processedPost) {
     return 'There was an error in post creation';
@@ -60,10 +59,10 @@ async function createResponse(responseData) {
 
 // Edit post
 async function editPost(postData) {
-  console.log('postData', postData.body)
+  console.log('postData', postData.body);
   const processedEdits = processing.editProcessing(postData.body);
 
-  console.log('proce', processedEdits)
+  console.log('proce', processedEdits);
 
   if (!processedEdits.post) {
     return 'There was an error in post editing';
@@ -99,7 +98,6 @@ async function removeContent(parentData) {
 
 // Like content
 async function likeContent(parentData) {
-
   const parentID = parentData.body.id;
   const userID = parentData.body.user;
   const liked = parentData.body.liked;
@@ -149,11 +147,6 @@ module.exports = {
   likeContent,
   shareContent,
 };
-
-
-
-
-
 
 
 // // Delete post (TBD)
@@ -327,7 +320,6 @@ module.exports = {
 //   return ;
 // }
 
-
 // module.exports = {
 //   createPost,
 //   createComment,
@@ -337,7 +329,6 @@ module.exports = {
 //   likePost,
 //   sharePost,
 // }
-
 
 // // - Draft post — /post/draft (OPTIONAL)
 // async function draftPost(userID, postData) {
@@ -356,17 +347,17 @@ module.exports = {
 // }
 
 // const item = await db.collection(type).doc(parentID).get();
-  // postUsers.limit(1).get().
-  // then(sub => {
-  //   if (sub.docs.length > 0) {
-  //     console.log('subcollection exists');
-  //   } else {
-  //     console.log('subcollection is NOT there, so user has not liked');
-  //     return false;
-  //   }
-  // });
+// postUsers.limit(1).get().
+// then(sub => {
+//   if (sub.docs.length > 0) {
+//     console.log('subcollection exists');
+//   } else {
+//     console.log('subcollection is NOT there, so user has not liked');
+//     return false;
+//   }
+// });
 
-  // Old Delete
+// Old Delete
 // async function removeComment(commentData) {
 //   const comment = db.collection('comments').doc(commentData.query.commentID);
 //   const res = await comment.update({removed: true});

@@ -3,13 +3,13 @@ const Timestamp = require('firebase-admin').firestore.Timestamp;
 
 
 function timestampToDate(timestamp) {
-  if(!timestamp) {
+  if (!timestamp) {
     return 'No timestamp.';
   }
-  if(timestamp instanceof Timestamp){
-    console.log("This is correct: Timestamp");
+  if (timestamp instanceof Timestamp) {
+    console.log('This is correct: Timestamp');
   } else {
-    console.log("This is WRONG: Timestamp");
+    console.log('This is WRONG: Timestamp');
   }
 
   return timestamp.toDate();
@@ -102,7 +102,7 @@ function promptMiddleware(id, dbPrompt, userInfo, topResponse) {
     likes: dbPrompt.numLikes,
     shares: dbPrompt.numShares,
     responses: dbPrompt.numResponses,
-    topResponse: topResponse
+    topResponse: topResponse,
   };
   return ret;
 }
@@ -206,8 +206,6 @@ module.exports = {
 //     };
 //     return ret;
 // }
-
-
 
 // add image later + content instead of body
 // const fakeComments = [

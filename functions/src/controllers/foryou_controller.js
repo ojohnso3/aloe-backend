@@ -11,7 +11,7 @@ async function getPosts(post) {
   const timestamp = post.query.timestamp;
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
-    if(processedTimestamp) {
+    if (processedTimestamp) {
       forYou = await posts.where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
@@ -28,7 +28,7 @@ async function getPosts(post) {
     finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 
-  return {results: finalPosts}
+  return {results: finalPosts};
 }
 
 // Get posts by topic
@@ -40,11 +40,11 @@ async function getPostsByTopic(post) {
   let forYou = [];
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
-    if(processedTimestamp) {
+    if (processedTimestamp) {
       forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
-    forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').limit(5).get()
+    forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').limit(5).get();
   }
   if (forYou.empty) {
     console.log('No matching documents.');
@@ -57,14 +57,14 @@ async function getPostsByTopic(post) {
     finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 
-  return {results: finalPosts}
+  return {results: finalPosts};
 }
 
 // Get top response on a prompt
 async function getTopResponse(promptID) {
   const responses = db.collection('responses');
   const top = await responses.where('parentID', '==', promptID).orderBy('numLikes', 'desc').limit(1).get();
-  
+
   if (top.empty) {
     console.log('No matching documents.');
     return '';
@@ -76,13 +76,13 @@ async function getTopResponse(promptID) {
 
 // Get prompts for feed
 async function getPrompts(promptData) {
-  console.log('get prompts', promptData.query)
+  console.log('get prompts', promptData.query);
   const collection = db.collection('prompts');
   let prompts = [];
   const timestamp = promptData.query.timestamp;
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
-    if(processedTimestamp) {
+    if (processedTimestamp) {
       prompts = await collection.orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
@@ -152,10 +152,10 @@ module.exports = {
 // }
 
 // return {results: postComments.docs.map((doc) => middleware.commentMiddleware(doc.id, doc.data(), 'sidthekid'))};
-    // let answers = [];
-    // if (doc.data().numAnswers) {
-    //   answers = await getSurveyAnswers(doc.id);
-    // }
+// let answers = [];
+// if (doc.data().numAnswers) {
+//   answers = await getSurveyAnswers(doc.id);
+// }
 
 // Get answers for survey (helper)
 // async function getSurveyAnswers(promptID) {
@@ -254,7 +254,6 @@ module.exports = {
 
 //   return {results: finalFeed}
 // }
-
 
 // - Get Prompts
 // async function getdPrompts() {

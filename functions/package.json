@@ -26,12 +26,13 @@
     "jade": "^1.11.0"
   },
   "devDependencies": {
-    "eslint-plugin-promise": "^4.2.1",
-    "firebase-functions-test": "^0.2.0",
-    "mocha": "^8.2.1",
     "acorn": "^8.0.4",
     "chai": "^4.2.0",
-    "chai-http": "^4.3.0"
+    "chai-http": "^4.3.0",
+    "eslint": "^7.18.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "firebase-functions-test": "^0.2.0",
+    "mocha": "^8.2.1"
   },
   "private": true
 }

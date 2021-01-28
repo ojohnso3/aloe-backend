@@ -7,7 +7,6 @@ const constants = require('../constants.js');
 
 // Get external profile
 async function getProfile(userData) {
-
   const profile = await db.collection('users').doc(userData.params.id).get();
   if (!profile.exists) {
     console.log('No such user profile.');
@@ -19,13 +18,12 @@ async function getProfile(userData) {
 
 // Load anonymous created posts on profile
 async function getAnonymousCreated(timestamp) {
-
   const posts = db.collection('posts');
-  
+
   let created = [];
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
-    if(processedTimestamp) {
+    if (processedTimestamp) {
       created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
@@ -43,7 +41,7 @@ async function getAnonymousCreated(timestamp) {
     createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 
-  console.log('ANON created size: ', createdPosts.length)
+  console.log('ANON created size: ', createdPosts.length);
 
   return {results: createdPosts};
 }
@@ -54,17 +52,17 @@ async function getCreated(userData) {
   const timestamp = userData.query.timestamp;
   const internal = userData.query.internal;
 
-  if(userID == constants.ANONYMOUS_ID) {
+  if (userID == constants.ANONYMOUS_ID) {
     return getAnonymousCreated(timestamp);
   }
 
   const posts = db.collection('posts');
-  
+
   let created = [];
-  if(internal) {
+  if (internal) {
     if (timestamp) {
       const processedTimestamp = helpers.dateToTimestamp(timestamp);
-      if(processedTimestamp) {
+      if (processedTimestamp) {
         created = await posts.where('userID', '==', userID).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
       }
     } else {
@@ -73,7 +71,7 @@ async function getCreated(userData) {
   } else {
     if (timestamp) {
       const processedTimestamp = helpers.dateToTimestamp(timestamp);
-      if(processedTimestamp) {
+      if (processedTimestamp) {
         created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
       }
     } else {
@@ -92,7 +90,7 @@ async function getCreated(userData) {
     createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 
-  console.log('created size: ', createdPosts.length)
+  console.log('created size: ', createdPosts.length);
 
   return {results: createdPosts};
 }
@@ -105,7 +103,7 @@ async function likedHelper(doc) {
     console.log('No document with postid: ' + postID);
     return null;
   }
-  if (likedPost.data().status !=  constants.APPROVED) {
+  if (likedPost.data().status != constants.APPROVED) {
     console.log('Post is not approved: ' + postID);
     return null;
   }
@@ -122,7 +120,7 @@ async function getLiked(userData) {
   let liked = [];
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
-    if(processedTimestamp) {
+    if (processedTimestamp) {
       liked = await user.collection('liked').orderBy('timestamp', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
@@ -137,12 +135,12 @@ async function getLiked(userData) {
   const likedPosts = [];
   await Promise.all(liked.docs.map(async (doc) => {
     const likedData = await likedHelper(doc);
-    if(likedData) {
+    if (likedData) {
       const likedPost = likedData.post;
       const likedUser = likedData.user;
-  
+
       const userInfo = await helpers.getUserInfo(likedUser.id, likedPost.data().anonymous);
-  
+
       likedPosts.push(middleware.postMiddleware(likedPost.id, likedPost.data(), userInfo));
     }
   }));
@@ -159,14 +157,12 @@ async function editProfile(profileData) {
   return res; // TODO: return value
 }
 
-
 module.exports = {
   getProfile,
   getCreated,
   getLiked,
   editProfile,
 };
-
 
 // const likedPosts = await Promise.all(liked.docs.map(async (doc) => {
 //   const postID = doc.data().postID;
@@ -180,20 +176,18 @@ module.exports = {
 // }))
 // returns null ??
 
-  // if(profile.docs.length != 1 ) {
-  //   console.log('ERROR: More than one user with the same username.')
-  // }
-  // const userDoc = profile.docs[0];
-  // return middleware.userMiddleware(userDoc.id, userDoc.data());
+// if(profile.docs.length != 1 ) {
+//   console.log('ERROR: More than one user with the same username.')
+// }
+// const userDoc = profile.docs[0];
+// return middleware.userMiddleware(userDoc.id, userDoc.data());
 
-   // return helpers.getCreated(userData.body.id, userData.body.timestamp);
-
-
-  // Before helper
-  // const posts = db.collection('posts');
-  // const created = await posts.where('userID', '==', userData.body.userID).get(); // .where('removed', '==', false)
-  // if (created.empty) {
-  //   console.log('No matching document.');
-  //   return;
-  // }
-  // return {results: created.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};
+// return helpers.getCreated(userData.body.id, userData.body.timestamp);
+// Before helper
+// const posts = db.collection('posts');
+// const created = await posts.where('userID', '==', userData.body.userID).get(); // .where('removed', '==', false)
+// if (created.empty) {
+//   console.log('No matching document.');
+//   return;
+// }
+// return {results: created.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};

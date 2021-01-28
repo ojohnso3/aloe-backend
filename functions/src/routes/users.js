@@ -35,7 +35,7 @@ router.post('/sessionLogin', (req, res) => {
           },
           (error) => {
             res.status(401).send('UNAUTHORIZED REQUEST!');
-          }
+          },
       );
 });
 
