@@ -51,6 +51,8 @@ async function getCreated(userData) {
   const timestamp = userData.query.timestamp;
   const internal = userData.query.internal;
 
+  console.log('userData', userData.query)
+
   if(userID == constants.ANONYMOUS_ID) {
     return getAnonymousCreated(timestamp);
   }
@@ -62,15 +64,19 @@ async function getCreated(userData) {
     if (timestamp) {
       created = await posts.where('userID', '==', userID).orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
     } else {
+      console.log("internal check")
       created = await posts.where('userID', '==', userID).orderBy('createdAt', 'desc').limit(5).get();
     }
   } else {
     if (timestamp) {
       created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
     } else {
+      console.log("external check")
       created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('createdAt', 'desc').limit(5).get();
     }
   }
+
+  console.log("after query size", created.docs.length)
 
   if (created.empty) {
     console.log('No matching CREATED docs.');
