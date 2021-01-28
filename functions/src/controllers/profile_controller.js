@@ -47,9 +47,9 @@ async function getAnonymousCreated(timestamp) {
 
 // Load created posts on profile
 async function getCreated(userData) {
-  const userID = userData.body.id;
-  const timestamp = userData.body.timestamp;
-  const internal = userData.body.internal;
+  const userID = userData.query.id;
+  const timestamp = userData.query.timestamp;
+  const internal = userData.query.internal;
 
   if(userID == constants.ANONYMOUS_ID) {
     return getAnonymousCreated(timestamp);
