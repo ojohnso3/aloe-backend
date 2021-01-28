@@ -27,7 +27,7 @@ router.get('/admin/posts', checkIfAuthenticated, response(adminController.getPos
 router.put('/admin/moderate', checkIfAuthenticated, response(adminController.moderatePost)); // works
 router.post('/admin/prompt', checkIfAuthenticated, response(adminController.createPrompt)); // done but check
 router.put('/admin/prompt', checkIfAuthenticated, response(adminController.editPrompt)); // done but check
-router.get('/admin/topics', checkIfAuthenticated, response(adminController.getTopics)); // works
+router.get('/admin/topics', response(adminController.getTopics)); // works
 router.post('/admin/topic', checkIfAuthenticated, response(adminController.addTopic)); // works
 router.put('/admin/topic', checkIfAuthenticated, response(adminController.editTopic)); // works
 router.delete('/admin/topic', checkIfAuthenticated, response(adminController.removeTopic)); // works
