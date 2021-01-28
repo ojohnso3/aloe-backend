@@ -1,18 +1,7 @@
 const constants = require('./constants.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
+const helpers = require('./helpers.js');
 
-
-function dateToTimestamp(date) {
-  if(!date) {
-    return null;
-  }
-
-  if(!(date instanceof Date)){
-    date = new Date(date);
-  }
-
-  return Timestamp.fromDate(date)
-}
 
 function topicParser(topicString) {
   console.log('tp', topicString)
@@ -167,7 +156,7 @@ function promptProcessing(prompt) {
   const promptData = JSON.parse(JSON.stringify(prompt));
 
   const ret = {
-    createdAt: dateToTimestamp(promptData.timestamp) || Timestamp.now(),
+    createdAt: helpers.dateToTimestamp(promptData.timestamp) || Timestamp.now(),
     updatedAt: Timestamp.now(),
     userID: constants.ALOE_ID,
     prompt: promptData.prompt,
@@ -196,7 +185,7 @@ function topicProcessing(topics) {
   const ret = {
     topic: topicsData.topic,
     description: topicsData.description || 'Definition will be uploaded soon!',
-    createdAt: dateToTimestamp(topicsData.timestamp) || Timestamp.now(),
+    createdAt: helpers.dateToTimestamp(topicsData.timestamp) || Timestamp.now(),
     updatedAt: Timestamp.now(),
     source: topicsData.source,
   };

@@ -24,7 +24,10 @@ async function getAnonymousCreated(timestamp) {
   
   let created = [];
   if (timestamp) {
-    created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
+    const processedTimestamp = helpers.dateToTimestamp(timestamp);
+    if(processedTimestamp) {
+      created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
+    }
   } else {
     created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('createdAt', 'desc').limit(5).get();
   }
@@ -51,8 +54,6 @@ async function getCreated(userData) {
   const timestamp = userData.query.timestamp;
   const internal = userData.query.internal;
 
-  console.log('userData', userData.query)
-
   if(userID == constants.ANONYMOUS_ID) {
     return getAnonymousCreated(timestamp);
   }
@@ -62,21 +63,23 @@ async function getCreated(userData) {
   let created = [];
   if(internal) {
     if (timestamp) {
-      created = await posts.where('userID', '==', userID).orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
+      const processedTimestamp = helpers.dateToTimestamp(timestamp);
+      if(processedTimestamp) {
+        created = await posts.where('userID', '==', userID).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
+      }
     } else {
-      console.log("internal check")
       created = await posts.where('userID', '==', userID).orderBy('createdAt', 'desc').limit(5).get();
     }
   } else {
     if (timestamp) {
-      created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
+      const processedTimestamp = helpers.dateToTimestamp(timestamp);
+      if(processedTimestamp) {
+        created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
+      }
     } else {
-      console.log("external check")
       created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('createdAt', 'desc').limit(5).get();
     }
   }
-
-  console.log("after query size", created.docs.length)
 
   if (created.empty) {
     console.log('No matching CREATED docs.');
@@ -118,7 +121,10 @@ async function getLiked(userData) {
   const user = db.collection('users').doc(userID);
   let liked = [];
   if (timestamp) {
-    liked = await user.collection('liked').orderBy('timestamp', 'desc').startAfter(timestamp).limit(5).get();
+    const processedTimestamp = helpers.dateToTimestamp(timestamp);
+    if(processedTimestamp) {
+      liked = await user.collection('liked').orderBy('timestamp', 'desc').startAfter(processedTimestamp).limit(5).get();
+    }
   } else {
     liked = await user.collection('liked').orderBy('timestamp', 'desc').limit(5).get();
   }

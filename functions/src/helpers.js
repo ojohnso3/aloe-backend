@@ -1,6 +1,19 @@
 const db = require('./firebase/db.js');
 const constants = require('./constants.js');
+const Timestamp = require('firebase-admin').firestore.Timestamp;
 
+
+function dateToTimestamp(date) {
+  if(!date) {
+    return null;
+  }
+
+  if(!(date instanceof Date)){
+    date = new Date(date);
+  }
+
+  return Timestamp.fromDate(date)
+}
 
 async function getUserInfo(userID, anonymous) {
   const userDoc = await db.collection('users').doc(userID).get();
@@ -49,6 +62,7 @@ function getAge(dob) {
 }
 
 module.exports = {
+  dateToTimestamp,
   getUserInfo,
   getAge,
 };

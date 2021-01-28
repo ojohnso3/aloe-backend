@@ -10,7 +10,10 @@ async function getPosts(post) {
   let forYou = [];
   const timestamp = post.query.timestamp;
   if (timestamp) {
-    forYou = await posts.where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
+    const processedTimestamp = helpers.dateToTimestamp(timestamp);
+    if(processedTimestamp) {
+      forYou = await posts.where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
+    }
   } else {
     forYou = await posts.where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').limit(5).get();
   }
@@ -36,7 +39,10 @@ async function getPostsByTopic(post) {
   const posts = db.collection('posts');
   let forYou = [];
   if (timestamp) {
-    forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
+    const processedTimestamp = helpers.dateToTimestamp(timestamp);
+    if(processedTimestamp) {
+      forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
+    }
   } else {
     forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').limit(5).get()
   }
@@ -75,7 +81,10 @@ async function getPrompts(promptData) {
   let prompts = [];
   const timestamp = promptData.query.timestamp;
   if (timestamp) {
-    prompts = await collection.orderBy('createdAt', 'desc').startAfter(timestamp).limit(5).get();
+    const processedTimestamp = helpers.dateToTimestamp(timestamp);
+    if(processedTimestamp) {
+      prompts = await collection.orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
+    }
   } else {
     prompts = await collection.orderBy('createdAt', 'desc').limit(5).get();
   }
