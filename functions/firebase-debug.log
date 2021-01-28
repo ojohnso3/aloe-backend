@@ -1,0 +1,115 @@
+[debug] [2021-01-28T22:41:11.933Z] ----------------------------------------------------------------------
+[debug] [2021-01-28T22:41:11.934Z] Command:       /Users/oj/.nvm/versions/node/v14.4.0/bin/node /Users/oj/.nvm/versions/node/v14.4.0/bin/firebase deploy --only functions
+[debug] [2021-01-28T22:41:11.935Z] CLI Version:   8.4.2
+[debug] [2021-01-28T22:41:11.935Z] Platform:      darwin
+[debug] [2021-01-28T22:41:11.935Z] Node Version:  v14.4.0
+[debug] [2021-01-28T22:41:11.936Z] Time:          Thu Jan 28 2021 17:41:11 GMT-0500 (Eastern Standard Time)
+[debug] [2021-01-28T22:41:11.936Z] ----------------------------------------------------------------------
+[debug] [2021-01-28T22:41:11.936Z] 
+[debug] [2021-01-28T22:41:11.946Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-01-28T22:41:11.947Z] > authorizing via signed-in user
+[debug] [2021-01-28T22:41:11.947Z] [iam] checking project aloe-stories for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2021-01-28T22:41:11.950Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/aloe-stories:testIamPermissions  
+ {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2021-01-28T22:41:12.234Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:12 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=137","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-28T22:41:12.236Z] >>> HTTP REQUEST POST https://iam.googleapis.com/v1/projects/aloe-stories/serviceAccounts/aloe-stories@appspot.gserviceaccount.com:testIamPermissions  
+ {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2021-01-28T22:41:12.543Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:12 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions.
+Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[info] 
+[info] === Deploying to 'aloe-stories'...
+[info] 
+[info] i  deploying functions 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
+[info] ✔  functions: Finished running predeploy script. 
+[debug] [2021-01-28T22:41:16.704Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "lint": "eslint . --ext .js"
+  },
+  "engines": {
+    "node": "10"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "firebase-admin": "^9.2.0",
+    "firebase-functions": "^3.11.0",
+    "morgan": "^1.10.0",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "eslint-plugin-react": "^7.21.5",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "^1.11.0"
+  },
+  "devDependencies": {
+    "acorn": "^8.0.4",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "eslint": "^7.18.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "firebase-functions-test": "^0.2.0",
+    "mocha": "^8.2.1"
+  },
+  "private": true
+}
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[debug] [2021-01-28T22:41:18.272Z] [functions] runtime dependency check dates: warning: 2020-05-21T00:00:00.000Z error: 2020-07-09T00:00:00.000Z
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[debug] [2021-01-28T22:41:18.273Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/aloe-stories/services/cloudfunctions.googleapis.com  
+ 
+[debug] [2021-01-28T22:41:18.273Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/aloe-stories/services/runtimeconfig.googleapis.com  
+ 
+[debug] [2021-01-28T22:41:18.274Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/aloe-stories/services/cloudbuild.googleapis.com  
+ 
+[debug] [2021-01-28T22:41:18.899Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:18 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-28T22:41:18.931Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:18 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] ✔  functions: required API cloudbuild.googleapis.com is enabled 
+[debug] [2021-01-28T22:41:18.949Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:18 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] ✔  functions: required API cloudfunctions.googleapis.com is enabled 
+[debug] [2021-01-28T22:41:18.950Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/aloe-stories/adminSdkConfig  
+ 
+[debug] [2021-01-28T22:41:19.497Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:19 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  functions: preparing functions directory for uploading... 
+[debug] [2021-01-28T22:41:19.499Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/aloe-stories/configs  
+ 
+[debug] [2021-01-28T22:41:19.916Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:19 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  functions: packaged functions (96.81 KB) for uploading 
+[debug] [2021-01-28T22:41:20.805Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/aloe-stories/locations/-/functions  
+ 
+[debug] [2021-01-28T22:41:21.556Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:21 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-28T22:41:21.560Z] >>> HTTP REQUEST POST https://cloudfunctions.googleapis.com/v1/projects/aloe-stories/locations/us-central1/functions:generateUploadUrl  
+ 
+[debug] [2021-01-28T22:41:22.373Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:22 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-28T22:41:22.374Z] >>> HTTP REQUEST PUT https://storage.googleapis.com/gcf-upload-us-central1-69d38d54-5500-4e4a-8f88-1017962cdafa/6ad8a1b7-0924-40d2-8fc3-ecbc8a0df686.zip?GoogleAccessId=service-583162886056@gcf-admin-robot.iam.gserviceaccount.com&Expires=1611875482&Signature=C04iETG5uvC%2FRJQdA%2FSigRxfZHJNj1x%2BZsF5B%2BUNQfpbvryIofrCdgkWOH9O7p3G8CQmGwmlCwN34ecoFvD2KYK4eHf2Po%2B%2BkY%2BU8OiuROmvqalcPpt6f13kh9%2F3Pe0jnoROkdrj3TkFBgNWWh54x08rf4mCJXRNqJxeRTB1niWllG%2BLSMYJY0a%2FTUbB%2BRhbHuXmfBmmA9AInDYI9E8%2Bp8EfzB%2Bdanvk6ubxtt5GIxOhmwbHKDmi2th%2FE%2FDmuTkpUgEsn8q4GBPMa0Di5ReQ8nuaZ4vCNmrixhGLsq2yK0fammiAYfJURbUrUL8%2BmX2GS2H4RPQR8UiH1U1n7r2Ypg%3D%3D  
+ <request body omitted>
+[debug] [2021-01-28T22:41:22.784Z] <<< HTTP RESPONSE 200 {"x-guploader-uploadid":"ABg5-Uw8mt-HD_CaXtDia_1FavAgSK_Jq-5IgoXZZeLi0NA2er7WfOfWpsoCTHHk4Bgz03-pU0dFNiv3MFSXKhPR0q-Qq03YFA","etag":"\"6d24e77c6d40d0cf54ec5081ce51ad2d\"","x-goog-generation":"1611873682732019","x-goog-metageneration":"1","x-goog-hash":"crc32c=FOjJ0w==, md5=bSTnfG1A0M9U7FCBzlGtLQ==","x-goog-stored-content-length":"99135","x-goog-stored-content-encoding":"identity","vary":"Origin","content-length":"0","date":"Thu, 28 Jan 2021 22:41:22 GMT","server":"UploadServer","content-type":"text/html; charset=UTF-8","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\""}
+[info] ✔  functions: functions folder uploaded successfully 
+[info] i  functions: updating Node.js 10 function app(us-central1)... 
+[debug] [2021-01-28T22:41:22.788Z] Trigger is:  {"httpsTrigger":{}}
+[debug] [2021-01-28T22:41:22.789Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/aloe-stories/services/cloudscheduler.googleapis.com  
+ 
+[debug] [2021-01-28T22:41:23.396Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:23 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-28T22:41:23.398Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/aloe-stories/locations/us-central1/functions/app {"updateMask":"sourceUploadUrl,name,labels,runtime,environmentVariables,httpsTrigger"} 
+ {"sourceUploadUrl":"https://storage.googleapis.com/gcf-upload-us-central1-69d38d54-5500-4e4a-8f88-1017962cdafa/6ad8a1b7-0924-40d2-8fc3-ecbc8a0df686.zip?GoogleAccessId=service-583162886056@gcf-admin-robot.iam.gserviceaccount.com&Expires=1611875482&Signature=C04iETG5uvC%2FRJQdA%2FSigRxfZHJNj1x%2BZsF5B%2BUNQfpbvryIofrCdgkWOH9O7p3G8CQmGwmlCwN34ecoFvD2KYK4eHf2Po%2B%2BkY%2BU8OiuROmvqalcPpt6f13kh9%2F3Pe0jnoROkdrj3TkFBgNWWh54x08rf4mCJXRNqJxeRTB1niWllG%2BLSMYJY0a%2FTUbB%2BRhbHuXmfBmmA9AInDYI9E8%2Bp8EfzB%2Bdanvk6ubxtt5GIxOhmwbHKDmi2th%2FE%2FDmuTkpUgEsn8q4GBPMa0Di5ReQ8nuaZ4vCNmrixhGLsq2yK0fammiAYfJURbUrUL8%2BmX2GS2H4RPQR8UiH1U1n7r2Ypg%3D%3D","name":"projects/aloe-stories/locations/us-central1/functions/app","labels":{"deployment-tool":"cli-firebase"},"httpsTrigger":{},"runtime":"nodejs10","environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"aloe-stories\",\"databaseURL\":\"https://aloe-stories.firebaseio.com\",\"storageBucket\":\"aloe-stories.appspot.com\",\"locationId\":\"us-east1\"}"}}
+[debug] [2021-01-28T22:41:24.428Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:24 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-28T22:41:24.430Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/aloe-stories/locations/-/functions  
+ 
+[debug] [2021-01-28T22:41:25.036Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:24 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-28T22:41:25.038Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/YWxvZS1zdG9yaWVzL3VzLWNlbnRyYWwxL2FwcC90Ym9lVkhLSVBOcw  
+ 
+[debug] [2021-01-28T22:41:25.410Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:25 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-28T22:41:27.416Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/YWxvZS1zdG9yaWVzL3VzLWNlbnRyYWwxL2FwcC90Ym9lVkhLSVBOcw  
+ 
+[debug] [2021-01-28T22:41:27.903Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:27 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-28T22:41:29.907Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/YWxvZS1zdG9yaWVzL3VzLWNlbnRyYWwxL2FwcC90Ym9lVkhLSVBOcw  
+ 
+[debug] [2021-01-28T22:41:30.156Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 28 Jan 2021 22:41:30 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}

@@ -7,7 +7,7 @@ function timestampToDate(timestamp) {
     return 'No timestamp.';
   }
   if (timestamp instanceof Timestamp) {
-    console.log('This is correct: Timestamp');
+    console.log('This is correct');
   } else {
     console.log('This is WRONG: Timestamp');
   }

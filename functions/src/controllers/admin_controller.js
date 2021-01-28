@@ -43,6 +43,8 @@ async function getPostsByStatus(request) {
     return [];
   }
 
+  console.log('selected', selected.docs.length);
+
   const finalPosts = [];
   await Promise.all(selected.docs.map(async (doc) => {
     const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
