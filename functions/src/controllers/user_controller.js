@@ -27,7 +27,7 @@ async function createAccount(userData) {
 async function login(loginData) {
   const email = loginData.body.email;
   const loginTime = loginData.body.loginTime;
-  console.log("login", loginData.body);
+
   const users = db.collection('users');
   const currUser = await users.where('email', '==', email).where('removed', '==', false).get();
 

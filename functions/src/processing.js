@@ -4,7 +4,7 @@ const helpers = require('./helpers.js');
 
 
 function getTimestamp(dob) {
-  if(!dob) {
+  if (!dob) {
     return ''; // could fail by type mismatch
   }
   const date = new Date(dob);
@@ -12,7 +12,7 @@ function getTimestamp(dob) {
 }
 
 function processIdentity(string) {
-  if(string === 'Prefer not to answer') {
+  if (string === 'Prefer not to answer') {
     return '';
   } else {
     return string;
