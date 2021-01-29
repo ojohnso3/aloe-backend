@@ -112,8 +112,8 @@ async function likedHelper(doc) {
 
 // Load liked posts on profile (TODO FIX FOR PROMPTS TOO)
 async function getLiked(userData) {
-  const userID = userData.body.id;
-  const timestamp = userData.body.timestamp;
+  const userID = userData.query.id;
+  const timestamp = userData.query.timestamp;
   const user = db.collection('users').doc(userID);
   let liked = [];
   if (timestamp) {
