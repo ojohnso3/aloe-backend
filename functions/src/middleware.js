@@ -32,6 +32,7 @@ function userMiddleware(id, dbUser) {
   const ret = {
     userid: id,
     username: dbUser.username,
+    type: dbUser.type,
     verified: dbUser.verified,
     profilePicture: dbUser.profilePic || '',
     dob: helpers.timestampToDate(dbUser.dob) || '',
