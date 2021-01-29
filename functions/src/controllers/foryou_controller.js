@@ -76,7 +76,7 @@ async function getTopResponse(promptID) {
 
 // Get prompts for feed
 async function getPrompts(promptData) {
-  console.log('get prompts', promptData.query);
+  console.log('turtle 1', promptData.query);
   const collection = db.collection('prompts');
   let prompts = [];
   const timestamp = promptData.query.timestamp;
@@ -93,6 +93,8 @@ async function getPrompts(promptData) {
     console.log('Nothing for getPrompts.');
     return {results: []};
   }
+
+  console.log('turtle 2', prompts.docs.length);
 
   const finalPrompts = [];
   await Promise.all(prompts.docs.map(async (doc) => {

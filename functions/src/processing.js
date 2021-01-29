@@ -61,7 +61,6 @@ function userProcessing(user) {
       return null;
     }
   }
-  console.log('ret user', ret);
   return ret;
 }
 
@@ -73,6 +72,8 @@ function profileProcessing(profile) {
   } else {
     profileData.consent = false;
   }
+
+  console.log('before the shit, after consent', profileData.consent);
 
   const ret = {
     username: profileData.username,
@@ -88,7 +89,6 @@ function profileProcessing(profile) {
       delete ret[key];
     }
   }
-  console.log('ret prof', ret);
   return ret;
 }
 
