@@ -11,6 +11,14 @@ function getTimestamp(dob) {
   return helpers.dateToTimestamp(date);
 }
 
+function processIdentity(string) {
+  if(string === 'Prefer not to answer') {
+    return '';
+  } else {
+    return string;
+  }
+}
+
 function topicParser(topicString) {
   if (Array.isArray(topicString)) {
     return topicString;
@@ -71,8 +79,8 @@ function profileProcessing(profile) {
     consent: profileData.consent,
     profilePic: profileData.profilePic,
     dob: getTimestamp(profileData.dob), // process later
-    pronouns: profileData.pronouns,
-    sexuality: profileData.sexuality,
+    pronouns: processIdentity(profileData.pronouns),
+    sexuality: processIdentity(profileData.sexuality),
   };
   for (const key of Object.keys(ret)) {
     // console.log('key', key, ' - ', ret[key]);
