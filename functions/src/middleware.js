@@ -2,23 +2,16 @@ const helpers = require('./helpers.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 
 
-function timestampToDate(timestamp) {
-  if (!timestamp) {
-    return 'No timestamp.';
-  }
-  if (timestamp instanceof Timestamp) {
-    console.log('This is correct');
-  } else {
-    console.log('This is WRONG: Timestamp');
-  }
 
-  return timestamp.toDate();
+function getAge(timestamp) {
+  const dob = helpers.timestampToDate(timestamp);
+  return helpers.getAge(dob);
 }
 
 function adminMiddleware(id, dbPost, userInfo) {
   const ret = {
     id,
-    timestamp: timestampToDate(dbPost.createdAt),
+    timestamp: helpers.timestampToDate(dbPost.createdAt),
     status: dbPost.status,
     notes: dbPost.adminNotes,
     userID: dbPost.userID,
@@ -41,8 +34,8 @@ function userMiddleware(id, dbUser) {
     username: dbUser.username,
     verified: dbUser.verified,
     profilePicture: dbUser.profilePic || '',
-    dob: timestampToDate(dbUser.dob) || '',
-    age: helpers.getAge(timestampToDate(dbUser.dob)),
+    dob: helpers.timestampToDate(dbUser.dob) || '',
+    age: getAge(dbUser.dob),
     pronouns: dbUser.pronouns || '',
     sexuality: dbUser.sexuality || '',
     email: dbUser.email,
@@ -61,7 +54,7 @@ function profileMiddleware(id, dbUser) {
     verified: dbUser.verified || false,
     profilePicture: dbUser.profilePic || '',
     doc: dbUser.signupTime,
-    age: helpers.getAge(timestampToDate(dbUser.dob)),
+    age: getAge(dbUser.dob),
     pronouns: dbUser.pronouns || '',
     sexuality: dbUser.sexuality || '',
   };
@@ -71,7 +64,7 @@ function profileMiddleware(id, dbUser) {
 function postMiddleware(id, dbPost, userInfo) {
   const ret = {
     id,
-    timestamp: timestampToDate(dbPost.createdAt), // updated too?
+    timestamp: helpers.timestampToDate(dbPost.createdAt), // updated too?
     status: dbPost.status,
     userid: userInfo.userID,
     user: userInfo.username,
@@ -92,7 +85,7 @@ function postMiddleware(id, dbPost, userInfo) {
 function promptMiddleware(id, dbPrompt, userInfo, topResponse) {
   const ret = {
     id,
-    timestamp: timestampToDate(dbPrompt.createdAt), // updated too?
+    timestamp: helpers.timestampToDate(dbPrompt.createdAt), // updated too?
     userid: userInfo.userID,
     user: userInfo.username,
     profilePicture: userInfo.profilePic || '',
@@ -116,7 +109,7 @@ function responseMiddleware(id, dbResponse, userInfo) {
     verified: userInfo.verified || false,
     content: dbResponse.body,
     likes: dbResponse.numLikes,
-    timestamp: timestampToDate(dbResponse.createdAt),
+    timestamp: helpers.timestampToDate(dbResponse.createdAt),
     top: false, // TODO design
   };
   return ret;
@@ -129,7 +122,7 @@ function reportMiddleware(id, dbReport) {
     parentID: dbReport.parentID,
     type: dbReport.type,
     reason: dbReport.reason || 'What is the reason??',
-    timestamp: timestampToDate(dbReport.createdAt),
+    timestamp: helpers.timestampToDate(dbReport.createdAt),
     status: dbReport.status,
   };
 

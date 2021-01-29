@@ -3,6 +3,19 @@ const constants = require('./constants.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 
 
+function timestampToDate(timestamp) {
+  if (!timestamp) {
+    return 'No timestamp.';
+  }
+  if (timestamp instanceof Timestamp) {
+    // console.log('This is correct');
+  } else {
+    // console.log('This is WRONG: Timestamp');
+  }
+
+  return timestamp.toDate();
+}
+
 function dateToTimestamp(date) {
   if (!date) {
     return null;
@@ -43,7 +56,7 @@ async function getUserInfo(userID, anonymous) {
       username: userDoc.data().username,
       profilePic: userDoc.data().profilePic,
       verified: userDoc.data().verified,
-      age: getAge(userDoc.data().dob),
+      age: getAge(timestampToDate(userDoc.data().dob)),
       pronouns: userDoc.data().pronouns,
       sexuality: userDoc.data().sexuality,
     };
@@ -63,6 +76,7 @@ function getAge(dob) {
 }
 
 module.exports = {
+  timestampToDate,
   dateToTimestamp,
   getUserInfo,
   getAge,
