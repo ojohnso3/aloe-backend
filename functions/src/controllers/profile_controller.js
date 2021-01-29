@@ -90,8 +90,6 @@ async function getCreated(userData) {
     createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 
-  console.log('created size: ', createdPosts.length);
-
   return {results: createdPosts};
 }
 
