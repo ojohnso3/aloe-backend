@@ -1,8 +1,6 @@
 const helpers = require('./helpers.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 
-
-
 function getAge(timestamp) {
   const dob = helpers.timestampToDate(timestamp);
   return helpers.getAge(dob);
@@ -44,7 +42,6 @@ function userMiddleware(id, dbUser) {
     consentSetting: dbUser.consent,
     notifSettings: dbUser.notifications || true,
   };
-  console.log("returning user", ret);
   return ret;
 }
 
