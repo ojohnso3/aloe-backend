@@ -15,14 +15,14 @@ async function adminLogin(adminData) {
     console.log('No such user.');
     return {};
   }
-  if (adminUser.docs.length != 1 ) {
+  if (adminUser.docs.length !== 1 ) {
     console.log('ERROR: More than one user with the same email.');
     return {};
   }
 
   const userDoc = adminUser.docs[0];
 
-  if (userDoc.data().type != 'ADMIN') {
+  if (userDoc.data().type !== 'ADMIN') {
     console.log('ERROR: User is not an Admin.');
     return {};
   }
@@ -77,7 +77,7 @@ async function createPrompt(promptData) {
   //   createAnswers(doc.id, processedPrompt.answers);
   // }
 
-  if (doc.data().userID != constants.ALOE_ID) {
+  if (doc.data().userID !== constants.ALOE_ID) {
     console.log('ERROR: ids do not match');
   }
   const userInfo = await helpers.getUserInfo(constants.ALOE_ID, false);
@@ -150,7 +150,7 @@ async function editTopic(topicData) {
   }
 
   const topicDoc = topic.docs[0];
-  const res = await topicDoc.ref.update(processedTopic); // res?
+  await topicDoc.ref.update(processedTopic); // res?
   return '1';
 }
 

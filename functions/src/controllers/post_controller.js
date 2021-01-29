@@ -106,9 +106,9 @@ async function likeContent(parentData) {
 
   let res = null;
 
-  if (liked == '1') {
+  if (liked === '1') {
     const docArr = await parent.collection('likes').where('userID', '==', userID).get();
-    if (docArr.size != 1) {
+    if (docArr.size !== 1) {
       console.log('ERROR: should like once');
       return null;
     }
@@ -116,9 +116,9 @@ async function likeContent(parentData) {
       res = doc.ref.delete();
     });
 
-    if (type == 'posts') {
+    if (type === 'posts') {
       const userArr = await user.collection('liked').where('parentID', '==', parentID).get();
-      if (userArr.size != 1) {
+      if (userArr.size !== 1) {
         console.log('ERROR: should like once');
         return null;
       }
@@ -132,7 +132,7 @@ async function likeContent(parentData) {
     res = await parent.collection('likes').add({userID: userID, timestamp: helpers.dateToTimestamp(timestamp)});
     await parent.update({numLikes: increment});
 
-    if (type == 'posts') {
+    if (type === 'posts') {
       await user.collection('liked').add({parentID: parentID, timestamp: helpers.dateToTimestamp(timestamp)});
     }
     return res;

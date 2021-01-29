@@ -3,6 +3,14 @@ const Timestamp = require('firebase-admin').firestore.Timestamp;
 const helpers = require('./helpers.js');
 
 
+function getTimestamp(dob) {
+  if(!dob) {
+    return ''; // could fail by type mismatch
+  }
+  const date = new Date(dob);
+  return helpers.dateToTimestamp(date);
+}
+
 function topicParser(topicString) {
   if (Array.isArray(topicString)) {
     return topicString;
@@ -28,9 +36,9 @@ function userProcessing(user) {
     consent: userData.consent || true, // change eventually?
     verified: false,
     profilePic: '',
-    dob: userData.dob || '',
-    pronouns: userData.pronouns || '',
-    sexuality: userData.sexuality || '',
+    // dob: userData.dob || '', // NOTE: added later in popup
+    // pronouns: userData.pronouns || '',
+    // sexuality: userData.sexuality || '',
     banned: {
       duration: 0,
       timestamp: '',
@@ -41,7 +49,7 @@ function userProcessing(user) {
   };
   for (const key of Object.keys(ret)) {
     // console.log('key', key, ' - ', ret[key]);
-    if (ret[key] == undefined) {
+    if (ret[key] === undefined) {
       return null;
     }
   }
@@ -61,13 +69,13 @@ function profileProcessing(profile) {
     username: profileData.username,
     consent: profileData.consent,
     profilePic: profileData.profilePic,
-    dob: profileData.dob,
+    dob: getTimestamp(profileData.dob), // process later
     pronouns: profileData.pronouns,
     sexuality: profileData.sexuality,
   };
   for (const key of Object.keys(ret)) {
     // console.log('key', key, ' - ', ret[key]);
-    if (ret[key] == '' || ret[key] == undefined) {
+    if (ret[key] === '' || ret[key] === undefined) {
       delete ret[key];
     }
   }
@@ -78,7 +86,7 @@ function postProcessing(post) {
   const postData = JSON.parse(JSON.stringify(post));
 
   let anonymous = true;
-  if (postData.anonymous == '0') {
+  if (postData.anonymous === '0') {
     anonymous = false;
   }
 
@@ -102,7 +110,7 @@ function postProcessing(post) {
 
   for (const key of Object.keys(ret)) {
     // console.log('key', key, ' - ', ret[key]);
-    if (ret[key] == undefined) {
+    if (ret[key] === undefined) {
       return null;
     }
   }
@@ -120,7 +128,7 @@ function editProcessing(post) {
     'removed': postData.removed,
   };
   for (const key of Object.keys(ret)) {
-    if (ret[key] == undefined) {
+    if (ret[key] === undefined) {
       delete ret[key];
     }
   }
@@ -145,7 +153,7 @@ function responseProcessing(response) {
   };
   for (const key of Object.keys(ret)) {
     // console.log('key', ret[key]);
-    if (ret[key] == undefined) {
+    if (ret[key] === undefined) {
       return null;
     }
   }
@@ -168,7 +176,7 @@ function promptProcessing(prompt) {
     removed: false,
   };
   for (const key of Object.keys(ret)) {
-    if (ret[key] == undefined) {
+    if (ret[key] === undefined) {
       return null;
     }
   }
@@ -191,7 +199,7 @@ function topicProcessing(topics) {
   };
 
   for (const key of Object.keys(ret)) {
-    if (ret[key] == undefined) {
+    if (ret[key] === undefined) {
       delete ret[key];
     }
   }

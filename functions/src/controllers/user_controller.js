@@ -34,7 +34,7 @@ async function login(loginData) {
     console.log('No such user.');
     return;
   }
-  if (currUser.docs.length != 1 ) {
+  if (currUser.docs.length !== 1 ) {
     console.log('ERROR: More than one user with the same email.');
   }
 

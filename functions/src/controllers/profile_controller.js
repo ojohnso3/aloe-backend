@@ -52,7 +52,7 @@ async function getCreated(userData) {
   const timestamp = userData.query.timestamp;
   const internal = userData.query.internal;
 
-  if (userID == constants.ANONYMOUS_ID) {
+  if (userID === constants.ANONYMOUS_ID) {
     return getAnonymousCreated(timestamp);
   }
 
@@ -101,7 +101,7 @@ async function likedHelper(doc) {
     console.log('No document with postid: ' + postID);
     return null;
   }
-  if (likedPost.data().status != constants.APPROVED) {
+  if (likedPost.data().status !== constants.APPROVED) {
     console.log('Post is not approved: ' + postID);
     return null;
   }

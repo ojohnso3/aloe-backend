@@ -1,5 +1,4 @@
 const helpers = require('./helpers.js');
-const Timestamp = require('firebase-admin').firestore.Timestamp;
 
 function getAge(timestamp) {
   const dob = helpers.timestampToDate(timestamp);
