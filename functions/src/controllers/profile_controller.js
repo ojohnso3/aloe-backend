@@ -95,7 +95,7 @@ async function getCreated(userData) {
 
 async function likedHelper(doc) {
   const posts = db.collection('posts');
-  const postID = doc.data().postID;
+  const postID = doc.data().parentID; // parentID vs postID
   const likedPost = await posts.doc(postID).get();
   if (!likedPost.exists) {
     console.log('No document with postid: ' + postID);
@@ -112,8 +112,8 @@ async function likedHelper(doc) {
 
 // Load liked posts on profile (TODO FIX FOR PROMPTS TOO)
 async function getLiked(userData) {
-  const userID = userData.query.id;
-  const timestamp = userData.query.timestamp;
+  const userID = userData.body.id;
+  const timestamp = userData.body.timestamp;
   const user = db.collection('users').doc(userID);
   let liked = [];
   if (timestamp) {

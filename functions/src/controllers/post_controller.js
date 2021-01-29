@@ -129,11 +129,11 @@ async function likeContent(parentData) {
     await parent.update({numLikes: decrement});
     return res;
   } else {
-    res = await parent.collection('likes').add({userID: userID, timestamp: timestamp});
+    res = await parent.collection('likes').add({userID: userID, timestamp: helpers.dateToTimestamp(timestamp)});
     await parent.update({numLikes: increment});
 
     if (type == 'posts') {
-      await user.collection('liked').add({parentID: parentID, timestamp: timestamp});
+      await user.collection('liked').add({parentID: parentID, timestamp: helpers.dateToTimestamp(timestamp)});
     }
     return res;
   }
