@@ -2,7 +2,6 @@ const db = require('./firebase/db.js');
 const constants = require('./constants.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 
-
 function timestampToDate(timestamp) {
   if (!timestamp) {
     return 'No timestamp.';
@@ -41,6 +40,9 @@ async function getUserInfo(userID, anonymous) {
         username: 'anonymous',
         profilePic: 'aloe.jpg', // link to image
         verified: true,
+        age: getAge(new Date()),
+        pronouns: 'any pronouns',
+        sexuality: 'questioning',
       };
     } else {
       userInfo = {
@@ -48,6 +50,9 @@ async function getUserInfo(userID, anonymous) {
         username: anonDoc.data().username,
         profilePic: anonDoc.data().profilePic,
         verified: true,
+        age: getAge(timestampToDate(anonDoc.data().dob)),
+        pronouns: anonDoc.data().pronouns,
+        sexuality: anonDoc.data().sexuality,
       };
     }
   } else {
