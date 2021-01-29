@@ -32,6 +32,7 @@ async function adminLogin(adminData) {
 
 // Load all posts of chosen status
 async function getPostsByStatus(request) {
+  console.log('quer', request.query)
   const posts = db.collection('posts');
   const status = request.query.status || 'ALL'; // If the status is undefined, make it 'ALL'
 
