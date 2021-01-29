@@ -1,6 +1,9 @@
 const helpers = require('./helpers.js');
 
 function getAge(timestamp) {
+  if(!dob) {
+    return '';
+  }
   const dob = helpers.timestampToDate(timestamp);
   return helpers.getAge(dob);
 }
