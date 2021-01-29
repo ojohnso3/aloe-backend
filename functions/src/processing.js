@@ -53,6 +53,7 @@ function userProcessing(user) {
       return null;
     }
   }
+  console.log('ret user', ret);
   return ret;
 }
 
@@ -79,6 +80,7 @@ function profileProcessing(profile) {
       delete ret[key];
     }
   }
+  console.log('ret prof', ret);
   return ret;
 }
 
