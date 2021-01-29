@@ -73,8 +73,6 @@ function profileProcessing(profile) {
     profileData.consent = false;
   }
 
-  console.log('before the shit, after consent', profileData.consent);
-
   const ret = {
     username: profileData.username,
     consent: profileData.consent,
