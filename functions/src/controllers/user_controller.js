@@ -25,6 +25,7 @@ async function createAccount(userData) {
 
 // Login to account (after auth verification)
 async function login(loginData) {
+  console.log("login data", loginData.body)
   const email = loginData.body.email;
   const loginTime = loginData.body.loginTime;
   const users = db.collection('users');
@@ -38,12 +39,20 @@ async function login(loginData) {
     console.log('ERROR: More than one user with the same email.');
   }
 
+  console.log("User size (should be 1)", currUser.docs.length)
+
   const userDoc = currUser.docs[0];
+
+  console.log('userdoc id', userDoc.id)
+  console.log('userdoc data', userDoc.data())
 
   const newDoc = users.doc(userDoc.id);
   await newDoc.update({loginTime: loginTime});
 
   const updatedUser = await newDoc.get();
+
+  console.log('updated data', updatedUser.data())
+
   return middleware.userMiddleware(updatedUser.id, updatedUser.data());
 }
 
