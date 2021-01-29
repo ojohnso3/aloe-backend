@@ -61,7 +61,7 @@ function profileMiddleware(id, dbUser) {
     verified: dbUser.verified || false,
     profilePicture: dbUser.profilePic || '',
     doc: dbUser.signupTime,
-    age: helpers.getAge(dbUser.dob),
+    age: helpers.getAge(timestampToDate(dbUser.dob)),
     pronouns: dbUser.pronouns || '',
     sexuality: dbUser.sexuality || '',
   };
