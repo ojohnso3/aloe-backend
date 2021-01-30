@@ -3,8 +3,8 @@ const constants = require('./constants.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 
 function timestampToDate(timestamp) {
-  if (!timestamp) {
-    return 'No timestamp.';
+  if (timestamp === undefined || !timestamp) {
+    return ''; // 'No timestamp.';
   }
   if (timestamp instanceof Timestamp) {
     // console.log('This is correct');
@@ -30,7 +30,6 @@ function dateToTimestamp(date) {
 async function getUserInfo(userID, anonymous) {
   const userDoc = await db.collection('users').doc(userID).get();
   let userInfo = {};
-  // TODO: add identity vals **
   if (anonymous || !userDoc.exists) {
     const anonDoc = await db.collection('users').doc(constants.ANONYMOUS_ID).get();
     if (!anonDoc.exists) {
