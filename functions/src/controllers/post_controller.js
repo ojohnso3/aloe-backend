@@ -50,8 +50,11 @@ async function createResponse(responseData) {
 
   const newResponse = await db.collection('responses').add(processedResponse);
 
-  const doc = await newResponse.get();
+  // prompt
+  const prompt = db.collection('prompts').doc(processedResponse.parentID);
+  await prompt.update({numResponses: increment});
 
+  const doc = await newResponse.get();
   const userInfo = await helpers.getUserInfo(doc.data().userID, false);
 
   return {results: middleware.responseMiddleware(doc.id, doc.data(), userInfo)};
@@ -80,6 +83,12 @@ async function removeContent(parentData) {
   const archived = doc.data();
   archived['contentType'] = type;
   await db.collection('archive').doc(id).set(archived);
+
+  // prompt
+  if(type == 'responses') {
+    const prompt = db.collection('prompts').doc(archived.parentID);
+    await prompt.update({numResponses: decrement});
+  }
 
   const likes = await parent.collection('likes').get();
   if (!likes.empty) {
