@@ -148,6 +148,8 @@ function editProcessing(post) {
 function responseProcessing(response) {
   const responseData = JSON.parse(JSON.stringify(response));
 
+  console.log('userid', responseData.userid);
+
   const ret = {
     userID: responseData.userid,
     parentID: responseData.id,
