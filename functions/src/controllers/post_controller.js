@@ -85,7 +85,7 @@ async function removeContent(parentData) {
   await db.collection('archive').doc(id).set(archived);
 
   // prompt
-  if(type == 'responses') {
+  if (type === 'responses') {
     const prompt = db.collection('prompts').doc(archived.parentID);
     await prompt.update({numResponses: decrement});
   }
