@@ -110,6 +110,7 @@ function responseMiddleware(id, dbResponse, userInfo) {
     profilePicture: userInfo.profilePic || '',
     verified: userInfo.verified || false,
     content: dbResponse.body,
+    anonymous: dbResponse.anonymous,
     likes: dbResponse.numLikes,
     timestamp: helpers.timestampToDate(dbResponse.createdAt),
     top: false, // TODO design

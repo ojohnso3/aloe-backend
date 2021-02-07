@@ -148,12 +148,18 @@ function editProcessing(post) {
 function responseProcessing(response) {
   const responseData = JSON.parse(JSON.stringify(response));
 
+  let anonymous = true;
+  if (responseData.anonymous === '0') {
+    anonymous = false;
+  }
+
   const ret = {
     userID: responseData.userid,
     parentID: responseData.id,
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
     body: responseData.body,
+    anonymous: anonymous,
     numLikes: 0,
     reported: false,
     removed: false,
