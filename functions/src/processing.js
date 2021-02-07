@@ -112,6 +112,7 @@ function postProcessing(post) {
     numShares: 0,
     numResponses: 0,
     anonymous: anonymous,
+    blurred: postData.blurred || false,
     reported: false,
     removed: false,
     adminNotes: '',

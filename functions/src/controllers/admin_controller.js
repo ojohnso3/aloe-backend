@@ -56,7 +56,7 @@ async function getPostsByStatus(request) {
 async function moderatePost(postData) {
   const updates = postData.body;
   const post = db.collection('posts').doc(updates.id);
-  const res = await post.update({status: updates.status, adminNotes: updates.notes, updatedAt: updates.timestamp});
+  const res = await post.update({status: updates.status, blurred: updates.blurred, adminNotes: updates.notes, updatedAt: updates.timestamp});
   return res;
 }
 

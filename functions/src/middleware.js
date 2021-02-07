@@ -21,6 +21,7 @@ function adminMiddleware(id, dbPost, userInfo) {
     content: dbPost.content.body,
     topics: dbPost.content.topics,
     anonymous: dbPost.anonymous,
+    blurred: dbPost.blurred,
     likes: dbPost.numLikes,
     shares: dbPost.numShares, // TBD
   };
@@ -79,6 +80,7 @@ function postMiddleware(id, dbPost, userInfo) {
     content: dbPost.content.body,
     topics: dbPost.content.topics,
     anonymous: dbPost.anonymous,
+    blurred: dbPost.blurred,
     likes: dbPost.numLikes,
     shares: dbPost.numShares,
   };
