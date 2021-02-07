@@ -80,6 +80,7 @@ function profileProcessing(profile) {
     dob: getTimestamp(profileData.dob), // process later
     pronouns: processIdentity(profileData.pronouns),
     sexuality: processIdentity(profileData.sexuality),
+    triggers: topicParser(profileData.triggers),
   };
   for (const key of Object.keys(ret)) {
     // console.log('key', key, ' - ', ret[key]);

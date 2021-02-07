@@ -39,6 +39,7 @@ function userMiddleware(id, dbUser) {
     age: getAge(dbUser.dob),
     pronouns: dbUser.pronouns || '',
     sexuality: dbUser.sexuality || '',
+    triggers: dbUser.triggers,
     email: dbUser.email,
     doc: dbUser.signupTime,
     consentSetting: dbUser.consent,
