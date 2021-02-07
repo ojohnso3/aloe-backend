@@ -84,6 +84,7 @@ function postMiddleware(id, dbPost, userInfo) {
     likes: dbPost.numLikes,
     shares: dbPost.numShares,
   };
+  console.log('check BLURRED here', ret.blurred);
   return ret;
 }
 
