@@ -29,7 +29,7 @@ async function login(loginData) {
   const email = loginData.body.email;
   const loginTime = loginData.body.loginTime;
 
-  // const timestamp = helpers.dateToTimestamp(loginTime);
+  const timestamp = helpers.dateToTimestamp(loginTime);
 
   const users = db.collection('users');
   const currUser = await users.where('email', '==', email).where('removed', '==', false).get();
@@ -45,7 +45,7 @@ async function login(loginData) {
   const userDoc = currUser.docs[0];
 
   const newDoc = users.doc(userDoc.id);
-  await newDoc.update({loginTime: loginTime});
+  await newDoc.update({loginTime: timestamp});
 
   const updatedUser = await newDoc.get();
 

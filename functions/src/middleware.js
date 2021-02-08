@@ -42,12 +42,12 @@ function userMiddleware(id, dbUser) {
     sexuality: dbUser.sexuality || '',
     triggers: dbUser.triggers || [],
     email: dbUser.email,
-    doc: helpers.timestampToDate(dbUser.signupTime),
+    doc: helpers.timestampToDate(dbUser.doc),
     consentSetting: dbUser.consent,
     notifSettings: dbUser.notifications || true,
   };
 
-  console.log('TRIGGERS HERE', ret.triggers);
+  // console.log('TRIGGERS HERE', ret.triggers);
   return ret;
 }
 
@@ -57,7 +57,7 @@ function profileMiddleware(id, dbUser) {
     username: dbUser.username,
     verified: dbUser.verified || false,
     profilePicture: dbUser.profilePic || '',
-    doc: helpers.timestampToDate(dbUser.signupTime),
+    doc: helpers.timestampToDate(dbUser.doc),
     age: getAge(dbUser.dob),
     pronouns: dbUser.pronouns || '',
     sexuality: dbUser.sexuality || '',
@@ -84,7 +84,7 @@ function postMiddleware(id, dbPost, userInfo) {
     likes: dbPost.numLikes,
     shares: dbPost.numShares,
   };
-  console.log('check BLURRED here', ret.blurred);
+  // console.log('check BLURRED here', ret.blurred);
   return ret;
 }
 

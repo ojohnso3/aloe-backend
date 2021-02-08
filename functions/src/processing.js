@@ -39,8 +39,7 @@ function userProcessing(user) {
   const ret = {
     email: userData.email,
     username: userData.username,
-    doc: userData.loginTime,
-    signupTime: timestamp,
+    doc: timestamp,
     loginTime: timestamp,
     type: 'USER',
     consent: userData.consent || true, // change eventually?
