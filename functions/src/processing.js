@@ -97,6 +97,11 @@ function postProcessing(post) {
     anonymous = false;
   }
 
+  let blurred = false;
+  if (postData.blurred === '1') {
+    blurred = true;
+  }
+
   const ret = {
     userID: postData.userid,
     createdAt: Timestamp.now(),
@@ -110,7 +115,7 @@ function postProcessing(post) {
     numShares: 0,
     numResponses: 0,
     anonymous: anonymous,
-    blurred: postData.blurred || false, // TODO: might have to check this value
+    blurred: blurred || false, // TODO: might have to check this value
     reported: false,
     removed: false,
     adminNotes: '',
