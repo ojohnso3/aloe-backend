@@ -8,11 +8,11 @@ function timestampToDate(timestamp) {
   }
   if (timestamp instanceof Timestamp) {
     // console.log('This is correct');
+    return timestamp.toDate();
   } else {
-    // console.log('This is WRONG: Timestamp');
+    // console.log('This is WRONG: Not Timestamp');
+    return new Date(timestamp);
   }
-
-  return timestamp.toDate();
 }
 
 function dateToTimestamp(date) {

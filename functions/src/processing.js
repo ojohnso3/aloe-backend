@@ -34,19 +34,18 @@ function topicParser(topicString) {
 function userProcessing(user) {
   const userData = JSON.parse(JSON.stringify(user));
 
+  const timestamp = helpers.dateToTimestamp(userData.loginTime);
+
   const ret = {
     email: userData.email,
     username: userData.username,
     doc: userData.loginTime,
-    signupTime: userData.loginTime,
-    loginTime: userData.loginTime,
+    signupTime: timestamp,
+    loginTime: timestamp,
     type: 'USER',
     consent: userData.consent || true, // change eventually?
     verified: false,
     profilePic: '',
-    // dob: userData.dob || '', // NOTE: added later in popup
-    // pronouns: userData.pronouns || '',
-    // sexuality: userData.sexuality || '',
     banned: {
       duration: 0,
       timestamp: '',
@@ -101,7 +100,7 @@ function postProcessing(post) {
 
   const ret = {
     userID: postData.userid,
-    createdAt: Timestamp.now(), // postData.timestamp
+    createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
     status: constants.PENDING,
     content: {
@@ -112,7 +111,7 @@ function postProcessing(post) {
     numShares: 0,
     numResponses: 0,
     anonymous: anonymous,
-    blurred: postData.blurred || false,
+    blurred: postData.blurred || false, // TODO: might have to check this value
     reported: false,
     removed: false,
     adminNotes: '',
@@ -142,8 +141,6 @@ function editProcessing(post) {
       delete ret[key];
     }
   }
-
-
   return {id: postData.postID, post: ret};
 }
 

@@ -1,6 +1,7 @@
 const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
 const processing = require('../processing.js');
+const helpers = require('../helpers.js');
 
 // Checks if username exists
 async function checkUsername(userData) {
@@ -27,8 +28,8 @@ async function createAccount(userData) {
 async function login(loginData) {
   const email = loginData.body.email;
   const loginTime = loginData.body.loginTime;
-  console.log('user info receiving', loginData.body);
 
+  // const timestamp = helpers.dateToTimestamp(loginTime);
 
   const users = db.collection('users');
   const currUser = await users.where('email', '==', email).where('removed', '==', false).get();
