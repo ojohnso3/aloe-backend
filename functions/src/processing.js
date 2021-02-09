@@ -35,7 +35,7 @@ function topicParser(topicString) {
 function userProcessing(user) {
   const userData = JSON.parse(JSON.stringify(user));
 
-  console.log('checking dob before processing', profileData.dob);
+  console.log('checking dob before processing', userData.dob);
   console.log('this is the middle step LOL');
   const timestamp = helpers.dateToTimestamp(userData.loginTime);
 
@@ -43,7 +43,7 @@ function userProcessing(user) {
     email: userData.email,
     username: userData.username,
     doc: timestamp,
-    dob: getTimestamp(profileData.dob), // process later
+    dob: getTimestamp(userData.dob), // process later
     loginTime: timestamp,
     type: 'USER',
     consent: userData.consent || true, // change eventually?

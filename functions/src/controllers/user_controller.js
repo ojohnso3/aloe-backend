@@ -19,6 +19,7 @@ async function checkUsername(userData) {
 
 // Create new user account (after auth verification)
 async function createAccount(userData) {
+  console.log('creating account');
   const processedUser = processing.userProcessing(userData.body);
   const newUser = db.collection('users').add(processedUser);
   return newUser; // TODO: return value
