@@ -40,6 +40,7 @@ function userProcessing(user) {
     email: userData.email,
     username: userData.username,
     doc: timestamp,
+    dob: getTimestamp(profileData.dob), // process later
     loginTime: timestamp,
     type: 'USER',
     consent: userData.consent || true, // change eventually?
@@ -75,7 +76,6 @@ function profileProcessing(profile) {
     username: profileData.username,
     consent: profileData.consent,
     profilePic: profileData.profilePic,
-    dob: getTimestamp(profileData.dob), // process later
     pronouns: processIdentity(profileData.pronouns),
     sexuality: processIdentity(profileData.sexuality),
     triggers: topicParser(profileData.triggers),
