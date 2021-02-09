@@ -4,6 +4,7 @@ const helpers = require('./helpers.js');
 
 
 function getTimestamp(dob) {
+  console.log('the dob is this: ', dob);
   if (!dob) {
     return ''; // could fail by type mismatch
   }
