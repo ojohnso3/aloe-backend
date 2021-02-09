@@ -52,8 +52,6 @@ async function getCreated(userData) { // TODO: created posts should also be anon
   const timestamp = userData.query.timestamp;
   const internal = userData.query.internal;
 
-  console.log('internal hrere', internal);
-
   if (userID === constants.ANONYMOUS_ID) {
     return getAnonymousCreated(timestamp);
   }
@@ -61,8 +59,7 @@ async function getCreated(userData) { // TODO: created posts should also be anon
   const posts = db.collection('posts');
 
   let created = [];
-  if (internal) {
-    console.log('yes internal');
+  if (internal == '1') {
     if (timestamp) {
       const processedTimestamp = helpers.dateToTimestamp(timestamp);
       if (processedTimestamp) {
@@ -72,7 +69,6 @@ async function getCreated(userData) { // TODO: created posts should also be anon
       created = await posts.where('userID', '==', userID).orderBy('createdAt', 'desc').limit(5).get();
     }
   } else {
-    console.log('no internal');
     if (timestamp) {
       const processedTimestamp = helpers.dateToTimestamp(timestamp);
       if (processedTimestamp) {
