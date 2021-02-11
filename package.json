@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "test": "mocha",
-    "start": "node ./bin/www"
+    "start": "PRODUCTION=True node ./bin/www",
+    "start:dev": "node ./bin/www",
+    "deploy": "cd functions && npm run deploy"
   },
   "dependencies": {
     "acorn": "^8.0.4",
