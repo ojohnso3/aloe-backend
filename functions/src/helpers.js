@@ -16,7 +16,7 @@ function timestampToDate(timestamp) {
 }
 
 function dateToTimestamp(date) {
-  console.log('the date is this: ', date);
+  // console.log('the date is this: ', date);
 
   if (!date) {
     return null;

@@ -123,6 +123,10 @@ async function removeTopic(topicData) {
 
   // Just in case there are duplicates
   await Promise.all(topicDoc.docs.map(async (doc) => {
+    const archived = doc.data();
+    archived['contentType'] = 'topics';
+    await db.collection('archive').doc(doc.id).set(archived);
+
     db.collection('topics').doc(doc.id).delete();
   }));
 

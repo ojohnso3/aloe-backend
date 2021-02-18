@@ -59,7 +59,7 @@ async function getCreated(userData) { // TODO: created posts should also be anon
   const posts = db.collection('posts');
 
   let created = [];
-  if (internal == '1') {
+  if (internal === '1') {
     if (timestamp) {
       const processedTimestamp = helpers.dateToTimestamp(timestamp);
       if (processedTimestamp) {
