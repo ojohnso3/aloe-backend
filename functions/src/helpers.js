@@ -88,7 +88,7 @@ module.exports = {
   getUserInfo,
   getAge,
   Timestamp,
-  FieldValue
+  FieldValue,
 };
 
 // async function getCreated(userID, timestamp) {
