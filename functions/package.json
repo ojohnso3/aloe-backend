@@ -5,8 +5,8 @@
     "emulate": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
-    "deploy:production": "PRODUCTION=True firebase deploy --only functions",
+    "deploy": "PRODUCTION=True firebase deploy --only functions",
+    "deploy:dev": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "lint": "eslint . --ext .js"
   },

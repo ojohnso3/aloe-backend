@@ -3,9 +3,8 @@ const middleware = require('../middleware.js');
 const processing = require('../processing.js');
 const helpers = require('../helpers.js');
 
-const FieldValue = require('firebase-admin').firestore.FieldValue;
-const increment = FieldValue.increment(1);
-const decrement = FieldValue.increment(-1);
+const increment = helpers.FieldValue.increment(1);
+const decrement = helpers.FieldValue.increment(-1);
 
 // Check if user has liked post
 async function checkLiked(parentData) {

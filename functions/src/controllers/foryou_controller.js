@@ -12,10 +12,10 @@ async function getPosts(post) {
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
     if (processedTimestamp) {
-      forYou = await posts.where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
+      forYou = await posts.where('status', '==', constants.APPROVED).orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
-    forYou = await posts.where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').limit(5).get();
+    forYou = await posts.where('status', '==', constants.APPROVED).orderBy('updatedAt', 'desc').limit(5).get();
   }
   if (forYou.empty) {
     console.log('Nothing for getPosts.');
@@ -41,10 +41,10 @@ async function getPostsByTopic(post) {
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
     if (processedTimestamp) {
-      forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
+      forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
-    forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('createdAt', 'desc').limit(5).get();
+    forYou = await posts.where('content.topics', 'array-contains', topic).where('status', '==', constants.APPROVED).orderBy('updatedAt', 'desc').limit(5).get();
   }
   if (forYou.empty) {
     console.log('No matching documents.');
@@ -82,10 +82,10 @@ async function getPrompts(promptData) {
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
     if (processedTimestamp) {
-      prompts = await collection.orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(5).get();
+      prompts = await collection.orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
-    prompts = await collection.orderBy('createdAt', 'desc').limit(5).get();
+    prompts = await collection.orderBy('updatedAt', 'desc').limit(5).get();
   }
 
   if (prompts.empty) {
@@ -106,7 +106,7 @@ async function getPrompts(promptData) {
 // Get Responses by ID
 async function getResponses(parentData) {
   const collection = db.collection('responses');
-  const responses = await collection.where('parentID', '==', parentData.query.id).get();
+  const responses = await collection.where('parentID', '==', parentData.query.id).orderBy('createdAt', 'desc').get();
   if (responses.empty) {
     console.log('No matching document for response.');
     return {results: []};

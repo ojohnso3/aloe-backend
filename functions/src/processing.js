@@ -1,7 +1,5 @@
 const constants = require('./constants.js');
-const Timestamp = require('firebase-admin').firestore.Timestamp;
 const helpers = require('./helpers.js');
-
 
 function getTimestamp(dob) {
   console.log('the dob is this: ', dob);
@@ -107,8 +105,8 @@ function postProcessing(post) {
 
   const ret = {
     userID: postData.userid,
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
+    createdAt: helpers.Timestamp.now(),
+    updatedAt: helpers.Timestamp.now(),
     status: constants.PENDING,
     content: {
       body: postData.content,
@@ -137,7 +135,7 @@ function editProcessing(post) {
   const postData = JSON.parse(JSON.stringify(post));
 
   const ret = {
-    'updatedAt': Timestamp.now(),
+    'updatedAt': helpers.Timestamp.now(),
     'content.body': postData.content,
     'content.topics': topicParser(postData.topics),
     'anonymous': postData.anonymous,
@@ -162,8 +160,8 @@ function responseProcessing(response) {
   const ret = {
     userID: responseData.userid,
     parentID: responseData.id,
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
+    createdAt: helpers.Timestamp.now(),
+    updatedAt: helpers.Timestamp.now(),
     body: responseData.body,
     anonymous: anonymous,
     numLikes: 0,
@@ -184,8 +182,8 @@ function promptProcessing(prompt) {
   const promptData = JSON.parse(JSON.stringify(prompt));
 
   const ret = {
-    createdAt: helpers.dateToTimestamp(promptData.timestamp) || Timestamp.now(),
-    updatedAt: Timestamp.now(),
+    createdAt: helpers.dateToTimestamp(promptData.timestamp) || helpers.Timestamp.now(),
+    updatedAt: helpers.Timestamp.now(),
     userID: constants.ALOE_ID,
     prompt: promptData.prompt,
     image: promptData.image,
@@ -214,8 +212,8 @@ function topicProcessing(topics) {
   const ret = {
     topic: topicsData.topic,
     description: topicsData.description || 'Definition will be uploaded soon!',
-    createdAt: helpers.dateToTimestamp(topicsData.timestamp) || Timestamp.now(),
-    updatedAt: Timestamp.now(),
+    createdAt: helpers.dateToTimestamp(topicsData.timestamp) || helpers.Timestamp.now(),
+    updatedAt: helpers.Timestamp.now(),
     source: topicsData.source,
   };
 

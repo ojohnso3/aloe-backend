@@ -54,10 +54,10 @@ async function getPostsByStatus(request) {
 
 // Change status of post
 async function moderatePost(postData) {
-  const updates = postData.body;
+  const updates = postData.body; // timestamp unnecessary
   const post = db.collection('posts').doc(updates.id);
-  const res = await post.update({status: updates.status, blurred: updates.blurred, adminNotes: updates.notes, updatedAt: updates.timestamp});
-  return res;
+  const res = await post.update({status: updates.status, blurred: updates.blurred, adminNotes: updates.notes, updatedAt: helpers.Timestamp.now()});
+  return true;
 }
 
 // Create new prompt
@@ -106,7 +106,7 @@ async function addTopic(topicData) {
   }
 
   await db.collection('topics').add(processedTopic);
-  return '1'; // res?
+  return '1';
 }
 
 // Remove topics to db

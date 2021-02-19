@@ -1,6 +1,7 @@
 const db = require('./firebase/db.js');
 const constants = require('./constants.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
+const FieldValue = require('firebase-admin').firestore.FieldValue;
 
 function timestampToDate(timestamp) {
   if (timestamp === undefined || !timestamp) {
@@ -86,6 +87,8 @@ module.exports = {
   dateToTimestamp,
   getUserInfo,
   getAge,
+  Timestamp,
+  FieldValue
 };
 
 // async function getCreated(userID, timestamp) {

@@ -68,7 +68,7 @@ function profileMiddleware(id, dbUser) {
 function postMiddleware(id, dbPost, userInfo) {
   const ret = {
     id,
-    timestamp: helpers.timestampToDate(dbPost.createdAt), // updated too?
+    timestamp: helpers.timestampToDate(dbPost.updatedAt), // created too?
     status: dbPost.status,
     userid: userInfo.userID,
     user: userInfo.username,
@@ -83,6 +83,7 @@ function postMiddleware(id, dbPost, userInfo) {
     blurred: dbPost.blurred,
     likes: dbPost.numLikes,
     shares: dbPost.numShares,
+    // add admin notes HERE??
   };
   // console.log('check BLURRED here', ret.blurred);
   return ret;
@@ -91,7 +92,7 @@ function postMiddleware(id, dbPost, userInfo) {
 function promptMiddleware(id, dbPrompt, userInfo, topResponse) {
   const ret = {
     id,
-    timestamp: helpers.timestampToDate(dbPrompt.createdAt), // updated too?
+    timestamp: helpers.timestampToDate(dbPrompt.updatedAt), // created too?
     userid: userInfo.userID,
     user: userInfo.username,
     profilePicture: userInfo.profilePic || '',
@@ -116,7 +117,7 @@ function responseMiddleware(id, dbResponse, userInfo) {
     content: dbResponse.body,
     anonymous: dbResponse.anonymous,
     likes: dbResponse.numLikes,
-    timestamp: helpers.timestampToDate(dbResponse.createdAt),
+    timestamp: helpers.timestampToDate(dbResponse.createdAt), // updated at?
     top: false, // TODO design
   };
   return ret;
@@ -129,7 +130,7 @@ function reportMiddleware(id, dbReport) {
     parentID: dbReport.parentID,
     type: dbReport.type,
     reason: dbReport.reason || 'What is the reason??',
-    timestamp: helpers.timestampToDate(dbReport.createdAt),
+    timestamp: helpers.timestampToDate(dbReport.createdAt), // updated at?
     status: dbReport.status,
   };
 
