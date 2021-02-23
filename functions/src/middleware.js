@@ -111,6 +111,7 @@ function promptMiddleware(id, dbPrompt, userInfo, topResponse) {
 function responseMiddleware(id, dbResponse, userInfo) {
   const ret = {
     id,
+    userid: userInfo.userID,
     user: userInfo.username,
     profilePicture: userInfo.profilePic || '',
     verified: userInfo.verified || false,
