@@ -32,7 +32,7 @@ function topicParser(topicString) {
 function userProcessing(user) {
   const userData = JSON.parse(JSON.stringify(user));
 
-  const timestamp = helpers.dateToTimestamp(Date()); // was userData.loginTime
+  const timestamp = helpers.Timestamp.now(); // was userData.loginTime
 
   const ret = {
     email: userData.email,
@@ -223,6 +223,22 @@ function topicProcessing(topics) {
   return ret;
 }
 
+function universityProcessing(university) {
+  const uniData = JSON.parse(JSON.stringify(university));
+
+  if (!uniData.university || !uniData.userid) {
+    return null;
+  }
+
+  const ret = {
+    university: uniData.university,
+    userID: uniData.userid,
+    createdAt: helpers.Timestamp.now(),
+  };
+
+  return ret;
+}
+
 module.exports = {
   userProcessing,
   profileProcessing,
@@ -231,6 +247,7 @@ module.exports = {
   responseProcessing,
   promptProcessing,
   topicProcessing,
+  universityProcessing,
 };
 
 

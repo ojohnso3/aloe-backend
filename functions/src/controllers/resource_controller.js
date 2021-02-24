@@ -1,5 +1,6 @@
 const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
+const processing = require('../processing.js');
 const helpers = require('../helpers.js');
 const csvtojson = require('csvtojson');
 
@@ -67,7 +68,16 @@ async function addResources() {
       });
 }
 
+// - Get Resources
+async function suggestUniversity(uniData) {
+  const processedUniversity = processing.universityProcessing(uniData.body);
+  await db.collection('universities').add(processedUniversity);
+
+  return true;
+}
+
 module.exports = {
   getResources,
   addResources,
+  suggestUniversity,
 };

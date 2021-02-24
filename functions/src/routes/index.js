@@ -23,12 +23,12 @@ function response(handler) {
 
 // Admin routes (CLEAN)
 router.get('/admin/login/:id', response(adminController.adminLogin)); // works
-router.get('/admin/posts', response(adminController.getPostsByStatus)); // works checkIfAuthenticated
+router.get('/admin/posts', checkIfAuthenticated, response(adminController.getPostsByStatus)); // works checkIfAuthenticated
 router.put('/admin/moderate', checkIfAuthenticated, response(adminController.moderatePost)); // works
-router.post('/admin/prompt', response(adminController.createPrompt)); // works checkIfAuthenticated
+router.post('/admin/prompt', checkIfAuthenticated, response(adminController.createPrompt)); // works checkIfAuthenticated
 router.put('/admin/prompt', checkIfAuthenticated, response(adminController.editPrompt)); // done but check
 router.get('/admin/topics', response(adminController.getTopics)); // works
-router.post('/admin/topic', response(adminController.addTopic)); // works checkIfAuthenticated
+router.post('/admin/topic', checkIfAuthenticated, response(adminController.addTopic)); // works checkIfAuthenticated
 router.put('/admin/topic', checkIfAuthenticated, response(adminController.editTopic)); // works
 router.post('/admin/topics', checkIfAuthenticated, response(adminController.removeTopic)); // works
 
@@ -80,6 +80,7 @@ router.put('/user/report', checkIfAuthenticated, response(reportController.repor
 // Resource routes (CLEAN)
 router.get('/resources/:id', response(resourceController.getResources)); // works
 router.post('/resources/add', response(resourceController.addResources)); // works
+router.post('/resources/uni', response(resourceController.suggestUniversity)); // works
 
 
 module.exports = router;
