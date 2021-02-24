@@ -3,6 +3,7 @@ const constants = require('./constants.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 
+
 function timestampToDate(timestamp) {
   if (timestamp === undefined || !timestamp) {
     return ''; // 'No timestamp.';
@@ -42,7 +43,7 @@ async function getUserInfo(userID, anonymous) {
         username: 'anonymous',
         profilePic: 'aloe.jpg', // link to image
         verified: true,
-        age: getAge(new Date()),
+        age: getAge(Date()),
         pronouns: 'any pronouns',
         sexuality: 'questioning',
       };

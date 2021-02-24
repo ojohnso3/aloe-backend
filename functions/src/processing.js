@@ -2,7 +2,6 @@ const constants = require('./constants.js');
 const helpers = require('./helpers.js');
 
 function getTimestamp(dob) {
-  console.log('the dob is this: ', dob);
   if (!dob) {
     return ''; // could fail by type mismatch
   }
@@ -33,18 +32,16 @@ function topicParser(topicString) {
 function userProcessing(user) {
   const userData = JSON.parse(JSON.stringify(user));
 
-  console.log('checking dob before processing', userData.dob);
-  console.log('this is the middle step LOL');
-  const timestamp = helpers.dateToTimestamp(userData.loginTime);
+  const timestamp = helpers.dateToTimestamp(Date()); // was userData.loginTime
 
   const ret = {
     email: userData.email,
     username: userData.username,
     doc: timestamp,
-    dob: getTimestamp(userData.dob), // process later
+    dob: getTimestamp(userData.dob),
     loginTime: timestamp,
     type: 'USER',
-    consent: userData.consent || true, // change eventually?
+    consent: userData.consent || false,
     verified: false,
     profilePic: '',
     banned: {

@@ -34,6 +34,7 @@ async function adminLogin(adminData) {
 async function getPostsByStatus(request) {
   const posts = db.collection('posts');
   const status = request.query.status || 'ALL'; // If the status is undefined, make it 'ALL'
+  console.log('STATUS', status)
 
   const selected = status === 'ALL' ?
     await posts.orderBy('createdAt', 'desc').get() :
