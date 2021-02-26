@@ -96,7 +96,7 @@ async function getPrompts(promptData) {
   const finalPrompts = [];
   await Promise.all(prompts.docs.map(async (doc) => {
     const topResponse = await getTopResponse(doc.id);
-    const userInfo = await helpers.getUserInfo(constants.ALOE_ID, false);
+    const userInfo = await helpers.getUserInfo(constants.ALOE_ID, false); // SET FALSE
     finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), userInfo, topResponse));
   }));
 
@@ -106,7 +106,7 @@ async function getPrompts(promptData) {
 // Get Responses by ID
 async function getResponses(parentData) {
   const collection = db.collection('responses');
-  const responses = await collection.where('parentID', '==', parentData.query.id).orderBy('createdAt', 'desc').get();
+  const responses = await collection.where('parentID', '==', parentData.body.id).orderBy('createdAt', 'desc').get();
   if (responses.empty) {
     console.log('No matching document for response.');
     return {results: []};
@@ -114,7 +114,7 @@ async function getResponses(parentData) {
 
   const finalResponses = [];
   await Promise.all(responses.docs.map(async (doc) => {
-    const userInfo = await helpers.getUserInfo(doc.data().userID, false);
+    const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
     finalResponses.push(middleware.responseMiddleware(doc.id, doc.data(), userInfo));
   }));
 

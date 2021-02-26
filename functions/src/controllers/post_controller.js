@@ -54,7 +54,7 @@ async function createResponse(responseData) {
   await prompt.update({numResponses: increment});
 
   const doc = await newResponse.get();
-  const userInfo = await helpers.getUserInfo(doc.data().userID, false);
+  const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
 
   return {results: middleware.responseMiddleware(doc.id, doc.data(), userInfo)};
 }

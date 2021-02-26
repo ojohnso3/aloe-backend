@@ -33,7 +33,6 @@ function dateToTimestamp(date) {
 }
 
 async function getUserInfo(userID, anonymous) {
-  console.log('first anon', anonymous)
   const userDoc = await db.collection('users').doc(userID).get();
   let userInfo = {};
   if (anonymous || !userDoc.exists) {
@@ -59,7 +58,6 @@ async function getUserInfo(userID, anonymous) {
         pronouns: userDoc.data().pronouns || '',
         sexuality: userDoc.data().sexuality || '',
       };
-      console.log("goes here if ANON", userInfo.userID)
     }
   } else {
     userInfo = {
@@ -72,7 +70,6 @@ async function getUserInfo(userID, anonymous) {
       sexuality: userDoc.data().sexuality || '',
     };
   }
-  console.log('check again userinfo id', userInfo.userID)
   return userInfo;
 }
 

@@ -37,7 +37,7 @@ async function getAnonymousCreated(timestamp) {
 
   const createdPosts = [];
   await Promise.all(created.docs.map(async (doc) => {
-    const userInfo = await helpers.getUserInfo(constants.ANONYMOUS_ID, false);
+    const userInfo = await helpers.getUserInfo(constants.ANONYMOUS_ID, true); // SET TO TRUE
     createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 
@@ -86,7 +86,7 @@ async function getCreated(userData) { // TODO: created posts should also be anon
 
   const createdPosts = [];
   await Promise.all(created.docs.map(async (doc) => {
-    const userInfo = await helpers.getUserInfo(userID, false);
+    const userInfo = await helpers.getUserInfo(userID, doc.data().anonymous); // WAS set to false
     createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 
