@@ -18,7 +18,6 @@ async function parseCSV(csvData) {
 const createResources = async (csvData) => {
   const parsedPosts = await parseCSV(csvData);
   parsedPosts.map(async (post) => {
-
     await db.collection('posts').add(post)
         .then(() => {
           console.log('successfully uploaded post');

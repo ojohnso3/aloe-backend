@@ -44,7 +44,7 @@ async function getUserInfo(userID, anonymous) {
         username: 'Anonymous',
         profilePic: 'aloe.jpg', // link to image
         verified: true,
-        age: "",
+        age: '',
         pronouns: '',
         sexuality: '',
       };
