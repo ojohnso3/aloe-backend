@@ -56,9 +56,9 @@ async function getUserInfo(userID, anonymous) {
         username: anonDoc.data().username,
         profilePic: anonDoc.data().profilePic,
         verified: true,
-        age: getAge(timestampToDate(userDoc.data().dob)),
-        pronouns: userDoc.data().pronouns,
-        sexuality: userDoc.data().sexuality,
+        age: getAge(timestampToDate(userDoc.data().dob)) || '',
+        pronouns: userDoc.data().pronouns || '',
+        sexuality: userDoc.data().sexuality || '',
       };
     }
   } else {
@@ -67,9 +67,9 @@ async function getUserInfo(userID, anonymous) {
       username: userDoc.data().username,
       profilePic: userDoc.data().profilePic,
       verified: userDoc.data().verified,
-      age: getAge(timestampToDate(userDoc.data().dob)),
-      pronouns: userDoc.data().pronouns,
-      sexuality: userDoc.data().sexuality,
+      age: getAge(timestampToDate(userDoc.data().dob)) || '',
+      pronouns: userDoc.data().pronouns || '',
+      sexuality: userDoc.data().sexuality || '',
     };
   }
   return userInfo;
