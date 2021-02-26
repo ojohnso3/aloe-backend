@@ -2,6 +2,7 @@ const db = require('./firebase/db.js');
 const constants = require('./constants.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 const FieldValue = require('firebase-admin').firestore.FieldValue;
+const csvtojson = require('csvtojson');
 
 
 function timestampToDate(timestamp) {
@@ -40,12 +41,12 @@ async function getUserInfo(userID, anonymous) {
       console.log('ERROR: no Anonymous account');
       userInfo = {
         userID: constants.ANONYMOUS_ID,
-        username: 'anonymous',
+        username: 'Anonymous',
         profilePic: 'aloe.jpg', // link to image
         verified: true,
-        age: getAge(Date()),
-        pronouns: 'any pronouns',
-        sexuality: 'questioning',
+        age: "",
+        pronouns: '',
+        sexuality: '',
       };
     } else {
       userInfo = {
@@ -53,9 +54,9 @@ async function getUserInfo(userID, anonymous) {
         username: anonDoc.data().username,
         profilePic: anonDoc.data().profilePic,
         verified: true,
-        age: getAge(timestampToDate(anonDoc.data().dob)),
-        pronouns: anonDoc.data().pronouns,
-        sexuality: anonDoc.data().sexuality,
+        age: getAge(timestampToDate(userDoc.data().dob)),
+        pronouns: userDoc.data().pronouns,
+        sexuality: userDoc.data().sexuality,
       };
     }
   } else {
@@ -88,6 +89,7 @@ module.exports = {
   dateToTimestamp,
   getUserInfo,
   getAge,
+  csvtojson,
   Timestamp,
   FieldValue,
 };

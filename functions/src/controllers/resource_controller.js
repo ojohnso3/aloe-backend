@@ -2,7 +2,6 @@ const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
 const processing = require('../processing.js');
 const helpers = require('../helpers.js');
-const csvtojson = require('csvtojson');
 
 
 // - Get Resources
@@ -61,7 +60,7 @@ const createResources = async (csvData) => {
 };
 
 async function addResources() {
-  csvtojson()
+  helpers.csvtojson()
       .fromFile('./functions/src/resources.csv')
       .then((csvData) => {
         createResources(csvData);
