@@ -110,6 +110,8 @@ function promptMiddleware(id, dbPrompt, userInfo, topResponse) {
 
 function responseMiddleware(id, dbResponse, userInfo) {
 
+  console.log('anon + id', dbResponse.anonymous + '+' + userInfo.userID)
+
   const ret = {
     id,
     userid: userInfo.userID,
