@@ -109,6 +109,9 @@ function promptMiddleware(id, dbPrompt, userInfo, topResponse) {
 }
 
 function responseMiddleware(id, dbResponse, userInfo) {
+  console.log('dbResponse', dbResponse)
+  console.log('userInfo', userInfo)
+
   const ret = {
     id,
     userid: userInfo.userID,
@@ -121,6 +124,7 @@ function responseMiddleware(id, dbResponse, userInfo) {
     timestamp: helpers.timestampToDate(dbResponse.createdAt), // updated at?
     top: false, // TODO design
   };
+  console.log('response ret', ret)
   return ret;
 }
 
