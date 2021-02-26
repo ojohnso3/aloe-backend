@@ -34,8 +34,6 @@ function dateToTimestamp(date) {
 
 async function getUserInfo(userID, anonymous) {
   const userDoc = await db.collection('users').doc(userID).get();
-  console.log('userdoc', userDoc.data())
-  console.log('anon', anonymous)
   let userInfo = {};
   if (anonymous || !userDoc.exists) {
     const anonDoc = await db.collection('users').doc(constants.ANONYMOUS_ID).get();
