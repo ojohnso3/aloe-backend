@@ -83,7 +83,7 @@ function postMiddleware(id, dbPost, userInfo) {
     blurred: dbPost.blurred,
     likes: dbPost.numLikes,
     shares: dbPost.numShares,
-    // add admin notes HERE??
+    notes: dbPost.adminNotes,
   };
   // console.log('check BLURRED here', ret.blurred);
   return ret;
@@ -96,7 +96,7 @@ function promptMiddleware(id, dbPrompt, userInfo, topResponse) {
     userid: userInfo.userID,
     user: userInfo.username,
     profilePicture: userInfo.profilePic || '',
-    verified: userInfo.verified || false,
+    verified: userInfo.verified || true,
     question: dbPrompt.prompt,
     image: dbPrompt.image,
     topics: dbPrompt.topics,
