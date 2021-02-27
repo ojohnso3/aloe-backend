@@ -16,7 +16,7 @@ async function checkLiked(parentData) {
   const likedUsers = db.collection(type).doc(parentID).collection('likes');
 
   const userDoc = await likedUsers.where('userID', '==', userID).get();
-  console.log('check like userdoc size', userDoc.length);
+  console.log('check like userdoc size', userDoc.docs.length);
 
   if (userDoc.empty) {
     console.log('User has not liked.');
