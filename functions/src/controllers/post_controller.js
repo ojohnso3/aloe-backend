@@ -116,12 +116,17 @@ async function likeContent(parentData) {
   const user = db.collection('users').doc(userID);
 
   const docArr = await parent.collection('likes').where('userID', '==', userID).get();
-  if (docArr.size !== 1) {
-    console.log('ERROR: should like once');
+  if (docArr.size > 0) {
+    console.log('User already liked');
     liked = '1';
   }
 
   if (liked === '1') {
+    // const docArr = await parent.collection('likes').where('userID', '==', userID).get();
+    // if (docArr.size !== 1) {
+    //   console.log('ERROR: should like once');
+    // }
+
     docArr.forEach(function(doc) {
       doc.ref.delete();
     });
