@@ -108,7 +108,7 @@ async function likeContent(parentData) {
   console.log('create like data', parentData.body);
   const parentID = parentData.body.id;
   const userID = parentData.body.user;
-  const liked = parentData.body.liked;
+  let liked = parentData.body.liked;
   const timestamp = parentData.body.timestamp;
   const type = parentData.body.type;
 
@@ -116,12 +116,12 @@ async function likeContent(parentData) {
   const user = db.collection('users').doc(userID);
 
   const docArr = await parent.collection('likes').where('userID', '==', userID).get();
-  console.log('doc1', docArr.size)
-  console.log('doc1', docArr.docs.length)
-  if (docArr.docs.length > 0) {
+
+  if (docArr.size > 0) {
     console.log('User already liked');
     liked = '1';
   }
+  console.log('check 0')
 
   if (liked === '1') {
     // const docArr = await parent.collection('likes').where('userID', '==', userID).get();
@@ -148,8 +148,11 @@ async function likeContent(parentData) {
       });
     }
   } else {
+    console.log('check 4')
     await parent.collection('likes').add({userID: userID, timestamp: helpers.dateToTimestamp(timestamp)});
     await parent.update({numLikes: increment});
+
+    console.log('check 5')
 
     if (type === 'posts') {
       await user.collection('liked').add({parentID: parentID, timestamp: helpers.dateToTimestamp(timestamp)});
