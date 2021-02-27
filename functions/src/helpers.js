@@ -54,9 +54,12 @@ async function getUserInfo(userID, anonymous) {
         username: anonDoc.data().username,
         profilePic: anonDoc.data().profilePic,
         verified: true,
-        age: getAge(timestampToDate(userDoc.data().dob)) || '',
-        pronouns: userDoc.data().pronouns || '',
-        sexuality: userDoc.data().sexuality || '',
+        age: '',
+        pronouns: '',
+        sexuality: '',
+        // age: getAge(timestampToDate(userDoc.data().dob)) || '',
+        // pronouns: userDoc.data().pronouns || '',
+        // sexuality: userDoc.data().sexuality || '',
       };
     }
   } else {
