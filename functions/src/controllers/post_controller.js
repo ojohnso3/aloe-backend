@@ -8,7 +8,7 @@ const decrement = helpers.FieldValue.increment(-1);
 
 // Check if user has liked post
 async function checkLiked(parentData) {
-  console.log('check like data', parentData.query);
+  // console.log('check like data', parentData.query);
   const parentID = parentData.query.id;
   const userID = parentData.query.userid;
   const type = parentData.query.type; // posts, prompts, responses
@@ -16,13 +16,12 @@ async function checkLiked(parentData) {
   const likedUsers = db.collection(type).doc(parentID).collection('likes');
 
   const userDoc = await likedUsers.where('userID', '==', userID).get();
-  console.log('check like userdoc size', userDoc.docs.length);
 
   if (userDoc.empty) {
-    console.log('User has not liked.');
+    // console.log('User has not liked.');
     return false;
   } else {
-    console.log('User has liked.');
+    // console.log('User has liked.');
     return true;
   }
 }
@@ -93,7 +92,7 @@ async function removeContent(parentData) {
 
   const likes = await parent.collection('likes').get();
   if (!likes.empty) {
-    console.log('Transferring likes...');
+    // console.log('Transferring likes...');
     likes.docs.map(async (likeDoc) => {
       await db.collection('archive').doc(id).collection('likes').add(likeDoc.data());
       await likeDoc.ref.delete();
@@ -105,7 +104,7 @@ async function removeContent(parentData) {
 
 // Like content
 async function likeContent(parentData) {
-  console.log('create like data', parentData.body);
+  // console.log('create like data', parentData.body);
   const parentID = parentData.body.id;
   const userID = parentData.body.user;
   let liked = parentData.body.liked;
@@ -118,7 +117,7 @@ async function likeContent(parentData) {
   const docArr = await parent.collection('likes').where('userID', '==', userID).get();
 
   if (docArr.size > 0) {
-    console.log('User already liked');
+    // console.log('User already liked');
     liked = '1';
   }
 
@@ -143,10 +142,7 @@ async function likeContent(parentData) {
       });
     }
   } else {
-    console.log('before adding to likes 2', userID);
-    const res = await parent.collection('likes').add({userID: userID, timestamp: helpers.dateToTimestamp(timestamp)});
-    console.log('after adding to likes', res);
-
+    await parent.collection('likes').add({userID: userID, timestamp: helpers.dateToTimestamp(timestamp)});
     await parent.update({numLikes: increment});
 
     if (type === 'posts') {
