@@ -8,6 +8,7 @@ const decrement = helpers.FieldValue.increment(-1);
 
 // Check if user has liked post
 async function checkLiked(parentData) {
+  console.log('check like data', parentData.query);
   const parentID = parentData.query.id;
   const userID = parentData.query.userid;
   const type = parentData.query.type; // posts, prompts, responses
@@ -15,6 +16,7 @@ async function checkLiked(parentData) {
   const likedUsers = db.collection(type).doc(parentID).collection('likes');
 
   const userDoc = await likedUsers.where('userID', '==', userID).get();
+  console.log('check like userdoc size', userDoc.length);
 
   if (userDoc.empty) {
     console.log('User has not liked.');
@@ -103,6 +105,7 @@ async function removeContent(parentData) {
 
 // Like content
 async function likeContent(parentData) {
+  console.log('create like data', parentData.body);
   const parentID = parentData.body.id;
   const userID = parentData.body.user;
   const liked = parentData.body.liked;
@@ -112,39 +115,34 @@ async function likeContent(parentData) {
   const parent = db.collection(type).doc(parentID);
   const user = db.collection('users').doc(userID);
 
-  let res = null;
-
   if (liked === '1') {
     const docArr = await parent.collection('likes').where('userID', '==', userID).get();
     if (docArr.size !== 1) {
       console.log('ERROR: should like once');
-      return null;
     }
     docArr.forEach(function(doc) {
-      res = doc.ref.delete();
+      doc.ref.delete();
     });
+    await parent.update({numLikes: decrement});
 
     if (type === 'posts') {
       const userArr = await user.collection('liked').where('parentID', '==', parentID).get();
       if (userArr.size !== 1) {
         console.log('ERROR: should like once');
-        return null;
       }
       userArr.forEach(function(doc) {
         doc.ref.delete();
       });
     }
-    await parent.update({numLikes: decrement});
-    return res;
   } else {
-    res = await parent.collection('likes').add({userID: userID, timestamp: helpers.dateToTimestamp(timestamp)});
+    await parent.collection('likes').add({userID: userID, timestamp: helpers.dateToTimestamp(timestamp)});
     await parent.update({numLikes: increment});
 
     if (type === 'posts') {
       await user.collection('liked').add({parentID: parentID, timestamp: helpers.dateToTimestamp(timestamp)});
     }
-    return res;
   }
+  return true;
 }
 
 // Share post
