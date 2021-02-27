@@ -121,7 +121,6 @@ async function likeContent(parentData) {
     console.log('User already liked');
     liked = '1';
   }
-  console.log('check 0')
 
   if (liked === '1') {
     // const docArr = await parent.collection('likes').where('userID', '==', userID).get();
@@ -129,14 +128,10 @@ async function likeContent(parentData) {
     //   console.log('ERROR: should like once');
     // }
 
-    console.log('check 1')
-
     docArr.forEach(function(doc) {
       doc.ref.delete();
     });
-    console.log('check 2')
     await parent.update({numLikes: decrement});
-    console.log('check 3')
 
     if (type === 'posts') {
       const userArr = await user.collection('liked').where('parentID', '==', parentID).get();
@@ -148,11 +143,12 @@ async function likeContent(parentData) {
       });
     }
   } else {
-    console.log('check 4')
-    await parent.collection('likes').add({userID: userID, timestamp: helpers.dateToTimestamp(timestamp)});
-    await parent.update({numLikes: increment});
+    console.log('before adding to likes 1', parent.data());
+    console.log('before adding to likes 2', userID);
+    const res = await parent.collection('likes').add({userID: userID, timestamp: helpers.dateToTimestamp(timestamp)});
+    console.log('after adding to likes', res);
 
-    console.log('check 5')
+    await parent.update({numLikes: increment});
 
     if (type === 'posts') {
       await user.collection('liked').add({parentID: parentID, timestamp: helpers.dateToTimestamp(timestamp)});
