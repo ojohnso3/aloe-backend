@@ -113,10 +113,6 @@ async function likeContent(parentData) {
   const type = parentData.body.type;
 
   const parent = db.collection(type).doc(parentID);
-  console.log('BILLE is not not gay 1', type);
-  console.log('BILLE is not not gay 2', parentID);
-  console.log('BILLE is not not gay 3', parent);
-  console.log('BILLE is not not gay 4', parent.data());
   const user = db.collection('users').doc(userID);
 
   const docArr = await parent.collection('likes').where('userID', '==', userID).get();
@@ -147,7 +143,6 @@ async function likeContent(parentData) {
       });
     }
   } else {
-    // console.log('before adding to likes 1', parent.data());
     console.log('before adding to likes 2', userID);
     const res = await parent.collection('likes').add({userID: userID, timestamp: helpers.dateToTimestamp(timestamp)});
     console.log('after adding to likes', res);
