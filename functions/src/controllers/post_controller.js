@@ -116,7 +116,9 @@ async function likeContent(parentData) {
   const user = db.collection('users').doc(userID);
 
   const docArr = await parent.collection('likes').where('userID', '==', userID).get();
-  if (docArr.size > 0) {
+  console.log('doc1', docArr.size)
+  console.log('doc1', docArr.docs.length)
+  if (docArr.docs.length > 0) {
     console.log('User already liked');
     liked = '1';
   }
@@ -127,10 +129,14 @@ async function likeContent(parentData) {
     //   console.log('ERROR: should like once');
     // }
 
+    console.log('check 1')
+
     docArr.forEach(function(doc) {
       doc.ref.delete();
     });
+    console.log('check 2')
     await parent.update({numLikes: decrement});
+    console.log('check 3')
 
     if (type === 'posts') {
       const userArr = await user.collection('liked').where('parentID', '==', parentID).get();
