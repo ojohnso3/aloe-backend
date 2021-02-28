@@ -151,8 +151,8 @@ async function editProfile(profileData) {
   const processedProfile = processing.profileProcessing(profileData.body);
 
   const user = db.collection('users').doc(profileData.body.id);
-  const res = await user.update(processedProfile);
-  return res; // TODO: return value
+  await user.update(processedProfile);
+  return true;
 }
 
 module.exports = {
@@ -161,31 +161,3 @@ module.exports = {
   getLiked,
   editProfile,
 };
-
-// const likedPosts = await Promise.all(liked.docs.map(async (doc) => {
-//   const postID = doc.data().postID;
-//   const likedPost = await posts.doc(postID).get();
-//   if (!likedPost.exists) {
-//     console.log('No document with postid: ' + postID);
-//     return;
-//   }
-//   const likedUser = await db.collection('users').doc(likedPost.data().userID).get();
-//   middleware.postMiddleware(likedPost.id, likedPost.data(), likedUser.data().username)
-// }))
-// returns null ??
-
-// if(profile.docs.length != 1 ) {
-//   console.log('ERROR: More than one user with the same username.')
-// }
-// const userDoc = profile.docs[0];
-// return middleware.userMiddleware(userDoc.id, userDoc.data());
-
-// return helpers.getCreated(userData.body.id, userData.body.timestamp);
-// Before helper
-// const posts = db.collection('posts');
-// const created = await posts.where('userID', '==', userData.body.userID).get(); // .where('removed', '==', false)
-// if (created.empty) {
-//   console.log('No matching document.');
-//   return;
-// }
-// return {results: created.docs.map((doc) => middleware.postMiddleware(doc.id, doc.data()))};

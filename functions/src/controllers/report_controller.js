@@ -60,9 +60,9 @@ async function reportPost(reportData) {
 // Report response
 async function reportResponse(reportData) {
   const response = db.collection('responses').doc(reportData.body.responseID);
-  const res = await response.update({removed: true});
+  await response.update({removed: true});
 
-  return res;
+  return true;
 }
 
 // Report User
@@ -73,9 +73,9 @@ async function reportUser(reportData) {
   const timestamp = reportData.body.timestamp;
 
   const user = db.collection('users').doc(userID);
-  const res = await user.update({banned: {duration: duration, timestamp: timestamp, reason: reason}});
+  await user.update({banned: {duration: duration, timestamp: timestamp, reason: reason}});
   console.log('reason: ', reason); // how to self-check??
-  return res;
+  return true;
 }
 
 // Unban a user
@@ -84,8 +84,8 @@ async function unbanUser(userData) {
   const userDoc = await user.get();
   const banned = userDoc.data().banned;
 
-  const res = await user.update({banned: {duration: 0, reason: 'Unbanned. Previous ban was on ' + banned.timestamp + ' for ' + banned.duration + ' days because' + banned.reason}});
-  return res;
+  await user.update({banned: {duration: 0, reason: 'Unbanned. Previous ban was on ' + banned.timestamp + ' for ' + banned.duration + ' days because' + banned.reason}});
+  return true;
 }
 
 // Load reported posts
@@ -187,13 +187,13 @@ async function reactivateUser(emailData) {
 
   if (!userData.data().removed) {
     console.log('User is currently active!');
-    return null;
+    return false;
   }
 
   const user = db.collection('users').doc(userData.id);
 
-  const res = await user.update({removed: false});
-  return res; // TODO: return
+  await user.update({removed: false});
+  return true;
 }
 
 
@@ -209,29 +209,3 @@ module.exports = {
   unbanUser,
   reactivateUser,
 };
-
-// switch(type) {
-//   case 'POST':
-//     await db.collection('posts').doc(postID).update({reported: true});
-//     db.collection('posts').doc(id).collection('reports').add(newReport);
-//     break;
-//   case 'COMMENT':
-//     const commentCollection = db.collection('posts').doc(postID).collection('comments').doc(commentID);
-//     const comment = commentCollection;
-//     await comment.update({reported: true});
-//     commentCollection.collection('reports').add(newReport);
-//     break;
-//   case 'USER':
-//     const user = db.collection('users').doc(reportedUser);
-//     await user.update({reported: true});
-//     db.collection('users').doc(reportedUser).collection('reports').add(newReport);
-//     break;
-//   default:
-//     // error -- return failure if error
-//     console.log('ERROR: Reporting type ' + type + ' is invalid.')
-//     break;
-// }
-
-// reportPost,
-// reportComment,
-// reportUser

@@ -4,7 +4,7 @@ const processing = require('../processing.js');
 const helpers = require('../helpers.js');
 
 
-// - Get Resources
+// Get Resources
 async function getResources(type) {
   const allResources = db.collection('resources');
   const resources = await allResources.where('type', '==', type.params.id).get();
@@ -12,7 +12,6 @@ async function getResources(type) {
     console.log('No matching documents for getResources.');
     return;
   }
-  // console.log('resources length', resources.docs.length)
 
   return {results: resources.docs.map((doc) => middleware.resourceMiddleware(doc.id, doc.data()))};
 }
@@ -67,7 +66,7 @@ async function addResources() {
       });
 }
 
-// - Get Resources
+// Add University
 async function suggestUniversity(uniData) {
   const processedUniversity = processing.universityProcessing(uniData.body);
   if(!processedUniversity) {

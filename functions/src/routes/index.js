@@ -84,37 +84,3 @@ router.post('/resources/uni', response(resourceController.suggestUniversity)); /
 
 
 module.exports = router;
-
-// TODO: Figure out drafting
-// router.delete('/post/removep', response(postController.removePost));
-// router.post('/post/draft', response(postController.draftPost));
-
-// router.get('/foryou/prompt', response(foryouController.getRecentPrompt)); // works
-// router.get('/foryou/chosen', response(foryouController.checkChosenAnswer)); // works
-// router.get('/foryou/results', response(foryouController.getSurveyResults)); // works
-// router.post('/foryou/choose', response(foryouController.chooseAnswer)); // works
-
-
-// router.put('/admin/notes', checkIfAuthenticated, response(adminController.updateNotes)); // done but check
-// router.get('/comment/liked', response(postController.checkLikedComment)); // works
-// router.put('/comment/remove', response(postController.removeComment)); // works
-
-// router.get('/content/surveys', response(foryouController.getSurveys)); // tbd
-// router.put('/post/save', response(postController.savePost)); // tested
-// router.get('/admin/post/:id', response(adminController.viewPost));
-
-// old response:
-// return async (req, res, next) => {
-//   res.send(handler(req, res, next)); // catch
-// };
-
-// router.get('/test', response(testingFunction));
-// router.post('/newpost', response(addNewPost));
-// router.post('/login', response(loginUser));
-// router.post('/newuser', response(addNewUser));
-// router.put('/updateuser', response(updateUser));
-
-/* Home page default */
-// router.get('/', function(req, res, next) {
-//   res.render('index', {title: 'Express'});
-// });

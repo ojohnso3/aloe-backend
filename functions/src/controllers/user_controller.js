@@ -60,7 +60,7 @@ async function deleteAccount(userData) {
     console.log('No such user.');
     return;
   }
-  const res = await user.update({removed: true});
+  await user.update({removed: true});
 
   const createdPosts = await db.collection('posts').where('userID', '==', userDoc.id).get();
   if (createdPosts.empty) {
@@ -81,7 +81,7 @@ async function deleteAccount(userData) {
       }
     });
   }
-  return res; // TODO: return value
+  return true;
 }
 
 

@@ -69,8 +69,8 @@ async function editPost(postData) {
   }
 
   const post = db.collection('posts').doc(processedEdits.id);
-  const res = await post.update(processedEdits.post);
-  return res;
+  await post.update(processedEdits.post);
+  return true;
 }
 
 // Remove post/response
@@ -108,7 +108,6 @@ async function likeContent(parentData) {
   const parentID = parentData.body.id;
   const userID = parentData.body.user;
   let liked = parentData.body.liked;
-  const timestamp = parentData.body.timestamp;
   const type = parentData.body.type;
 
   const parent = db.collection(type).doc(parentID);
@@ -142,11 +141,11 @@ async function likeContent(parentData) {
       });
     }
   } else {
-    await parent.collection('likes').add({userID: userID, timestamp: helpers.dateToTimestamp(timestamp)});
+    await parent.collection('likes').add({userID: userID, timestamp: helpers.Timestamp.now()});
     await parent.update({numLikes: increment});
 
     if (type === 'posts') {
-      await user.collection('liked').add({parentID: parentID, timestamp: helpers.dateToTimestamp(timestamp)});
+      await user.collection('liked').add({parentID: parentID, timestamp: helpers.Timestamp.now()});
     }
   }
   return true;
@@ -157,11 +156,10 @@ async function shareContent(parentData) {
   const parentID = parentData.body.id;
   const userID = parentData.body.userid;
   const type = parentData.body.type;
-  const timestamp = postData.body.timestamp;
 
   const sharedContent = db.collection(type).doc(parentID);
   await sharedContent.update({numShares: increment});
-  return await sharedContent.collection('shares').add({userID: userID, timestamp: timestamp});
+  return await sharedContent.collection('shares').add({userID: userID, timestamp: helpers.Timestamp.now()});
 }
 
 module.exports = {
@@ -173,234 +171,3 @@ module.exports = {
   likeContent,
   shareContent,
 };
-
-
-// // Delete post (TBD)
-// async function remove(parentData) {
-//   const id = parentData.body.id;
-//   const type = parentData.body.type;
-//   const parent = db.collection(type).doc(id);
-//   const doc = await parent.get();
-//   const archived = doc.data();
-//   archived['contentType'] = type;
-//   const res = await db.collection('archive').add(archived);
-
-//   const likes = await parent.collection('likes').get();
-//   if (!likes.empty) {
-//     console.log('Deleting likes...');
-//     likes.forEach(function(doc) {
-//       doc.ref.delete();
-//     });
-//   }
-//   await parent.delete();
-//   return res; // TODO return value
-// }
-
-
-// async function getUserInfo(userID) {
-//   const userDoc = await db.collection('users').doc(userID).get();
-//   var userInfo = {};
-//   if (!userDoc.exists) {
-//     console.log('No matching user document.'); // return an error here
-//   } else {
-//     userInfo = {
-//       username: userDoc.data().username,
-//       profilePic: userDoc.data().profilePic,
-//       verified: userDoc.data().verified,
-//     }
-//   }
-//   return userInfo;
-// }
-
-// const likes = likesRef.docs.map(doc => doc.data());
-
-// var newLikes = doc.data().likes;
-// if (newLikes.includes(user)) {
-//   newLikes.splice((newLikes).indexOf(user), 1);
-// } else {
-//   newLikes.push(user);
-// }
-// await post.update({likes: newLikes}); // const res = return res
-// const updatedPost = await post.get()
-
-// addToSubCollection(user, updatedPost, 'liked') // original post stored
-
-// return middleware.postMiddleware(updatedPost.id, updatedPost.data());
-// db.collection('posts').doc(commentData.body.postID).collection('comments').add(commentData.body.comment);
-// // const commentDoc = await comment.get()
-// // return commentDoc;
-// const updatedPost = await db.collection('posts').doc(commentData.body.postID).get();
-// return middleware.postMiddleware(updatedPost.id, updatedPost.data());
-
-
-// OLD
-
-// // also add to users liked subcollection (cloud function?)
-// // original version stored (what happens with changes?)
-// async function addToSubCollection(user, post, subcollection) {
-//   // console.log('sub user', user)
-//   // console.log('sub post', post)
-//   // console.log('sub collection', subcollection)
-
-//   const fullDoc = await db.collection('users').doc(user).collection(subcollection).doc(post.id)
-//   const docDetails = await fullDoc.get()
-
-//   if (docDetails.data()) {
-//     console.log('Removing from subcollection');
-//     fullDoc.delete();
-//   } else{
-//     console.log('Adding to subcolleciton');
-//     const postData = post.data();
-//     postData['id'] = post.id;
-//     fullDoc.set(postData);
-//   }
-// }
-
-// // Like post
-// async function likePost(likeData) {
-//   const postID = likeData.body.id;
-//   const user = likeData.body.user;
-
-//   const post = db.collection('posts').doc(postID);
-//   const doc = await post.get();
-//   var newLikes = doc.data().likes;
-//   if (newLikes.includes(user)) {
-//     newLikes.splice((newLikes).indexOf(user), 1);
-//   } else {
-//     newLikes.push(user);
-//   }
-//   await post.update({likes: newLikes}); // const res = return res
-//   const updatedPost = await post.get()
-
-//   addToSubCollection(user, updatedPost, 'liked') // original post stored
-
-//   return middleware.postMiddleware(updatedPost.id, updatedPost.data());
-// }
-
-// // Share post
-// async function sharePost(postID) {
-//   const post = db.collection('posts').doc(postID.body.id);
-//   const doc = await post.get();
-//   const res = await post.update({shares: doc.data().shares + 1});
-//   return res;
-// }
-
-// // - Report post — /post/report (How does this work?)
-// async function reportPost(userID, postID) {
-//   const post = db.collection('posts').doc(postID.body.id);
-//   const res = await post.update({reported: true});
-//   return res;
-// }
-
-// // - Report comment
-// async function reportComment(userID, postID) {
-//   const post = db.collection('posts').doc(postID.body.id);
-//   const res = await post.update({reported: true});
-//   return res;
-// }
-
-// // Create new comment (should update comments in post in created/liked)
-// async function createComment(commentData) {
-//   db.collection('posts').doc(commentData.body.postID).collection('comments').add(commentData.body.comment);
-//   // const commentDoc = await comment.get()
-//   // return commentDoc;
-//   const updatedPost = await db.collection('posts').doc(commentData.body.postID).get();
-//   return middleware.postMiddleware(updatedPost.id, updatedPost.data());
-// }
-
-// // - Remove comment
-// async function removeComment(userID, commentID) {
-//   // delete comment
-// }
-
-// // if post == draft, just change boolean to false, else:
-// // NOTE: be careful of returning sensitive data (private key)
-
-// // Create new post
-// async function createPost(postData) {
-//   // check if right values are passed in
-
-//   const processedPost = processing.postProcessing(postData.body)
-
-//   const post = await db.collection('posts').add(processedPost);
-
-//   const createdPost = await db.collection('posts').doc(post.id).get()
-
-//   // how are comments updated from sub collection -- figure this out!!
-//   addToSubCollection(createdPost.data().username, createdPost, 'created') // original post stored
-
-//   return middleware.postMiddleware(createdPost.id, createdPost.data());
-// }
-
-// // Edit post
-// async function editPost(postData) { // remember dot notation (content.title) for nested fields
-//   const post = db.collection('posts').doc(postData.body.id);
-//   const res = await post.update(postData.body);
-//   return res;
-// }
-
-// // - Delete post — /post/delete
-// async function removePost(userID, postID) {
-//   const post = db.collection('posts').doc(postID.body.id);
-//   // delete
-//   return ;
-// }
-
-// module.exports = {
-//   createPost,
-//   createComment,
-//   editPost,
-//   removePost,
-//   removeComment,
-//   likePost,
-//   sharePost,
-// }
-
-// // - Draft post — /post/draft (OPTIONAL)
-// async function draftPost(userID, postData) {
-//   const post = db.collection('posts').add(postData);
-//   // draft field true
-//   return post;
-// }
-
-// - Save post
-// async function savePost(postID) {
-//   const post = db.collection('posts').doc(postID.body.id);
-//   const doc = await post.get();
-//   const res = await post.update({saves: doc.data().saves + 1});
-//   // also add to users saved subcollection (cloud function?)
-//   return res;
-// }
-
-// const item = await db.collection(type).doc(parentID).get();
-// postUsers.limit(1).get().
-// then(sub => {
-//   if (sub.docs.length > 0) {
-//     console.log('subcollection exists');
-//   } else {
-//     console.log('subcollection is NOT there, so user has not liked');
-//     return false;
-//   }
-// });
-
-// Old Delete
-// async function removeComment(commentData) {
-//   const comment = db.collection('comments').doc(commentData.query.commentID);
-//   const res = await comment.update({removed: true});
-//   return res; // TODO return value
-// }
-
-// Check if user has liked comment
-// async function checkLikedComment(commentData) {
-//   const commentID = commentData.body.commentID;
-//   const userID = commentData.body.userID;
-//   const commentUsers = db.collection('comments').doc(commentID).collection('likes');
-//   const userDoc = await commentUsers.where('userID', '==', userID).get();
-//   if (userDoc.empty) {
-//     console.log('User has not liked.');
-//     return false;
-//   } else {
-//     console.log('User has liked.');
-//     return true;
-//   }
-// }
