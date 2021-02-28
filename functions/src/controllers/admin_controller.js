@@ -36,26 +36,27 @@ async function getPostsByStatus(request) {
   const posts = db.collection('posts');
   const status = request.query.status || 'ALL'; // If the status is undefined, make it 'ALL'
 
-  let selected = [];
-  const timestamp = request.query.timestamp;
-  console.log('timestamp', timestamp)
-  if (timestamp) {
-    const processedTimestamp = helpers.dateToTimestamp(timestamp);
-    if (processedTimestamp) {
-      selected = status === 'ALL' ?
-        await posts.orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(10).get() :
-        await posts.where('status', '==', status).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(10).get();
-    }
-  } else {
-    console.log('inside')
-    selected = status === 'ALL' ?
-      await posts.orderBy('createdAt', 'desc').limit(3).get() :
-      await posts.where('status', '==', status).orderBy('createdAt', 'desc').limit(3).get();
-  }
+  // TODO: For moderation pagination
+  // let selected = [];
+  // const timestamp = request.query.timestamp;
+  // console.log('timestamp', timestamp)
+  // if (timestamp) {
+  //   const processedTimestamp = helpers.dateToTimestamp(timestamp);
+  //   if (processedTimestamp) {
+  //     selected = status === 'ALL' ?
+  //       await posts.orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(10).get() :
+  //       await posts.where('status', '==', status).orderBy('createdAt', 'desc').startAfter(processedTimestamp).limit(10).get();
+  //   }
+  // } else {
+  //   console.log('inside')
+  //   selected = status === 'ALL' ?
+  //     await posts.orderBy('createdAt', 'desc').limit(10).get() :
+  //     await posts.where('status', '==', status).orderBy('createdAt', 'desc').limit(10).get();
+  // }
 
-  // const selected = status === 'ALL' ?
-  //   await posts.orderBy('createdAt', 'desc').get() :
-  //   await posts.where('status', '==', status).orderBy('createdAt', 'desc').limit(10).get();
+  const selected = status === 'ALL' ?
+    await posts.orderBy('createdAt', 'desc').get() :
+    await posts.where('status', '==', status).orderBy('createdAt', 'desc').limit(10).get();
   console.log('size', selected.size)
   if (selected.empty) {
     console.log('No matching documents.');
