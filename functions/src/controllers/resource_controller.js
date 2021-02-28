@@ -70,6 +70,9 @@ async function addResources() {
 // - Get Resources
 async function suggestUniversity(uniData) {
   const processedUniversity = processing.universityProcessing(uniData.body);
+  if(!processedUniversity) {
+    return false;
+  }
   await db.collection('universities').add(processedUniversity);
 
   return true;
