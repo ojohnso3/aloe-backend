@@ -1,2 +1,3 @@
 node_modules
 functions/src/firebase/production-key.json
+functions/src/firebase/dev-key.json
