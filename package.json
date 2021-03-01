@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "test": "mocha",
-    "start": "PRODUCTION=True node ./bin/www",
-    "start:dev": "node ./bin/www",
+    "start": "node ./bin/www",
+    "start:prod": "PRODUCTION=True node ./bin/www",
     "deploy": "cd functions && npm run deploy"
   },
   "dependencies": {
