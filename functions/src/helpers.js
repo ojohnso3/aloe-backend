@@ -1,6 +1,7 @@
 const db = require('./firebase/db.js');
 const constants = require('./constants.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
+// firebase.firestore.FieldValue.serverTimestamp()
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 const csvtojson = require('csvtojson');
 
@@ -10,7 +11,7 @@ function timestampToDate(timestamp) {
     return ''; // 'No timestamp.';
   }
   if (timestamp instanceof Timestamp) {
-    // console.log('This is correct');
+    // console.log('This is correct'); // NOTE: timezone differences
     return timestamp.toDate();
   } else {
     // console.log('This is WRONG: Not Timestamp');

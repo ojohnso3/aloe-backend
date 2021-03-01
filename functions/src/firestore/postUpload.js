@@ -29,6 +29,7 @@ const createResources = async (csvData) => {
 };
 
 async function uploadPosts() {
+  console.log('uploading posts!')
   helpers.csvtojson()
       .fromFile('./functions/src/betaPosts.csv')
       .then((csvData) => {
@@ -36,4 +37,7 @@ async function uploadPosts() {
       });
 }
 
-uploadPosts();
+module.exports = {
+  uploadPosts,
+};
+// uploadPosts();

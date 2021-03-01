@@ -4,7 +4,6 @@ const helpers = require('../helpers.js');
 const processing = require('../processing.js');
 const constants = require('../constants.js');
 
-
 // Get external profile
 async function getProfile(userData) {
   const profile = await db.collection('users').doc(userData.params.id).get();

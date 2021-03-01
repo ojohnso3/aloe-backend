@@ -66,6 +66,8 @@ function profileMiddleware(id, dbUser) {
 }
 
 function postMiddleware(id, dbPost, userInfo) {
+  console.log("CHECK TIME", helpers.timestampToDate(dbPost.updatedAt))
+  console.log("CHECK TIMEASATMAP", dbPost.updatedAt)
   const ret = {
     id,
     timestamp: helpers.timestampToDate(dbPost.updatedAt), // created too?
