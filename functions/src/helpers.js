@@ -11,7 +11,7 @@ function timestampToDate(timestamp) {
     return '';
   }
   // NOTE: timezone differences
-  if (timestamp instanceof Timestamp) { 
+  if (timestamp instanceof Timestamp) {
     return timestamp.toDate();
   } else {
     return new Date(timestamp);
@@ -19,7 +19,6 @@ function timestampToDate(timestamp) {
 }
 
 function dateToTimestamp(date) {
-
   if (!date) {
     return null;
   }
