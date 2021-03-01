@@ -19,10 +19,12 @@ async function getProfile(userData) {
 // Load anonymous created posts on profile
 async function getAnonymousCreated(timestamp) {
   const posts = db.collection('posts');
+  console.log("time", timestamp);
 
   let created = [];
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
+    console.log("pro", processedTimestamp);
     if (processedTimestamp) {
       created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
@@ -48,9 +50,9 @@ async function getAnonymousCreated(timestamp) {
 
 // Load created posts on profile
 async function getCreated(userData) { // TODO: created posts should also be anon
-  const userID = userData.query.id;
-  const timestamp = userData.query.timestamp;
-  const internal = userData.query.internal;
+  const userID = userData.body.id;
+  const timestamp = userData.body.timestamp;
+  const internal = userData.body.internal;
 
   if (userID === constants.ANONYMOUS_ID) {
     return getAnonymousCreated(timestamp);
