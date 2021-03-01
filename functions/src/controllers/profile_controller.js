@@ -18,12 +18,13 @@ async function getProfile(userData) {
 // Load anonymous created posts on profile
 async function getAnonymousCreated(timestamp) {
   const posts = db.collection('posts');
-  console.log("time", timestamp);
 
   let created = [];
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
-    console.log("pro", processedTimestamp);
+    console.log("timestamp", processedTimestamp);
+    console.log("date", helpers.timestampToDate(processedTimestamp));
+
     if (processedTimestamp) {
       created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
@@ -43,6 +44,10 @@ async function getAnonymousCreated(timestamp) {
   }));
 
   console.log('ANON created size: ', createdPosts.length);
+
+  console.log('ANON first story', createdPosts[0].content);
+  console.log('ANON time', createdPosts[0].timestamp);
+
 
   return {results: createdPosts};
 }
