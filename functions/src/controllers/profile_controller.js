@@ -106,7 +106,6 @@ async function likedHelper(doc) {
     return null;
   }
 
-  // const likedUser = await db.collection('users').doc(likedPost.data().userID).get();
   return likedPost;
 }
 
@@ -120,10 +119,10 @@ async function getLiked(userData) {
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
     if (processedTimestamp) {
-      liked = await user.collection('liked').orderBy('contentTimestamp', 'desc').startAfter(processedTimestamp).limit(1).get();
+      liked = await user.collection('liked').orderBy('contentTimestamp', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
-    liked = await user.collection('liked').orderBy('contentTimestamp', 'desc').limit(1).get();
+    liked = await user.collection('liked').orderBy('contentTimestamp', 'desc').limit(5).get();
   }
 
   if (liked.empty) {
