@@ -8,19 +8,17 @@ const csvtojson = require('csvtojson');
 
 function timestampToDate(timestamp) {
   if (timestamp === undefined || !timestamp) {
-    return ''; // 'No timestamp.';
+    return '';
   }
-  if (timestamp instanceof Timestamp) {
-    // console.log('This is correct'); // NOTE: timezone differences
+  // NOTE: timezone differences
+  if (timestamp instanceof Timestamp) { 
     return timestamp.toDate();
   } else {
-    // console.log('This is WRONG: Not Timestamp');
     return new Date(timestamp);
   }
 }
 
 function dateToTimestamp(date) {
-  // console.log('the date is this: ', date);
 
   if (!date) {
     return null;
@@ -43,7 +41,7 @@ async function getUserInfo(userID, anonymous) {
       userInfo = {
         userID: constants.ANONYMOUS_ID,
         username: 'Anonymous',
-        profilePic: 'aloe.jpg', // link to image
+        profilePic: '',
         verified: true,
         age: '',
         pronouns: '',
@@ -54,13 +52,10 @@ async function getUserInfo(userID, anonymous) {
         userID: constants.ANONYMOUS_ID,
         username: anonDoc.data().username,
         profilePic: anonDoc.data().profilePic,
-        verified: true,
+        verified: anonDoc.data().anonymous,
         age: '',
         pronouns: '',
         sexuality: '',
-        // age: getAge(timestampToDate(userDoc.data().dob)) || '',
-        // pronouns: userDoc.data().pronouns || '',
-        // sexuality: userDoc.data().sexuality || '',
       };
     }
   } else {
@@ -97,25 +92,3 @@ module.exports = {
   Timestamp,
   FieldValue,
 };
-
-// async function getCreated(userID, timestamp) {
-//   const posts = db.collection('posts');
-//   let created = [];
-//   if (timestamp) {
-//     created = await posts.where('userID', '==', userID).startAfter(timestamp).limit(5).get(); // .orderBy('timestamp', 'desc')
-//   } else {
-//     created = await posts.where('userID', '==', userID).limit(5).get();
-//   }
-//   if (created.empty) {
-//     console.log('No matching document.');
-//     return;
-//   }
-
-//   const createdPosts = [];
-//   await Promise.all(created.docs.map(async (doc) => {
-//     const userInfo = await getUserInfo(userID);
-//     createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
-//   }));
-
-//   return {results: createdPosts};
-// }

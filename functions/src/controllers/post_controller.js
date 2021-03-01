@@ -104,7 +104,6 @@ async function removeContent(parentData) {
 
 // Like content
 async function likeContent(parentData) {
-  // console.log('create like data', parentData.body);
   const parentID = parentData.body.id;
   const userID = parentData.body.user;
   let liked = parentData.body.liked;
