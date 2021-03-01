@@ -22,8 +22,6 @@ async function getAnonymousCreated(timestamp) {
   let created = [];
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
-    console.log("timestamp", processedTimestamp);
-    console.log("date", helpers.timestampToDate(processedTimestamp));
 
     if (processedTimestamp) {
       created = await posts.where('status', '==', constants.APPROVED).where('anonymous', '==', true).orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
@@ -44,10 +42,6 @@ async function getAnonymousCreated(timestamp) {
   }));
 
   console.log('ANON created size: ', createdPosts.length);
-
-  console.log('ANON first story', createdPosts[0].content);
-  console.log('ANON time', createdPosts[0].timestamp);
-
 
   return {results: createdPosts};
 }
@@ -112,23 +106,24 @@ async function likedHelper(doc) {
     return null;
   }
 
-  const likedUser = await db.collection('users').doc(likedPost.data().userID).get();
-  return {post: likedPost, user: likedUser};
+  // const likedUser = await db.collection('users').doc(likedPost.data().userID).get();
+  return likedPost;
 }
 
 // Load liked posts on profile (TODO FIX FOR PROMPTS TOO)
 async function getLiked(userData) {
   const userID = userData.query.id;
   const timestamp = userData.query.timestamp;
+
   const user = db.collection('users').doc(userID);
   let liked = [];
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
     if (processedTimestamp) {
-      liked = await user.collection('liked').orderBy('timestamp', 'desc').startAfter(processedTimestamp).limit(5).get();
+      liked = await user.collection('liked').orderBy('contentTimestamp', 'desc').startAfter(processedTimestamp).limit(1).get();
     }
   } else {
-    liked = await user.collection('liked').orderBy('timestamp', 'desc').limit(5).get();
+    liked = await user.collection('liked').orderBy('contentTimestamp', 'desc').limit(1).get();
   }
 
   if (liked.empty) {
@@ -138,13 +133,9 @@ async function getLiked(userData) {
 
   const likedPosts = [];
   await Promise.all(liked.docs.map(async (doc) => {
-    const likedData = await likedHelper(doc);
-    if (likedData) {
-      const likedPost = likedData.post;
-      const likedUser = likedData.user;
-
-      const userInfo = await helpers.getUserInfo(likedUser.id, likedPost.data().anonymous);
-
+    const likedPost = await likedHelper(doc);
+    if (likedPost) {
+      const userInfo = await helpers.getUserInfo(likedPost.data().userID, likedPost.data().anonymous);
       likedPosts.push(middleware.postMiddleware(likedPost.id, likedPost.data(), userInfo));
     }
   }));

@@ -113,10 +113,10 @@ async function likeContent(parentData) {
   const parent = db.collection(type).doc(parentID);
   const user = db.collection('users').doc(userID);
 
+  // Extra check
   const docArr = await parent.collection('likes').where('userID', '==', userID).get();
 
   if (docArr.size > 0) {
-    // console.log('User already liked');
     liked = '1';
   }
 
@@ -145,7 +145,8 @@ async function likeContent(parentData) {
     await parent.update({numLikes: increment});
 
     if (type === 'posts') {
-      await user.collection('liked').add({parentID: parentID, timestamp: helpers.Timestamp.now()});
+      const parentDoc = await parent.get();
+      await user.collection('liked').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
     }
   }
   return true;
