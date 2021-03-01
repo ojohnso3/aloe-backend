@@ -3,6 +3,6 @@ module.exports = Object.freeze({
   PENDING: 'PENDING',
   REJECTED: 'REJECTED',
 
-  ALOE_ID: 'rvmrSMFUbZfjqpE7aSFd',
-  ANONYMOUS_ID: 'FtmFW0Qavf1jTmaggHbv',
+  ALOE_ID: 'wsw36O6X5qNgjddTIFaC', // same for now
+  ANONYMOUS_ID: 'wsw36O6X5qNgjddTIFaC',
 });
