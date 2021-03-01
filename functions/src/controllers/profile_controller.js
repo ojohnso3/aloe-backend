@@ -58,11 +58,7 @@ async function getCreated(userData) { // TODO: created posts should also be anon
   const timestamp = userData.query.timestamp;
   const internal = userData.query.internal;
 
-  console.log('anon const', constants.ANONYMOUS_ID);
-  console.log('id', userID);
-
   if (userID === constants.ANONYMOUS_ID) {
-    console.log('going into anon HERE')
     return getAnonymousCreated(timestamp);
   }
 
