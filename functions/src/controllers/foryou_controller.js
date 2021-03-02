@@ -106,7 +106,26 @@ async function getPrompts(promptData) {
 // Get Responses by ID
 async function getResponses(parentData) {
   const collection = db.collection('responses');
-  const responses = await collection.where('parentID', '==', parentData.query.id).orderBy('createdAt', 'desc').get();
+  // ADDED 4 REPLIES
+  const responses = await collection.where('parentID', '==', parentData.body.id).where('replyID', '==', '').orderBy('createdAt', 'desc').get();
+  if (responses.empty) {
+    console.log('No matching document for response.');
+    return {results: []};
+  }
+
+  const finalResponses = [];
+  await Promise.all(responses.docs.map(async (doc) => {
+    const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
+    finalResponses.push(middleware.responseMiddleware(doc.id, doc.data(), userInfo));
+  }));
+
+  return {results: finalResponses};
+}
+
+// Get Replies by ID
+async function getReplies(parentData) { // ADDED 4 REPLIES
+  const collection = db.collection('responses');
+  const responses = await collection.where('replyID', '==', parentData.body.id).orderBy('createdAt', 'asc').get();
   if (responses.empty) {
     console.log('No matching document for response.');
     return {results: []};
@@ -127,4 +146,5 @@ module.exports = {
   getPostsByTopic,
   getPrompts,
   getResponses,
+  getReplies,
 };

@@ -80,12 +80,25 @@ async function removeContent(parentData) {
 
   const parent = db.collection(type).doc(id);
   const doc = await parent.get();
+  if(!doc.exists) {
+    return false;
+  }
+
   const archived = doc.data();
   archived['contentType'] = type;
   await db.collection('archive').doc(id).set(archived);
 
-  // prompt
+  // response
   if (type === 'responses') {
+    // ADDED 4 REPLIES
+    const replies = await db.collection('responses').where('replyID', '==', id).get();
+    if (!replies.empty) {
+      replies.docs.map(async (reply) => {
+        await reply.ref.update({replyID: ''});
+        console.log('deleting replyid and turning into normal response');
+      });
+    }
+
     const prompt = db.collection('prompts').doc(archived.parentID);
     await prompt.update({numResponses: decrement});
   }
@@ -99,7 +112,7 @@ async function removeContent(parentData) {
     });
   }
   await parent.delete();
-  return 'success'; // TODO return value
+  return true; // TODO return value
 }
 
 // Like content

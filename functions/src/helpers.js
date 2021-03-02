@@ -1,10 +1,9 @@
 const db = require('./firebase/db.js');
 const constants = require('./constants.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
-// firebase.firestore.FieldValue.serverTimestamp()
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 const csvtojson = require('csvtojson');
-
+// FieldValue.serverTimestamp()
 
 function timestampToDate(timestamp) {
   if (timestamp === undefined || !timestamp) {

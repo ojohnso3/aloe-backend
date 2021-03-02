@@ -65,7 +65,8 @@ router.get('/foryou/posts', response(foryouController.getPosts)); // works
 router.get('/foryou/topic', response(foryouController.getPostsByTopic)); // works
 router.get('/foryou/prompts', response(foryouController.getPrompts)); // works
 router.get('/foryou/responses', response(foryouController.getResponses)); // works
-
+// ADDED 4 REPLIES
+router.get('/foryou/replies', response(foryouController.getReplies)); // works
 
 // Reporting routes (MESSY)
 router.post('/report', response(reportController.reportFromApp)); // works

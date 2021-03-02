@@ -159,6 +159,7 @@ function responseProcessing(response) {
   const ret = {
     userID: responseData.userid,
     parentID: responseData.id,
+    replyID: responseData.replyTo || '', // ADDED 4 REPLIES
     createdAt: helpers.Timestamp.now(),
     updatedAt: helpers.Timestamp.now(),
     body: responseData.body,
@@ -168,8 +169,13 @@ function responseProcessing(response) {
     removed: false,
     top: false, // TODO: design
   };
+
+  // console.log('ret.replyID', ret.replyID);
+  // if(ret.replyID == undefined) {
+  //   delete ret[replyID];
+  // }
+
   for (const key of Object.keys(ret)) {
-    // console.log('key', ret[key]);
     if (ret[key] === undefined) {
       return null;
     }
