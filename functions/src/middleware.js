@@ -47,6 +47,8 @@ function userMiddleware(id, dbUser) {
     notifSettings: dbUser.notifications || true,
   };
 
+  console.log("user data CONSENT", ret.consentSetting);
+
   return ret;
 }
 

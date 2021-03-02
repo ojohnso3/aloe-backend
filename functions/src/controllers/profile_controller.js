@@ -149,6 +149,7 @@ async function editProfile(profileData) {
   console.log('id', profileData.body.id)
   const user = db.collection('users').doc(profileData.body.id);
   await user.update(processedProfile);
+  console.log('finished well yas king')
   return true;
 }
 
