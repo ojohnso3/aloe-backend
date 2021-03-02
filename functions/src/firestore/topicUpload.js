@@ -2,40 +2,40 @@ const db = require('../firebase/db.js');
 const helpers = require('../helpers.js');
 
 const topicsArray = [
-  "Abortion",
-  "Advice",
-  "Alcohol",
-  "Birth Control",
-  "Body Standards",
-  "Child Grooming",
-  "College",
-  "Consent",
-  "Dating Apps",
+  'Abortion',
+  'Advice',
+  'Alcohol',
+  'Birth Control',
+  'Body Standards',
+  'Child Grooming',
+  'College',
+  'Consent',
+  'Dating Apps',
   'Domestic Abuse',
-  "Drugs",
-  "Film/TV",
-  "Healing",
-  "High School",
-  "Hookup Culture",
-  "Hygiene",
-  "Kinks",
-  "Masturbation",
-  "Mental Health",
-  "Music",
-  "Porn",
-  "Pregnancy",
-  "Relationships",
-  "Sexual Assault",
-  "Sexual Orientation",
-  "Sexual Pleasure",
-  "Shame",
-  "STIs",
-  "Story",
-  "Virginity",
-]
+  'Drugs',
+  'Film/TV',
+  'Healing',
+  'High School',
+  'Hookup Culture',
+  'Hygiene',
+  'Kinks',
+  'Masturbation',
+  'Mental Health',
+  'Music',
+  'Porn',
+  'Pregnancy',
+  'Relationships',
+  'Sexual Assault',
+  'Sexual Orientation',
+  'Sexual Pleasure',
+  'Shame',
+  'STIs',
+  'Story',
+  'Virginity',
+];
 
 async function parseTopics() {
-  let allTopics = [];
+  const allTopics = [];
   for (let i=0; i<topicsArray.length; i++) {
     const topic = topicsArray[i];
 
@@ -71,7 +71,7 @@ async function uploadTopics() {
   createTopics();
 }
 
-// module.exports = {
-//   uploadTopics,
-// };
+module.exports = {
+  uploadTopics,
+};
 // uploadTopics();

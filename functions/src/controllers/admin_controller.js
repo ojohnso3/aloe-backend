@@ -140,8 +140,6 @@ async function editTopic(topicData) {
   const topicInfo = topicData.body.data;
   const processedTopic = processing.topicProcessing(topicInfo);
 
-  console.log('new pr', processedTopic);
-
   if (!processedTopic.topic || !original) {
     return 'error1';
   }
@@ -179,12 +177,12 @@ async function addUserTopic(topicData) {
   const topic = topicData.body.topic;
   const userID = topicData.body.userid;
 
-  if(!topic || !userID) {
+  if (!topic || !userID) {
     return false;
   }
 
   await db.collection('topicideas').add({topic: topic, userID: userID, createdAt: helpers.Timestamp.now()});
-  return true
+  return true;
 }
 
 // Add email to db

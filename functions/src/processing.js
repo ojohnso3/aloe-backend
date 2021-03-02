@@ -65,9 +65,9 @@ function userProcessing(user) {
 function profileProcessing(profile) {
   const profileData = JSON.parse(JSON.stringify(profile));
 
-  if (profileData.consent == '1') {
+  if (profileData.consent === '1') {
     profileData.consent = true;
-  } else if (profileData.consent == '0') {
+  } else if (profileData.consent === '0') {
     profileData.consent = false;
   }
 
@@ -218,7 +218,7 @@ function topicProcessing(topics) {
 
   for (const key of Object.keys(ret)) {
     if (ret[key] === undefined) {
-      delete ret[key];
+      delete ret[key]; // be careful of returning empty object
     }
   }
 

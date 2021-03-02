@@ -145,7 +145,7 @@ async function getLiked(userData) {
 // Update profile
 async function editProfile(profileData) {
   const processedProfile = processing.profileProcessing(profileData.body);
-  if(!processedProfile || Object.keys(processedProfile).length === 0) {
+  if (!processedProfile || Object.keys(processedProfile).length === 0) {
     return false;
   }
 
