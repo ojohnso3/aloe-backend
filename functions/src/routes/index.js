@@ -32,6 +32,7 @@ router.post('/admin/topic', checkIfAuthenticated, response(adminController.addTo
 router.put('/admin/topic', checkIfAuthenticated, response(adminController.editTopic)); // works
 router.post('/admin/topics', checkIfAuthenticated, response(adminController.removeTopic)); // works
 
+router.post('/user/topic', response(adminController.addUserTopic)); // works
 router.post('/website/email', response(adminController.addEmail)); // works
 
 

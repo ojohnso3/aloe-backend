@@ -174,6 +174,19 @@ async function getTopics() {
   return {results: topicTags};
 }
 
+// User suggests topic
+async function addUserTopic(topicData) {
+  const topic = topicData.body.topic;
+  const userID = topicData.body.userid;
+
+  if(!topic || !userID) {
+    return false;
+  }
+
+  await db.collection('userTopics').add({topic: topic, userID: userID, createdAt: helpers.Timestamp.now()});
+  return true
+}
+
 // Add email to db
 async function addEmail(emailData) {
   const emailInfo = emailData.body;
@@ -199,5 +212,6 @@ module.exports = {
   addTopic,
   editTopic,
   removeTopic,
+  addUserTopic,
   addEmail,
 };
