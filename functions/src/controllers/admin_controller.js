@@ -183,7 +183,7 @@ async function addUserTopic(topicData) {
     return false;
   }
 
-  await db.collection('userTopics').add({topic: topic, userID: userID, createdAt: helpers.Timestamp.now()});
+  await db.collection('topicideas').add({topic: topic, userID: userID, createdAt: helpers.Timestamp.now()});
   return true
 }
 
