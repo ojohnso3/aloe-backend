@@ -71,8 +71,6 @@ function profileProcessing(profile) {
     profileData.consent = false;
   }
 
-  console.log('check consent', profileData.consent)
-
   const ret = {
     username: profileData.username,
     consent: profileData.consent,
@@ -83,12 +81,10 @@ function profileProcessing(profile) {
   };
 
   for (const key of Object.keys(ret)) {
-    console.log('key', key + ' ' + ret[key])
     if (ret[key] === '' || ret[key] === undefined) {
       delete ret[key];
     }
   }
-  console.log('ret', ret)
   return ret;
 }
 
