@@ -145,11 +145,12 @@ async function getLiked(userData) {
 // Update profile
 async function editProfile(profileData) {
   const processedProfile = processing.profileProcessing(profileData.body);
+  if(!processedProfile) {
+    return false;
+  }
 
-  console.log('id', profileData.body.id)
   const user = db.collection('users').doc(profileData.body.id);
   await user.update(processedProfile);
-  console.log('finished well yas king')
   return true;
 }
 
