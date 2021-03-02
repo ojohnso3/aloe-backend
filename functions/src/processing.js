@@ -52,7 +52,6 @@ function userProcessing(user) {
     notifications: true,
     removed: false,
   };
-  console.log('CONSENT USERPRO', ret.consent);
 
   for (const key of Object.keys(ret)) {
     // console.log('key', key, ' - ', ret[key]);
@@ -66,14 +65,11 @@ function userProcessing(user) {
 function profileProcessing(profile) {
   const profileData = JSON.parse(JSON.stringify(profile));
 
-  console.log('CONSENT PROFILEPRO 1', profileData.consent);
-  if (profileData.consent) { // 0 vs 1 CHECK
+  if (profileData.consent == '1') {
     profileData.consent = true;
-  } else {
+  } else if (profileData.consent == '0') {
     profileData.consent = false;
   }
-
-  console.log('CONSENT PROFILEPRO 2', profileData.consent);
 
   const ret = {
     username: profileData.username,
@@ -83,10 +79,8 @@ function profileProcessing(profile) {
     sexuality: processIdentity(profileData.sexuality),
     triggers: topicParser(profileData.triggers),
   };
-  console.log('CONSENT PROFILEPRO 3', ret.consent);
 
   for (const key of Object.keys(ret)) {
-    // console.log('key', key, ' - ', ret[key]);
     if (ret[key] === '' || ret[key] === undefined) {
       delete ret[key];
     }
@@ -135,6 +129,7 @@ function postProcessing(post) {
   return ret;
 }
 
+// NOTE: not currently used
 function editProcessing(post) {
   const postData = JSON.parse(JSON.stringify(post));
 
