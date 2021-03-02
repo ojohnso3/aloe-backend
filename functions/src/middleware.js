@@ -108,6 +108,7 @@ function promptMiddleware(id, dbPrompt, userInfo, topResponse) {
 }
 
 function responseMiddleware(id, dbResponse, userInfo) {
+
   const ret = {
     id,
     userid: userInfo.userID,
@@ -115,6 +116,7 @@ function responseMiddleware(id, dbResponse, userInfo) {
     profilePicture: userInfo.profilePic || '',
     verified: userInfo.verified || false,
     content: dbResponse.body,
+    hasReplies: dbResponse.replies > 0 ? true : false,
     anonymous: dbResponse.anonymous,
     likes: dbResponse.numLikes,
     timestamp: helpers.timestampToDate(dbResponse.createdAt), // updated at?

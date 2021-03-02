@@ -50,6 +50,16 @@ async function createResponse(responseData) {
 
   const newResponse = await db.collection('responses').add(processedResponse);
 
+  // parent of reply
+  if(processedResponse.replyID) {
+    const parentResponse = db.collection('responses').doc(processedResponse.replyID);
+
+    await parentResponse.update({replies: increment}); // +1 read / write
+    // if(!(await parentResponse.get()).data().replies) {
+    //   await parentResponse.update({replies: true});
+    // }
+  }
+
   // prompt
   const prompt = db.collection('prompts').doc(processedResponse.parentID);
   await prompt.update({numResponses: increment});
@@ -97,6 +107,18 @@ async function removeContent(parentData) {
         await reply.ref.update({replyID: ''});
         console.log('deleting replyid and turning into normal response');
       });
+    } else {
+      // ADDED 4 REPLIES
+      if(archived.replyID) {
+        const parentResponse = db.collection('responses').doc(archived.replyID);
+        await parentResponse.update({replies: decrement});
+      }
+
+      // const allreplies = await db.collection('responses').where('replyID', '==', archived.replyID).get();
+      // if (allreplies === 1) {
+      //   const parentResponse = db.collection('responses').doc(archived.replyID);
+      //   await parentResponse.update({replies: false});
+      // }
     }
 
     const prompt = db.collection('prompts').doc(archived.parentID);
