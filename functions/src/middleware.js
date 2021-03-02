@@ -116,6 +116,7 @@ function responseMiddleware(id, dbResponse, userInfo) {
     profilePicture: userInfo.profilePic || '',
     verified: userInfo.verified || false,
     content: dbResponse.body,
+    replyTo: dbResponse.replyID,
     hasReplies: dbResponse.replies > 0 ? true : false,
     anonymous: dbResponse.anonymous,
     likes: dbResponse.numLikes,
