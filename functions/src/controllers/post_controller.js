@@ -50,19 +50,15 @@ async function createResponse(responseData) {
 
   const newResponse = await db.collection('responses').add(processedResponse);
 
-  // parent of reply
-  if(processedResponse.replyID) {
-    const parentResponse = db.collection('responses').doc(processedResponse.replyID);
-
-    await parentResponse.update({replies: increment}); // +1 read / write
-    // if(!(await parentResponse.get()).data().replies) {
-    //   await parentResponse.update({replies: true});
-    // }
-  }
-
   // prompt
   const prompt = db.collection('prompts').doc(processedResponse.parentID);
   await prompt.update({numResponses: increment});
+
+  // parent of reply
+  if (processedResponse.replyID) {
+    const parentResponse = db.collection('responses').doc(processedResponse.replyID);
+    await parentResponse.update({replies: increment});
+  }
 
   const doc = await newResponse.get();
   const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
@@ -90,7 +86,7 @@ async function removeContent(parentData) {
 
   const parent = db.collection(type).doc(id);
   const doc = await parent.get();
-  if(!doc.exists) {
+  if (!doc.exists) {
     return false;
   }
 
@@ -100,7 +96,9 @@ async function removeContent(parentData) {
 
   // response
   if (type === 'responses') {
-    // ADDED 4 REPLIES
+    const prompt = db.collection('prompts').doc(archived.parentID);
+    await prompt.update({numResponses: decrement});
+
     const replies = await db.collection('responses').where('replyID', '==', id).get();
     if (!replies.empty) {
       replies.docs.map(async (reply) => {
@@ -108,33 +106,22 @@ async function removeContent(parentData) {
         console.log('deleting replyid and turning into normal response');
       });
     } else {
-      // ADDED 4 REPLIES
-      if(archived.replyID) {
+      if (archived.replyID) {
         const parentResponse = db.collection('responses').doc(archived.replyID);
         await parentResponse.update({replies: decrement});
       }
-
-      // const allreplies = await db.collection('responses').where('replyID', '==', archived.replyID).get();
-      // if (allreplies === 1) {
-      //   const parentResponse = db.collection('responses').doc(archived.replyID);
-      //   await parentResponse.update({replies: false});
-      // }
     }
-
-    const prompt = db.collection('prompts').doc(archived.parentID);
-    await prompt.update({numResponses: decrement});
   }
 
   const likes = await parent.collection('likes').get();
   if (!likes.empty) {
-    // console.log('Transferring likes...');
     likes.docs.map(async (likeDoc) => {
       await db.collection('archive').doc(id).collection('likes').add(likeDoc.data());
       await likeDoc.ref.delete();
     });
   }
   await parent.delete();
-  return true; // TODO return value
+  return true;
 }
 
 // Like content

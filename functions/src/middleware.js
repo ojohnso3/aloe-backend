@@ -108,7 +108,6 @@ function promptMiddleware(id, dbPrompt, userInfo, topResponse) {
 }
 
 function responseMiddleware(id, dbResponse, userInfo) {
-
   const ret = {
     id,
     userid: userInfo.userID,

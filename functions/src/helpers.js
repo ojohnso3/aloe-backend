@@ -34,37 +34,35 @@ function getTimeFromNow(timestamp) {
   if (!date || date === '') {
     return '';
   }
-  
+
   const diffMs = Date.now() - date.getTime();
-  if(diffMs < 0) {
+  if (diffMs < 0) {
     return '';
   }
 
   const seconds = Math.round(diffMs / 1000); // absolute value??
-  if(seconds < 60) {
+  if (seconds < 60) {
     return seconds + 's';
   }
 
   const minutes = Math.round(seconds / 60);
-  if(minutes < 60) {
+  if (minutes < 60) {
     return minutes + 'm';
   }
 
   const hours = Math.round(minutes / 60);
-  if(hours < 24) {
+  if (hours < 24) {
     return hours + 'h';
   }
 
   const days = Math.round(hours / 24);
-  if(days < 7) {
+  if (days < 7) {
     return days + 'd';
   }
 
   const weeks = Math.round(days / 7);
   return weeks + 'w';
 }
-
-
 
 async function getUserInfo(userID, anonymous) {
   const userDoc = await db.collection('users').doc(userID).get();

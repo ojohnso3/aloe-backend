@@ -159,9 +159,8 @@ function responseProcessing(response) {
   const ret = {
     userID: responseData.userid,
     parentID: responseData.id,
-    replyID: responseData.replyTo || '', // ADDED 4 REPLIES
     replies: 0,
-    // replies: responseData.hasReplies || false, // ADDED 4 REPLIES
+    replyID: responseData.replyTo || '',
     createdAt: helpers.Timestamp.now(),
     updatedAt: helpers.Timestamp.now(),
     body: responseData.body,
