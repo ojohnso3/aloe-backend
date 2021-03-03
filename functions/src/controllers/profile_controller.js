@@ -41,8 +41,6 @@ async function getAnonymousCreated(timestamp) {
     createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
 
-  console.log('ANON created size: ', createdPosts.length);
-
   return {results: createdPosts};
 }
 
@@ -102,7 +100,7 @@ async function likedHelper(doc) {
     return null;
   }
   if (likedPost.data().status !== constants.APPROVED) {
-    console.log('Post is not approved: ' + postID);
+    // console.log('Post is not approved: ' + postID);
     return null;
   }
 

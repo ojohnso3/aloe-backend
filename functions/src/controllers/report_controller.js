@@ -10,7 +10,7 @@ async function reportFromApp(reportData) {
   const reason = reportData.body.reason;
   const parentID = reportData.body.id;
 
-  console.log('report', reportData.body);
+  // console.log('report', reportData.body);
 
   const newReport = {
     parentID: parentID,
@@ -23,11 +23,10 @@ async function reportFromApp(reportData) {
 
   // separate username check for user (TODO: can just use userID instead)
   if (type === 'users') {
-    console.log('username', parentID);
     const userCol = db.collection(type).where('username', '==', parentID);
     const user = await userCol.get();
-    if (user.empty) { // user.size == 1
-      console.log('No matching ' + type + ' document.');
+    if (user.empty) {
+      // console.log('No matching ' + type + ' document.');
       return 'error';
     }
 
@@ -41,7 +40,7 @@ async function reportFromApp(reportData) {
   } else {
     const parent = db.collection(type).doc(parentID);
     if (!(await parent.get()).exists) {
-      console.log('No matching ' + type + ' document.');
+      // console.log('No matching ' + type + ' document.');
       return 'error';
     }
     await parent.update({reported: true});
@@ -74,7 +73,6 @@ async function reportUser(reportData) {
 
   const user = db.collection('users').doc(userID);
   await user.update({banned: {duration: duration, timestamp: timestamp, reason: reason}});
-  console.log('reason: ', reason); // how to self-check??
   return true;
 }
 
@@ -91,7 +89,6 @@ async function unbanUser(userData) {
 // Load reported posts
 async function getReportedByType(reportType) {
   const type = reportType.params.id; // POST, RESPONSE, USER
-  console.log('type', type);
 
   switch (type) {
     case 'POST':

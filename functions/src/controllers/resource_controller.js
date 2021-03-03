@@ -38,7 +38,6 @@ async function parseCSV(csvData) {
 
     allResources.push(resource);
   }
-  console.log('resources #: ', allResources.length);
   return allResources;
 }
 

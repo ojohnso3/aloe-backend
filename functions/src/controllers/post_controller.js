@@ -8,7 +8,6 @@ const decrement = helpers.FieldValue.increment(-1);
 
 // Check if user has liked post
 async function checkLiked(parentData) {
-  // console.log('check like data', parentData.query);
   const parentID = parentData.query.id;
   const userID = parentData.query.userid;
   const type = parentData.query.type; // posts, prompts, responses
@@ -103,7 +102,7 @@ async function removeContent(parentData) {
     if (!replies.empty) {
       replies.docs.map(async (reply) => {
         await reply.ref.update({replyID: ''});
-        console.log('deleting replyid and turning into normal response');
+        // console.log('deleting replyid and turning into normal response');
       });
     } else {
       if (archived.replyID) {

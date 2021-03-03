@@ -171,11 +171,6 @@ function responseProcessing(response) {
     top: false, // TODO: design
   };
 
-  // console.log('ret.replyID', ret.replyID);
-  // if(ret.replyID == undefined) {
-  //   delete ret[replyID];
-  // }
-
   for (const key of Object.keys(ret)) {
     if (ret[key] === undefined) {
       return null;

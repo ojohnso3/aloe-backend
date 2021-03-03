@@ -123,7 +123,7 @@ async function getResponses(parentData) {
 }
 
 // Get Replies by ID
-async function getReplies(parentData) { // ADDED 4 REPLIES
+async function getReplies(parentData) {
   const collection = db.collection('responses');
   const responses = await collection.where('replyID', '==', parentData.query.id).orderBy('createdAt', 'asc').get();
   if (responses.empty) {

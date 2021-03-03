@@ -5,14 +5,13 @@ const helpers = require('../helpers.js');
 
 // Checks if username exists
 async function checkUsername(userData) {
-  console.log('username here: ', userData.query.username);
   const users = db.collection('users');
   const userDoc = await users.where('username', '==', userData.query.username).get();
   if (userDoc.empty) {
-    console.log('Username is available.');
+    // console.log('Username is available.');
     return true;
   } else {
-    console.log('Username is taken.');
+    // console.log('Username is taken.');
     return false;
   }
 }
