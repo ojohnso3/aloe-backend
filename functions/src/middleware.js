@@ -121,6 +121,7 @@ function responseMiddleware(id, dbResponse, userInfo) {
     anonymous: dbResponse.anonymous,
     likes: dbResponse.numLikes,
     timestamp: helpers.timestampToDate(dbResponse.createdAt), // updated at?
+    lifetime: helpers.getTimeFromNow(dbResponse.createdAt),
     top: false, // TODO design
   };
   return ret;

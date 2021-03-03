@@ -107,7 +107,7 @@ async function getPrompts(promptData) {
 async function getResponses(parentData) {
   const collection = db.collection('responses');
   // ADDED 4 REPLIES
-  const responses = await collection.where('parentID', '==', parentData.query.id).where('replyID', '==', '').orderBy('createdAt', 'desc').get();
+  const responses = await collection.where('parentID', '==', parentData.body.id).where('replyID', '==', '').orderBy('createdAt', 'desc').get();
   if (responses.empty) {
     console.log('No matching document for response.');
     return {results: []};
