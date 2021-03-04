@@ -179,8 +179,30 @@ async function shareContent(parentData) {
   const type = parentData.body.type;
 
   const sharedContent = db.collection(type).doc(parentID);
+  await sharedContent.collection('shares').add({userID: userID, timestamp: helpers.Timestamp.now()});
   await sharedContent.update({numShares: increment});
-  return await sharedContent.collection('shares').add({userID: userID, timestamp: helpers.Timestamp.now()});
+  return true;
+}
+
+// Support post
+async function supportContent(parentData) {
+  const parentID = parentData.body.id;
+  const userID = parentData.body.userid;
+  const type = parentData.body.type;
+  let content = parentData.body.content;
+
+  if (!parentID || !userID || !type) {
+    return false;
+  }
+
+  if (!content) {
+    content = '';
+  }
+
+  const supportedContent = db.collection('posts').doc(parentID);
+  await supportedContent.collection('supports').add({userID: userID, type: type, content: content, timestamp: helpers.Timestamp.now()});
+  await supportedContent.update({numSupports: increment});
+  return true;
 }
 
 module.exports = {
@@ -191,4 +213,5 @@ module.exports = {
   removeContent,
   likeContent,
   shareContent,
+  supportContent,
 };

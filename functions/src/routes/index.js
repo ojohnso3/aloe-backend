@@ -57,6 +57,7 @@ router.post('/response/create', response(postController.createResponse)); // wor
 router.post('/content/remove', response(postController.removeContent)); // works
 router.put('/content/like', response(postController.likeContent)); // works
 router.put('/content/share', response(postController.shareContent)); // works
+router.put('/content/support', response(postController.supportContent)); // works
 router.put('/post/edit', response(postController.editPost)); // works
 
 
