@@ -15,7 +15,7 @@ function response(handler) {
     handler(req, res, next).then((obj) => {
       res.send(obj);
     })
-        .catch(next);
+    .catch(next);
   };
 }
 // TODO:

@@ -30,6 +30,7 @@ function adminMiddleware(id, dbPost, userInfo) {
 }
 
 function userMiddleware(id, dbUser) {
+
   const ret = {
     userid: id,
     username: dbUser.username,
@@ -37,11 +38,11 @@ function userMiddleware(id, dbUser) {
     verified: dbUser.verified,
     profilePicture: dbUser.profilePic || '',
     dob: helpers.timestampToDate(dbUser.dob) || '',
-    age: getAge(dbUser.dob),
+    // age: getAge(dbUser.dob),
     pronouns: dbUser.pronouns || '',
     sexuality: dbUser.sexuality || '',
     triggers: dbUser.triggers || [],
-    email: dbUser.email,
+    // email: dbUser.email, // TODO: REMOVE
     doc: helpers.timestampToDate(dbUser.doc),
     consentSetting: dbUser.consent,
     notifSettings: dbUser.notifications || true,
@@ -57,7 +58,7 @@ function profileMiddleware(id, dbUser) {
     verified: dbUser.verified || false,
     profilePicture: dbUser.profilePic || '',
     doc: helpers.timestampToDate(dbUser.doc),
-    age: getAge(dbUser.dob),
+    // age: getAge(dbUser.dob),
     pronouns: dbUser.pronouns || '',
     sexuality: dbUser.sexuality || '',
   };
@@ -73,7 +74,7 @@ function postMiddleware(id, dbPost, userInfo) {
     user: userInfo.username,
     profilePicture: userInfo.profilePic || '',
     verified: userInfo.verified || false,
-    age: userInfo.age || '',
+    // age: userInfo.age || '',
     pronouns: userInfo.pronouns || '',
     sexuality: userInfo.sexuality || '',
     content: dbPost.content.body,

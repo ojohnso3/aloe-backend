@@ -141,10 +141,10 @@ async function likeContent(parentData) {
   }
 
   if (liked === '1') {
-    // const docArr = await parent.collection('likes').where('userID', '==', userID).get();
-    // if (docArr.size !== 1) {
-    //   console.log('ERROR: should like once');
-    // }
+    const docArr = await parent.collection('likes').where('userID', '==', userID).get();
+    if (docArr.size !== 1) {
+      console.log('ERROR: should like once');
+    }
 
     docArr.forEach(function(doc) {
       doc.ref.delete();
@@ -161,6 +161,11 @@ async function likeContent(parentData) {
       });
     }
   } else {
+    // const docArr = await parent.collection('likes').where('userID', '==', userID).get();
+
+    // if (docArr.size > 0) {
+    //   liked = '1';
+    // }
     await parent.collection('likes').add({userID: userID, timestamp: helpers.Timestamp.now()});
     await parent.update({numLikes: increment});
 
