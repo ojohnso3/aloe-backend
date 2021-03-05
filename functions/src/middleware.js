@@ -48,6 +48,7 @@ function userMiddleware(id, dbUser) {
     notifSettings: dbUser.notifications || true,
   };
 
+  console.log('user', ret)
   return ret;
 }
 

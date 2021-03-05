@@ -39,14 +39,10 @@ async function login(loginData) {
   const loginTime = loginData.body.loginTime;
 
   const timestamp = helpers.dateToTimestamp(loginTime);
-  
+
   return await admin.auth().verifyIdToken(token)
   .then(async (decodedToken) => {
-    console.log('decodedToken', decodedToken)
-
     const uid = decodedToken.uid;
-
-    console.log('uid', uid)
 
     const users = db.collection('users');
     const currUser = await users.where('uid', '==', uid).where('removed', '==', false).get();
