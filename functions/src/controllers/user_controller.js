@@ -18,13 +18,60 @@ async function checkUsername(userData) {
 
 // Create new user account (after auth verification)
 async function createAccount(userData) {
-  const processedUser = processing.userProcessing(userData.body);
-  db.collection('users').add(processedUser);
-  return true;
+  return await admin.auth().verifyIdToken(userData.body.token)
+  .then(async (decodedToken) => {
+    const uid = decodedToken.uid;
+
+    const processedUser = processing.userProcessing(userData.body, uid);
+    db.collection('users').add(processedUser);
+    return true;
+  })
+  .catch((error) => {
+    console.log('ERROR: ', error)
+    return false;
+  });
 }
 
 // Login to account (after auth verification)
 async function login(loginData) {
+  const token = loginData.body.token;
+  const loginTime = loginData.body.loginTime;
+
+  const timestamp = helpers.dateToTimestamp(loginTime);
+
+  return await admin.auth().verifyIdToken(token)
+  .then(async (decodedToken) => {
+    const uid = decodedToken.uid;
+
+    const users = db.collection('users');
+    const currUser = await users.where('uid', '==', uid).where('removed', '==', false).get();
+
+    if (currUser.empty) {
+      console.log('No such user.');
+      return;
+    }
+    if (currUser.docs.length !== 1 ) {
+      console.log('ERROR: More than one user with the same email.');
+    }
+
+    const userDoc = currUser.docs[0];
+
+    const newDoc = users.doc(userDoc.id);
+    await newDoc.update({loginTime: timestamp});
+
+    const updatedUser = await newDoc.get();
+
+    return middleware.userMiddleware(updatedUser.id, updatedUser.data());
+  })
+  .catch((error) => {
+    console.log('ERROR: ', error)
+    // return false; // add to admin login???
+  });
+}
+
+
+// Login to account (after auth verification)
+async function oldlogin(loginData) {
   const email = loginData.body.email;
   const loginTime = loginData.body.loginTime;
 

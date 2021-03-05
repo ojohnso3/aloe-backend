@@ -172,25 +172,25 @@ async function getBannedUsers() {
 }
 
 // Reactivate user
-async function reactivateUser(emailData) {
-  const users = db.collection('users').where('email', '==', emailData.body.email);
-  const userDoc = await users.get();
-  if (userDoc.empty || userDoc.docs.length > 1) {
-    console.log('No such user or toom many.');
-    return null;
-  }
+async function reactivateUser(data) {
+  // const users = db.collection('users').where('email', '==', emailData.body.email);
+  // const userDoc = await users.get();
+  // if (userDoc.empty || userDoc.docs.length > 1) {
+  //   console.log('No such user or toom many.');
+  //   return null;
+  // }
 
-  const userData = userDoc.docs[0];
+  // const userData = userDoc.docs[0];
 
-  if (!userData.data().removed) {
-    console.log('User is currently active!');
-    return false;
-  }
+  // if (!userData.data().removed) {
+  //   console.log('User is currently active!');
+  //   return false;
+  // }
 
-  const user = db.collection('users').doc(userData.id);
+  // const user = db.collection('users').doc(userData.id);
 
-  await user.update({removed: false});
-  return true;
+  // await user.update({removed: false});
+  // return true;
 }
 
 

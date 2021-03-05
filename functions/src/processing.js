@@ -29,13 +29,14 @@ function topicParser(topicString) {
   }
 }
 
-function userProcessing(user) {
+function userProcessing(user, uid) {
   const userData = JSON.parse(JSON.stringify(user));
 
   const timestamp = helpers.Timestamp.now(); // was userData.loginTime
 
   const ret = {
-    email: userData.email,
+    // email: userData.email,
+    uid: uid,
     username: userData.username,
     doc: timestamp,
     dob: getTimestamp(userData.dob),
