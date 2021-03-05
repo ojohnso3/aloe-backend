@@ -32,7 +32,7 @@ function topicParser(topicString) {
 function userProcessing(user, uid) {
   const userData = JSON.parse(JSON.stringify(user));
 
-  const timestamp = helpers.Timestamp.now(); // was userData.loginTime
+  const timestamp = helpers.Timestamp.now();
 
   const ret = {
     // email: userData.email,
