@@ -44,6 +44,8 @@ async function login(loginData) {
 
   return await admin.auth().verifyIdToken(token)
   .then(async (decodedToken) => {
+    console.log('decodedToken', decodedToken)
+
     const uid = decodedToken.uid;
 
     console.log('uid', uid)
@@ -69,8 +71,9 @@ async function login(loginData) {
     return middleware.userMiddleware(updatedUser.id, updatedUser.data());
   })
   .catch((error) => {
+    console.log("there is an error")
     console.log('ERROR: ', error)
-    // return false; // add to admin login???
+    return false; // add to admin login???
   });
 }
 
