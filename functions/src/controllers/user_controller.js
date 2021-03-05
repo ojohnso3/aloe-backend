@@ -19,15 +19,11 @@ async function checkUsername(userData) {
 
 // Create new user account (after auth verification)
 async function createAccount(userData) {
-  console.log('userData', userData.body.token);
   return await admin.auth().verifyIdToken(userData.body.token)
   .then(async (decodedToken) => {
-    console.log('decodedToken', decodedToken);
     const uid = decodedToken.uid;
-    console.log('uid', uid);
 
     const processedUser = processing.userProcessing(userData.body, uid);
-    console.log('processedUser', processedUser);
     db.collection('users').add(processedUser);
     return true;
   })

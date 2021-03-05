@@ -54,8 +54,6 @@ function userProcessing(user, uid) {
     removed: false,
   };
 
-  console.log('ret', ret)
-
   for (const key of Object.keys(ret)) {
     // console.log('key', key, ' - ', ret[key]);
     if (ret[key] === undefined) {
