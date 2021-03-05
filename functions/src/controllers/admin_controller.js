@@ -7,7 +7,7 @@ const admin = require('../firebase/admin');
 
 
 // Login as admin
-async function oldAdminLogin(adminData) {
+async function adminLogin(adminData) {
   const email = adminData.params.id;
   const users = db.collection('users');
   const adminUser = await users.where('email', '==', email).where('removed', '==', false).get();
@@ -31,7 +31,7 @@ async function oldAdminLogin(adminData) {
 }
 
 // UPDATED Login as admin
-async function adminLogin(adminData) {
+async function newAdminLogin(adminData) {
   const token = adminData.params.id;
 
   return await admin.auth().verifyIdToken(token)
