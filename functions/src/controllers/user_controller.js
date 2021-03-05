@@ -2,6 +2,7 @@ const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
 const processing = require('../processing.js');
 const helpers = require('../helpers.js');
+const admin = require('../firebase/admin');
 
 // Checks if username exists
 async function checkUsername(userData) {
@@ -38,18 +39,7 @@ async function login(loginData) {
   const loginTime = loginData.body.loginTime;
 
   const timestamp = helpers.dateToTimestamp(loginTime);
-
-  console.log('timestamp', timestamp);
-  console.log('token', token);
-
-  console.log('coocheese')
-
-  console.log('admin 1', admin.auth());
-  const bet = await admin.auth().verifyIdToken(token);
-  console.log('admin 2', bet);
-
-  console.log('baguette')
-
+  
   return await admin.auth().verifyIdToken(token)
   .then(async (decodedToken) => {
     console.log('decodedToken', decodedToken)
