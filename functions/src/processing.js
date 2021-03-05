@@ -39,7 +39,7 @@ function userProcessing(user, uid) {
     uid: uid,
     username: userData.username,
     doc: timestamp,
-    dob: getTimestamp(userData.dob),
+    // dob: getTimestamp(userData.dob),
     loginTime: timestamp,
     type: 'USER',
     consent: userData.consent || false,

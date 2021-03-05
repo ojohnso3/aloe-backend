@@ -37,7 +37,7 @@ function userMiddleware(id, dbUser) {
     type: dbUser.type,
     verified: dbUser.verified,
     profilePicture: dbUser.profilePic || '',
-    dob: helpers.timestampToDate(dbUser.dob) || '',
+    // dob: helpers.timestampToDate(dbUser.dob) || '',
     // age: getAge(dbUser.dob),
     pronouns: dbUser.pronouns || '',
     sexuality: dbUser.sexuality || '',
