@@ -19,7 +19,7 @@ async function checkUsername(userData) {
 
 // Create new user account (after auth verification)
 async function createAccount(userData) {
-  console.log('userData', userData);
+  console.log('userData', userData.body.token);
   return await admin.auth().verifyIdToken(userData.body.token)
   .then(async (decodedToken) => {
     console.log('decodedToken', decodedToken);
