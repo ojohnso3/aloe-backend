@@ -42,6 +42,14 @@ async function login(loginData) {
   console.log('timestamp', timestamp);
   console.log('token', token);
 
+  console.log('coocheese')
+
+  console.log('admin 1', admin.auth());
+  const bet = await admin.auth().verifyIdToken(token);
+  console.log('admin 2', bet);
+
+  console.log('baguette')
+
   return await admin.auth().verifyIdToken(token)
   .then(async (decodedToken) => {
     console.log('decodedToken', decodedToken)
