@@ -20,17 +20,17 @@ async function checkUsername(userData) {
 // Create new user account (after auth verification)
 async function createAccount(userData) {
   return await admin.auth().verifyIdToken(userData.body.token)
-  .then(async (decodedToken) => {
-    const uid = decodedToken.uid;
+      .then(async (decodedToken) => {
+        const uid = decodedToken.uid;
 
-    const processedUser = processing.userProcessing(userData.body, uid);
-    db.collection('users').add(processedUser);
-    return true;
-  })
-  .catch((error) => {
-    console.log('ERROR: ', error)
-    // return false;
-  });
+        const processedUser = processing.userProcessing(userData.body, uid);
+        db.collection('users').add(processedUser);
+        return true;
+      })
+      .catch((error) => {
+        console.log('ERROR: ', error);
+        // return false;
+      });
 }
 
 // Login to account (after auth verification)
@@ -41,64 +41,63 @@ async function login(loginData) {
   const timestamp = helpers.dateToTimestamp(loginTime);
 
   return await admin.auth().verifyIdToken(token)
-  .then(async (decodedToken) => {
-    const uid = decodedToken.uid;
+      .then(async (decodedToken) => {
+        const uid = decodedToken.uid;
 
-    const users = db.collection('users');
-    const currUser = await users.where('uid', '==', uid).where('removed', '==', false).get();
+        const users = db.collection('users');
+        const currUser = await users.where('uid', '==', uid).where('removed', '==', false).get();
 
-    if (currUser.empty) {
-      console.log('No such user.');
-      return;
-    }
-    if (currUser.docs.length !== 1 ) {
-      console.log('ERROR: More than one user with the same email.');
-    }
+        if (currUser.empty) {
+          console.log('No such user.');
+          return;
+        }
+        if (currUser.docs.length !== 1 ) {
+          console.log('ERROR: More than one user with the same email.');
+        }
 
-    const userDoc = currUser.docs[0];
+        const userDoc = currUser.docs[0];
 
-    const newDoc = users.doc(userDoc.id);
-    await newDoc.update({loginTime: timestamp});
+        const newDoc = users.doc(userDoc.id);
+        await newDoc.update({loginTime: timestamp});
 
-    const updatedUser = await newDoc.get();
+        const updatedUser = await newDoc.get();
 
-    return middleware.userMiddleware(updatedUser.id, updatedUser.data());
-  })
-  .catch((error) => {
-    console.log("there is an error")
-    console.log('ERROR: ', error)
-    return {results: {}}; // add to admin login???
-  });
+        return middleware.userMiddleware(updatedUser.id, updatedUser.data());
+      })
+      .catch((error) => {
+        console.log('ERROR: ', error);
+        return {results: {}}; // add to admin login???
+      });
 }
 
 
 // Login to account (after auth verification)
-async function oldlogin(loginData) {
-  const email = loginData.body.email;
-  const loginTime = loginData.body.loginTime;
+// async function oldlogin(loginData) {
+//   const email = loginData.body.email;
+//   const loginTime = loginData.body.loginTime;
 
-  const timestamp = helpers.dateToTimestamp(loginTime);
+//   const timestamp = helpers.dateToTimestamp(loginTime);
 
-  const users = db.collection('users');
-  const currUser = await users.where('email', '==', email).where('removed', '==', false).get();
+//   const users = db.collection('users');
+//   const currUser = await users.where('email', '==', email).where('removed', '==', false).get();
 
-  if (currUser.empty) {
-    console.log('No such user.');
-    return;
-  }
-  if (currUser.docs.length !== 1 ) {
-    console.log('ERROR: More than one user with the same email.');
-  }
+//   if (currUser.empty) {
+//     console.log('No such user.');
+//     return;
+//   }
+//   if (currUser.docs.length !== 1 ) {
+//     console.log('ERROR: More than one user with the same email.');
+//   }
 
-  const userDoc = currUser.docs[0];
+//   const userDoc = currUser.docs[0];
 
-  const newDoc = users.doc(userDoc.id);
-  await newDoc.update({loginTime: timestamp});
+//   const newDoc = users.doc(userDoc.id);
+//   await newDoc.update({loginTime: timestamp});
 
-  const updatedUser = await newDoc.get();
+//   const updatedUser = await newDoc.get();
 
-  return middleware.userMiddleware(updatedUser.id, updatedUser.data());
-}
+//   return middleware.userMiddleware(updatedUser.id, updatedUser.data());
+// }
 
 // Soft delete user account (hide user and make posts anonymous)
 async function deleteAccount(userData) {

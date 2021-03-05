@@ -1,13 +1,13 @@
 const constants = require('./constants.js');
 const helpers = require('./helpers.js');
 
-function getTimestamp(dob) {
-  if (!dob) {
-    return ''; // could fail by type mismatch
-  }
-  const date = new Date(dob);
-  return helpers.dateToTimestamp(date);
-}
+// function getTimestamp(dob) {
+//   if (!dob) {
+//     return ''; // could fail by type mismatch
+//   }
+//   const date = new Date(dob);
+//   return helpers.dateToTimestamp(date);
+// }
 
 function processIdentity(string) {
   if (string === 'Prefer not to answer') {

@@ -3,7 +3,7 @@ const middleware = require('../middleware.js');
 const processing = require('../processing.js');
 const helpers = require('../helpers.js');
 const constants = require('../constants.js');
-const admin = require('../firebase/admin');
+// const admin = require('../firebase/admin');
 
 
 // Login as admin
@@ -31,41 +31,38 @@ async function adminLogin(adminData) {
 }
 
 // UPDATED Login as admin
-async function newAdminLogin(adminData) {
-  const token = adminData.params.id;
+// async function newAdminLogin(adminData) {
+//   const token = adminData.params.id;
 
-  return await admin.auth().verifyIdToken(token)
-  .then(async (decodedToken) => {
-    const uid = decodedToken.uid;
+//   return await admin.auth().verifyIdToken(token)
+//   .then(async (decodedToken) => {
+//     const uid = decodedToken.uid;
 
-    const users = db.collection('users');
-    const adminUser = await users.where('uid', '==', uid).where('removed', '==', false).get();
+//     const users = db.collection('users');
+//     const adminUser = await users.where('uid', '==', uid).where('removed', '==', false).get();
 
-    if (adminUser.empty) {
-      console.log('No such user.');
-      return {};
-    }
-    if (adminUser.docs.length !== 1 ) {
-      console.log('ERROR: More than one user with the same email.');
-      return {};
-    }
+//     if (adminUser.empty) {
+//       console.log('No such user.');
+//       return {};
+//     }
+//     if (adminUser.docs.length !== 1 ) {
+//       console.log('ERROR: More than one user with the same email.');
+//       return {};
+//     }
 
-    const userDoc = adminUser.docs[0];
+//     const userDoc = adminUser.docs[0];
 
-    if (userDoc.data().type !== 'ADMIN') {
-      console.log('ERROR: User is not an Admin.');
-      return {};
-    }
+//     if (userDoc.data().type !== 'ADMIN') {
+//       console.log('ERROR: User is not an Admin.');
+//       return {};
+//     }
 
-    return middleware.userMiddleware(userDoc.id, userDoc.data());
-  })
-  .catch((error) => {
-    console.log('ERROR: ', error)
-  });
-}
-
-
-
+//     return middleware.userMiddleware(userDoc.id, userDoc.data());
+//   })
+//   .catch((error) => {
+//     console.log('ERROR: ', error)
+//   });
+// }
 
 // Load all posts of chosen status
 async function getPostsByStatus(request) {

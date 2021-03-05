@@ -1,12 +1,12 @@
 const helpers = require('./helpers.js');
 
-function getAge(timestamp) {
-  if (!timestamp) {
-    return '';
-  }
-  const dob = helpers.timestampToDate(timestamp);
-  return helpers.getAge(dob);
-}
+// function getAge(timestamp) {
+//   if (!timestamp) {
+//     return '';
+//   }
+//   const dob = helpers.timestampToDate(timestamp);
+//   return helpers.getAge(dob);
+// }
 
 function adminMiddleware(id, dbPost, userInfo) {
   const ret = {
@@ -30,7 +30,6 @@ function adminMiddleware(id, dbPost, userInfo) {
 }
 
 function userMiddleware(id, dbUser) {
-
   const ret = {
     userid: id,
     username: dbUser.username,
@@ -48,7 +47,6 @@ function userMiddleware(id, dbUser) {
     notifSettings: dbUser.notifications || true,
   };
 
-  console.log('user', ret)
   return ret;
 }
 
