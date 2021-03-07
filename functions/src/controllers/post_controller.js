@@ -144,13 +144,14 @@ async function likeContent(parentData) {
   const user = db.collection('users').doc(userID);
 
   // Extra check
-  const docArr = await parent.collection('likes').where('userID', '==', userID).get();
+  // const docArr = await parent.collection('likes').where('userID', '==', userID).get();
 
-  if (docArr.size > 0) {
-    liked = '1';
-  }
+  // if (docArr.size > 0) {
+  //   liked = '1';
+  // }
 
   if (liked === '1') {
+    console.log("removing like...");
     const docArr = await parent.collection('likes').where('userID', '==', userID).get();
     if (docArr.size !== 1) {
       console.log('ERROR: should like once');
@@ -179,20 +180,24 @@ async function likeContent(parentData) {
       });
     }
   } else {
-    // const docArr = await parent.collection('likes').where('userID', '==', userID).get();
-    // if (docArr.size > 0) {
+    console.log("adding like...");
+    const docArr = await parent.collection('likes').where('userID', '==', userID).get();
+    if (docArr.size === 0) {
     //   liked = '1';
-    // }
-    await parent.collection('likes').add({userID: userID, timestamp: helpers.Timestamp.now()});
-    await parent.update({numLikes: increment});
+      await parent.collection('likes').add({userID: userID, timestamp: helpers.Timestamp.now()});
+      await parent.update({numLikes: increment});
 
-    if (type === 'posts') {
-      const parentDoc = await parent.get();
-      await user.collection('liked').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
-    } else if (type === 'prompts') {
-      const parentDoc = await parent.get();
-      await user.collection('prompted').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
+      if (type === 'posts') {
+        const parentDoc = await parent.get();
+        await user.collection('liked').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
+      } else if (type === 'prompts') {
+        const parentDoc = await parent.get();
+        await user.collection('prompted').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
+      }
+    } else {
+      console.log('liked already existed');
     }
+
   }
   return true;
 }
