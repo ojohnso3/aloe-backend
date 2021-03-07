@@ -138,6 +138,8 @@ async function likeContent(parentData) {
   let liked = parentData.body.liked;
   const type = parentData.body.type;
 
+  console.log('liked', liked);
+
   const parent = db.collection(type).doc(parentID);
   const user = db.collection('users').doc(userID);
 
