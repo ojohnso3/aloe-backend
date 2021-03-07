@@ -1,10 +1,12 @@
+const helpers = require('../helpers.js');
+
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+// sgMail.setApiKey(helpers.functions.config().sendgrid.api)
 
 // Add email to db
 async function sendEmail(id, username, timestamp) {
   const processedTimestamp = new Date(timestamp).toDateString();
-  console.log("check timestamp", processedTimestamp);
 
   const msg = {
     to: 'aloestories@gmail.com', // Change to your recipient

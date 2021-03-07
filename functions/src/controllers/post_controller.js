@@ -162,7 +162,15 @@ async function likeContent(parentData) {
     if (type === 'posts') {
       const userArr = await user.collection('liked').where('parentID', '==', parentID).get();
       if (userArr.size !== 1) {
-        console.log('ERROR: should like once');
+        console.log('ERROR: should like POST once');
+      }
+      userArr.forEach(function(doc) {
+        doc.ref.delete();
+      });
+    } else if (type === 'prompts') {
+      const userArr = await user.collection('prompted').where('parentID', '==', parentID).get();
+      if (userArr.size !== 1) {
+        console.log('ERROR: should like PROMPT once');
       }
       userArr.forEach(function(doc) {
         doc.ref.delete();
@@ -170,7 +178,6 @@ async function likeContent(parentData) {
     }
   } else {
     // const docArr = await parent.collection('likes').where('userID', '==', userID).get();
-
     // if (docArr.size > 0) {
     //   liked = '1';
     // }
@@ -180,6 +187,9 @@ async function likeContent(parentData) {
     if (type === 'posts') {
       const parentDoc = await parent.get();
       await user.collection('liked').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
+    } else if (type === 'prompts') {
+      const parentDoc = await parent.get();
+      await user.collection('prompted').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
     }
   }
   return true;

@@ -3,6 +3,7 @@ const constants = require('./constants.js');
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 const csvtojson = require('csvtojson');
+const functions = require('firebase-functions');
 // FieldValue.serverTimestamp()
 
 function timestampToDate(timestamp) {
@@ -123,6 +124,7 @@ module.exports = {
   getUserInfo,
   getAge,
   csvtojson,
+  functions,
   Timestamp,
   FieldValue,
 };

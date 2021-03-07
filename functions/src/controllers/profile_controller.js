@@ -91,36 +91,41 @@ async function getCreated(userData) {
   return {results: createdPosts};
 }
 
-async function likedHelper(doc) {
-  const posts = db.collection('posts');
-  const postID = doc.data().parentID; // parentID vs postID
-  const likedPost = await posts.doc(postID).get();
-  if (!likedPost.exists) {
-    console.log('No document with postid: ' + postID);
+async function likedHelper(doc, type) {
+  const posts = db.collection(type);
+  const parentID = doc.data().parentID; // parentID vs postID
+  const likedContent = await posts.doc(parentID).get();
+  if (!likedContent.exists) {
+    console.log('No document with id: ' + parentID);
     return null;
   }
-  if (likedPost.data().status !== constants.APPROVED) {
-    // console.log('Post is not approved: ' + postID);
-    return null;
+  if(type == 'posts') {
+    if (likedContent.data().status !== constants.APPROVED) {
+      // console.log('Post is not approved: ' + postID);
+      return null;
+    }
   }
 
-  return likedPost;
+  return likedContent;
 }
 
 // Load liked posts on profile (TODO FIX FOR PROMPTS TOO)
 async function getLiked(userData) {
   const userID = userData.query.id;
   const timestamp = userData.query.timestamp;
+  const type = userData.body.query;
+
+  const subcollection = type === 'prompts' ? 'prompted' : 'liked';
 
   const user = db.collection('users').doc(userID);
   let liked = [];
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
     if (processedTimestamp) {
-      liked = await user.collection('liked').orderBy('contentTimestamp', 'desc').startAfter(processedTimestamp).limit(5).get();
+      liked = await user.collection(subcollection).orderBy('contentTimestamp', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
-    liked = await user.collection('liked').orderBy('contentTimestamp', 'desc').limit(5).get();
+    liked = await user.collection(subcollection).orderBy('contentTimestamp', 'desc').limit(5).get();
   }
 
   if (liked.empty) {
@@ -128,16 +133,20 @@ async function getLiked(userData) {
     return {results: []};
   }
 
-  const likedPosts = [];
+  const allLiked = [];
   await Promise.all(liked.docs.map(async (doc) => {
-    const likedPost = await likedHelper(doc);
-    if (likedPost) {
-      const userInfo = await helpers.getUserInfo(likedPost.data().userID, likedPost.data().anonymous);
-      likedPosts.push(middleware.postMiddleware(likedPost.id, likedPost.data(), userInfo));
+    const likedContent = await likedHelper(doc, type);
+    if (likedContent) {
+      const userInfo = await helpers.getUserInfo(likedContent.data().userID, likedContent.data().anonymous);
+      if (type === 'posts') {
+        allLiked.push(middleware.postMiddleware(likedContent.id, likedContent.data(), userInfo));
+      } else if (type === 'prompts') {
+        allLiked.push(middleware.promptMiddleware(likedContent.id, likedContent.data(), userInfo));
+      }
     }
   }));
 
-  return {results: likedPosts};
+  return {results: allLiked};
 }
 
 // Update profile
