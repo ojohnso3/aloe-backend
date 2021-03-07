@@ -109,7 +109,7 @@ async function likedHelper(doc, type) {
   return likedContent;
 }
 
-// Load liked posts on profile (TODO FIX FOR PROMPTS TOO)
+// Load liked posts/prompts on profile
 async function getLiked(userData) {
   const userID = userData.query.id;
   const timestamp = userData.query.timestamp;
