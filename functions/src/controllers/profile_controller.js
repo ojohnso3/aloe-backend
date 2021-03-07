@@ -115,7 +115,13 @@ async function getLiked(userData) {
   const timestamp = userData.query.timestamp;
   const type = userData.body.query;
 
+  console.log('id', id);
+  console.log('timestamp', timestamp);
+  console.log('type', type);
+
   const subcollection = type === 'prompts' ? 'prompted' : 'liked';
+  console.log('sub', subcollection);
+
 
   const user = db.collection('users').doc(userID);
   let liked = [];
@@ -125,8 +131,11 @@ async function getLiked(userData) {
       liked = await user.collection(subcollection).orderBy('contentTimestamp', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
+    console.log('before liked');
     liked = await user.collection(subcollection).orderBy('contentTimestamp', 'desc').limit(5).get();
   }
+
+  console.log('after liked');
 
   if (liked.empty) {
     console.log('No matching document.');
@@ -135,7 +144,9 @@ async function getLiked(userData) {
 
   const allLiked = [];
   await Promise.all(liked.docs.map(async (doc) => {
+    console.log('before liked helper');
     const likedContent = await likedHelper(doc, type);
+    console.log('after liked helper');
     if (likedContent) {
       const userInfo = await helpers.getUserInfo(likedContent.data().userID, likedContent.data().anonymous);
       if (type === 'posts') {
