@@ -11,7 +11,8 @@ const helpers = require('./helpers.js');
 function adminMiddleware(id, dbPost, userInfo) {
   const ret = {
     id,
-    timestamp: helpers.timestampToDate(dbPost.createdAt),
+    createdTimestamp: helpers.timestampToDate(dbPost.createdAt),
+    updatedTimestamp: helpers.timestampToDate(dbPost.updatedAt),
     status: dbPost.status,
     notes: dbPost.adminNotes,
     userID: dbPost.userID,
