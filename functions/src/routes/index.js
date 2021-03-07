@@ -35,7 +35,6 @@ router.post('/admin/topics', checkIfAuthenticated, response(adminController.remo
 router.post('/user/topic', response(adminController.addUserTopic)); // works
 router.post('/website/email', response(adminController.addEmail)); // works
 
-
 // User routes (CLEAN)
 router.get('/user/username', response(userController.checkUsername)); // works
 router.post('/user/create', response(userController.createAccount)); // works

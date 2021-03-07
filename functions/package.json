@@ -15,6 +15,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "@sendgrid/mail": "^7.4.2",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "csvtojson": "^2.0.10",
