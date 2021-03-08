@@ -35,33 +35,33 @@ async function adminLogin(adminData) {
   const token = adminData.params.id;
 
   return await admin.auth().verifyIdToken(token)
-  .then(async (decodedToken) => {
-    const uid = decodedToken.uid;
+      .then(async (decodedToken) => {
+        const uid = decodedToken.uid;
 
-    const users = db.collection('users');
-    const adminUser = await users.where('uid', '==', uid).where('removed', '==', false).get();
+        const users = db.collection('users');
+        const adminUser = await users.where('uid', '==', uid).where('removed', '==', false).get();
 
-    if (adminUser.empty) {
-      console.log('No such user.');
-      return {};
-    }
-    if (adminUser.docs.length !== 1 ) {
-      console.log('ERROR: More than one user with the same email.');
-      return {};
-    }
+        if (adminUser.empty) {
+          console.log('No such user.');
+          return {};
+        }
+        if (adminUser.docs.length !== 1 ) {
+          console.log('ERROR: More than one user with the same email.');
+          return {};
+        }
 
-    const userDoc = adminUser.docs[0];
+        const userDoc = adminUser.docs[0];
 
-    if (userDoc.data().type !== 'ADMIN') {
-      console.log('ERROR: User is not an Admin.');
-      return {};
-    }
+        if (userDoc.data().type !== 'ADMIN') {
+          console.log('ERROR: User is not an Admin.');
+          return {};
+        }
 
-    return middleware.userMiddleware(userDoc.id, userDoc.data());
-  })
-  .catch((error) => {
-    console.log('ERROR: ', error)
-  });
+        return middleware.userMiddleware(userDoc.id, userDoc.data());
+      })
+      .catch((error) => {
+        console.log('ERROR: ', error);
+      });
 }
 
 // Load all posts of chosen status

@@ -1,8 +1,8 @@
-const helpers = require('../helpers.js');
+// const helpers = require('../helpers.js');
 
-const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-// sgMail.setApiKey(helpers.functions.config().sendgrid.api)
+const sgMail = require('@sendgrid/mail');
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// sgMail.setApiKey(helpers.functions.config().sendgrid.api);
 
 // Add email to db
 async function sendEmail(id, username, timestamp) {
@@ -16,15 +16,15 @@ async function sendEmail(id, username, timestamp) {
   };
 
   sgMail
-  .send(msg)
-  .then(() => {
-    console.log('Email sent');
-    return true;
-  })
-  .catch((error) => {
-    console.error(error);
-    return false;
-  })
+      .send(msg)
+      .then(() => {
+        console.log('Email sent');
+        return true;
+      })
+      .catch((error) => {
+        console.error(error);
+        return false;
+      });
 }
 
 module.exports = {

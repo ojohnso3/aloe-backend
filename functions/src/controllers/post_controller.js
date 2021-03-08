@@ -2,8 +2,7 @@ const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
 const processing = require('../processing.js');
 const helpers = require('../helpers.js');
-const sendgridController = require('./sendgrid_controller.js');
-
+// const sendgridController = require('./sendgrid_controller.js');
 
 const increment = helpers.FieldValue.increment(1);
 const decrement = helpers.FieldValue.increment(-1);
@@ -41,7 +40,7 @@ async function createPost(postData) {
 
   const ret = {results: middleware.postMiddleware(doc.id, doc.data(), userInfo)};
 
-  if(ret) {
+  if (ret) {
     // sendgridController.sendEmail(ret.id, ret.username, ret.timestamp);
   }
 
@@ -135,10 +134,8 @@ async function removeContent(parentData) {
 async function likeContent(parentData) {
   const parentID = parentData.body.id;
   const userID = parentData.body.user;
-  let liked = parentData.body.liked;
+  const liked = parentData.body.liked;
   const type = parentData.body.type;
-
-  console.log('liked', liked);
 
   const parent = db.collection(type).doc(parentID);
   const user = db.collection('users').doc(userID);
@@ -151,7 +148,7 @@ async function likeContent(parentData) {
   // }
 
   if (liked === '1') {
-    console.log("removing like...");
+    console.log('removing like...');
     const docArr = await parent.collection('likes').where('userID', '==', userID).get();
     if (docArr.size !== 1) {
       console.log('ERROR: should like once');
@@ -180,7 +177,7 @@ async function likeContent(parentData) {
       });
     }
   } else {
-    console.log("adding like...");
+    console.log('adding like...');
     const docArr = await parent.collection('likes').where('userID', '==', userID).get();
     if (docArr.size === 0) {
     //   liked = '1';
@@ -197,7 +194,6 @@ async function likeContent(parentData) {
     } else {
       console.log('liked already existed');
     }
-
   }
   return true;
 }

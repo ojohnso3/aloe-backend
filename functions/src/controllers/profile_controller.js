@@ -99,7 +99,7 @@ async function likedHelper(doc, type) {
     console.log('No document with id: ' + parentID);
     return null;
   }
-  if(type == 'posts') {
+  if (type === 'posts') {
     if (likedContent.data().status !== constants.APPROVED) {
       // console.log('Post is not approved: ' + postID);
       return null;
@@ -111,7 +111,6 @@ async function likedHelper(doc, type) {
 
 // Load liked posts/prompts on profile
 async function getLiked(userData) {
-
   const userID = userData.query.id;
   const timestamp = userData.query.timestamp;
   const type = userData.query.type;
