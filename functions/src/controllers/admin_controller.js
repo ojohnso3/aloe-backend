@@ -5,31 +5,6 @@ const helpers = require('../helpers.js');
 const constants = require('../constants.js');
 const admin = require('../firebase/admin');
 
-
-// Login as admin
-// async function adminLogin(adminData) {
-//   const email = adminData.params.id;
-//   const users = db.collection('users');
-//   const adminUser = await users.where('email', '==', email).where('removed', '==', false).get();
-
-//   if (adminUser.empty) {
-//     console.log('No such user.');
-//     return {};
-//   }
-//   if (adminUser.docs.length !== 1 ) {
-//     console.log('ERROR: More than one user with the same email.');
-//     return {};
-//   }
-
-//   const userDoc = adminUser.docs[0];
-
-//   if (userDoc.data().type !== 'ADMIN') {
-//     console.log('ERROR: User is not an Admin.');
-//     return {};
-//   }
-//   return middleware.userMiddleware(userDoc.id, userDoc.data());
-// }
-
 // UPDATED Login as admin
 async function adminLogin(adminData) {
   const token = adminData.params.id;
@@ -91,6 +66,11 @@ async function moderatePost(postData) {
   const updates = postData.body; // timestamp unnecessary
   const post = db.collection('posts').doc(updates.id);
   await post.update({status: updates.status, blurred: updates.blurred, adminNotes: updates.notes, updatedAt: helpers.Timestamp.now()});
+  if (updates.status === constants.APPROVED) {
+    helpers.sendPushNotification('token', 'APPROVED'); // send token
+  } else if (updates.status === constants.REJECTED) {
+    helpers.sendPushNotification('token', 'REJECTED'); // send token
+  }
   return true;
 }
 
@@ -247,3 +227,27 @@ module.exports = {
   addUserTopic,
   addEmail,
 };
+
+// Login as admin
+// async function adminLogin(adminData) {
+//   const email = adminData.params.id;
+//   const users = db.collection('users');
+//   const adminUser = await users.where('email', '==', email).where('removed', '==', false).get();
+
+//   if (adminUser.empty) {
+//     console.log('No such user.');
+//     return {};
+//   }
+//   if (adminUser.docs.length !== 1 ) {
+//     console.log('ERROR: More than one user with the same email.');
+//     return {};
+//   }
+
+//   const userDoc = adminUser.docs[0];
+
+//   if (userDoc.data().type !== 'ADMIN') {
+//     console.log('ERROR: User is not an Admin.');
+//     return {};
+//   }
+//   return middleware.userMiddleware(userDoc.id, userDoc.data());
+// }

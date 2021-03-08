@@ -4,6 +4,7 @@ const Timestamp = require('firebase-admin').firestore.Timestamp;
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 const csvtojson = require('csvtojson');
 const functions = require('firebase-functions');
+const admin = require('./firebase/admin');
 // FieldValue.serverTimestamp()
 
 function timestampToDate(timestamp) {
@@ -117,12 +118,75 @@ function getAge(dob) {
   return Math.abs(ageDt.getUTCFullYear() - 1970).toString();
 }
 
+function sendPushNotification(token, type) {
+  if(!process.env.PRODUCTION) {
+    console.log('Cannot send notifications on TESTING');
+    return;
+  }
+  console.log('token check 1', token);
+  if(!token || token === '') {
+    token = 'cJJFxqymT0wFuqUBsaQmyB:APA91bGZfbkaPRVlpxeE80G9Pp1P1L_BVfCcGa0zCoLJetdmvWyiTOA40SjhTQi7VAEHEAocrSDbjU2LnFcgjxoP-FYIZa5T-l0KBH9rh9wMU4SuwSXKscBftBPdTAdNlRlMBlDqTY6H'
+    // return;
+  }
+
+  console.log('token check 2', token);
+
+  let title;
+  let body;
+
+  // STORYLIKE, RESPONSELIKE, REPLY, APPROVED, REJECTED
+  switch(type) {
+    case 'STORYLIKE':
+      title = 'Someone has liked your story!';
+      body = 'Click on this notification to return to Aloe :)';
+      break;
+    case 'RESPONSELIKE':
+      title = 'Someone has liked your response!';
+      body = 'Click on this notification to return to Aloe :)';
+      break;
+    case 'REPLY':
+      title = 'Someone has replied to your response!';
+      body = 'Click on this notification to return to Aloe :)';
+      break;
+    case 'APPROVED':
+      title = 'Your story has been approved!';
+      body = 'Click on this notification to view your story on Aloe :)';
+      break;
+    case 'REJECTED':
+      title = 'Your story has been declined——please review our notes and resubmit!';
+      body = 'Click on this notification to review your story in your profile.';
+      break;
+    default:
+  }
+
+  var message = {
+    notification: {
+      title: title,
+      body: body,
+    },
+    token: token,
+  };
+
+  console.log('message', message);
+
+  // Send a message to the device corresponding to the provided registration token.
+  admin.messaging().send(message)
+    .then((response) => {
+      // Response is a message ID string.
+      console.log('Successfully sent message:', response);
+    })
+    .catch((error) => {
+      console.log('Error sending message:', error);
+    });
+}
+
 module.exports = {
   timestampToDate,
   dateToTimestamp,
   getTimeFromNow,
   getUserInfo,
   getAge,
+  sendPushNotification,
   csvtojson,
   functions,
   Timestamp,

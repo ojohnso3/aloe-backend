@@ -64,6 +64,12 @@ async function createResponse(responseData) {
   if (processedResponse.replyID) {
     const parentResponse = db.collection('responses').doc(processedResponse.replyID);
     await parentResponse.update({replies: increment});
+
+    // PUSH notification to owner of original response
+    const originalUserID = (await parentResponse.get()).data().userID;
+    const originalUser = await db.collection('users').doc(originalUserID).get();
+    // console.log('username check REPLY', originalUser.data().username);
+    helpers.sendPushNotification(originalUser.data().token, 'REPLY');
   }
 
   const doc = await newResponse.get();
@@ -180,16 +186,27 @@ async function likeContent(parentData) {
     console.log('adding like...');
     const docArr = await parent.collection('likes').where('userID', '==', userID).get();
     if (docArr.size === 0) {
-    //   liked = '1';
+
       await parent.collection('likes').add({userID: userID, timestamp: helpers.Timestamp.now()});
       await parent.update({numLikes: increment});
 
+      const parentDoc = await parent.get();
+
       if (type === 'posts') {
-        const parentDoc = await parent.get();
         await user.collection('liked').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
+        
+        const originalUser = await db.collection('users').doc(parentDoc.data().userID).get();
+        // console.log('username check STORYLIKE', originalUser.data().username);
+        helpers.sendPushNotification(originalUser.data().token, 'STORYLIKE');
+
       } else if (type === 'prompts') {
-        const parentDoc = await parent.get();
         await user.collection('prompted').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
+
+      } else {
+        const originalUser = await db.collection('users').doc(parentDoc.data().userID).get();
+        // console.log('username check RESPONSELIKE', originalUser.data().username);
+        helpers.sendPushNotification(originalUser.data().token, 'RESPONSELIKE');
+
       }
     } else {
       console.log('liked already existed');
