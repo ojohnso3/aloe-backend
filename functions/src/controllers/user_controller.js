@@ -33,6 +33,25 @@ async function createAccount(userData) {
       });
 }
 
+// Add or update registration token
+async function addRegistrationToken(userData) {
+  if (!userData.body.userid || !userData.body.token) {
+    console.log('ERROR: Invalid userid or token');
+    return false;
+  }
+
+  const user = db.collection('users').doc(userData.body.userid);
+  const userDoc = await user.get();
+
+  if (!userDoc.exists) {
+    console.log('No such user.');
+    return false;
+  }
+
+  await user.update({token: userData.body.token});
+  return true;
+}
+
 // Login to account (after auth verification)
 async function login(loginData) {
   const token = loginData.body.token;
@@ -70,35 +89,6 @@ async function login(loginData) {
       });
 }
 
-
-// Login to account (after auth verification)
-// async function oldlogin(loginData) {
-//   const email = loginData.body.email;
-//   const loginTime = loginData.body.loginTime;
-
-//   const timestamp = helpers.dateToTimestamp(loginTime);
-
-//   const users = db.collection('users');
-//   const currUser = await users.where('email', '==', email).where('removed', '==', false).get();
-
-//   if (currUser.empty) {
-//     console.log('No such user.');
-//     return;
-//   }
-//   if (currUser.docs.length !== 1 ) {
-//     console.log('ERROR: More than one user with the same email.');
-//   }
-
-//   const userDoc = currUser.docs[0];
-
-//   const newDoc = users.doc(userDoc.id);
-//   await newDoc.update({loginTime: timestamp});
-
-//   const updatedUser = await newDoc.get();
-
-//   return middleware.userMiddleware(updatedUser.id, updatedUser.data());
-// }
-
 // Soft delete user account (hide user and make posts anonymous)
 async function deleteAccount(userData) {
   const user = db.collection('users').doc(userData.body.userID);
@@ -135,6 +125,35 @@ async function deleteAccount(userData) {
 module.exports = {
   checkUsername,
   createAccount,
+  addRegistrationToken,
   login,
   deleteAccount,
 };
+
+// Login to account (after auth verification)
+// async function oldlogin(loginData) {
+//   const email = loginData.body.email;
+//   const loginTime = loginData.body.loginTime;
+
+//   const timestamp = helpers.dateToTimestamp(loginTime);
+
+//   const users = db.collection('users');
+//   const currUser = await users.where('email', '==', email).where('removed', '==', false).get();
+
+//   if (currUser.empty) {
+//     console.log('No such user.');
+//     return;
+//   }
+//   if (currUser.docs.length !== 1 ) {
+//     console.log('ERROR: More than one user with the same email.');
+//   }
+
+//   const userDoc = currUser.docs[0];
+
+//   const newDoc = users.doc(userDoc.id);
+//   await newDoc.update({loginTime: timestamp});
+
+//   const updatedUser = await newDoc.get();
+
+//   return middleware.userMiddleware(updatedUser.id, updatedUser.data());
+// }

@@ -40,6 +40,8 @@ router.get('/user/username', response(userController.checkUsername)); // works
 router.post('/user/create', response(userController.createAccount)); // works
 router.put('/user/login', response(userController.login)); // works
 router.put('/user/delete', response(userController.deleteAccount)); // works
+router.put('/user/token', response(userController.addRegistrationToken)); // check
+
 
 
 // Profile routes (CLEAN)
