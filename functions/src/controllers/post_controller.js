@@ -41,7 +41,7 @@ async function createPost(postData) {
   const ret = {results: middleware.postMiddleware(doc.id, doc.data(), userInfo)};
 
   if (ret) {
-    sendgridController.sendEmail(ret.id, ret.username, ret.timestamp);
+    sendgridController.sendEmail(ret.results.id, ret.results.user, ret.results.timestamp);
   }
 
   return ret;
