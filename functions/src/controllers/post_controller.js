@@ -2,7 +2,7 @@ const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
 const processing = require('../processing.js');
 const helpers = require('../helpers.js');
-// const sendgridController = require('./sendgrid_controller.js');
+const sendgridController = require('./sendgrid_controller.js');
 
 const increment = helpers.FieldValue.increment(1);
 const decrement = helpers.FieldValue.increment(-1);
@@ -41,7 +41,7 @@ async function createPost(postData) {
   const ret = {results: middleware.postMiddleware(doc.id, doc.data(), userInfo)};
 
   if (ret) {
-    // sendgridController.sendEmail(ret.id, ret.username, ret.timestamp);
+    sendgridController.sendEmail(ret.id, ret.username, ret.timestamp);
   }
 
   return ret;
