@@ -136,6 +136,7 @@ async function removeTopic(topicData) {
   await Promise.all(topicDoc.docs.map(async (doc) => {
     const archived = doc.data();
     archived['contentType'] = 'topics';
+    // change updatedAt too?
     await db.collection('archive').doc(doc.id).set(archived);
 
     db.collection('topics').doc(doc.id).delete();
@@ -154,6 +155,7 @@ async function editTopic(topicData) {
   if (!processedTopic.topic || !original) {
     return 'error1';
   }
+  delete processedTopic['createdAt'];
 
   const topic = await db.collection('topics').where('topic', '==', original).get();
 
