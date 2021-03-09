@@ -119,10 +119,11 @@ function getAge(dob) {
 }
 
 async function sendPushNotification(token, type, userID, anonymous, prompt) {
-  if (!process.env.PRODUCTION) {
-    console.log('Cannot send notifications on TESTING');
-    return;
-  }
+  // TODO: comment out when deploying
+  // if (!process.env.PRODUCTION) {
+  //   console.log('Cannot send notifications on TESTING');
+  //   return;
+  // }
 
   if (!token || token === '') {
     return;
