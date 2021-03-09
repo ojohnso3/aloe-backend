@@ -119,14 +119,14 @@ function getAge(dob) {
 }
 
 async function sendPushNotification(token, type, userID, anonymous, prompt) {
-  // if(!process.env.PRODUCTION) {
-  //   console.log('Cannot send notifications on TESTING');
-  //   return;
-  // }
+  if(!process.env.PRODUCTION) {
+    console.log('Cannot send notifications on TESTING');
+    return;
+  }
 
-  // if(!token || token === '') {
-  //   return;
-  // }
+  if(!token || token === '') {
+    return;
+  }
 
   let title;
   let body;
@@ -183,14 +183,14 @@ async function sendPushNotification(token, type, userID, anonymous, prompt) {
   console.log('message', message);
 
   // Send a message to the device corresponding to the provided registration token.
-  // admin.messaging().send(message)
-  //   .then((response) => {
-  //     // Response is a message ID string.
-  //     console.log('Successfully sent message:', response);
-  //   })
-  //   .catch((error) => {
-  //     console.log('Error sending message:', error);
-  //   });
+  admin.messaging().send(message)
+    .then((response) => {
+      // Response is a message ID string.
+      console.log('Successfully sent message:', response);
+    })
+    .catch((error) => {
+      console.log('Error sending message:', error);
+    });
 }
 
 module.exports = {
