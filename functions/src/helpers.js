@@ -118,66 +118,79 @@ function getAge(dob) {
   return Math.abs(ageDt.getUTCFullYear() - 1970).toString();
 }
 
-function sendPushNotification(token, type) {
-  if(!process.env.PRODUCTION) {
-    console.log('Cannot send notifications on TESTING');
-    return;
-  }
-  console.log('token check 1', token);
-  if(!token || token === '') {
-    token = 'cJJFxqymT0wFuqUBsaQmyB:APA91bGZfbkaPRVlpxeE80G9Pp1P1L_BVfCcGa0zCoLJetdmvWyiTOA40SjhTQi7VAEHEAocrSDbjU2LnFcgjxoP-FYIZa5T-l0KBH9rh9wMU4SuwSXKscBftBPdTAdNlRlMBlDqTY6H'
-    // return;
-  }
+async function sendPushNotification(token, type, userID, anonymous, prompt) {
+  // if(!process.env.PRODUCTION) {
+  //   console.log('Cannot send notifications on TESTING');
+  //   return;
+  // }
 
-  console.log('token check 2', token);
+  // if(!token || token === '') {
+  //   return;
+  // }
 
   let title;
   let body;
+  let user;
+  let username;
 
   // STORYLIKE, RESPONSELIKE, REPLY, APPROVED, REJECTED
   switch(type) {
     case 'STORYLIKE':
-      title = 'Someone has liked your story!';
-      body = 'Click on this notification to return to Aloe :)';
+      user = await getUserInfo(userID, anonymous);
+      username = user.username;
+
+      body = username + ' has liked your story!';
       break;
     case 'RESPONSELIKE':
-      title = 'Someone has liked your response!';
-      body = 'Click on this notification to return to Aloe :)';
+      user = await getUserInfo(userID, anonymous);
+      username = user.username;
+
+      // title = prompt;
+      body = username + ' has liked your response!';
       break;
     case 'REPLY':
-      title = 'Someone has replied to your response!';
-      body = 'Click on this notification to return to Aloe :)';
+      user = await getUserInfo(userID, anonymous);
+      username = user.username;
+
+      title = prompt;
+      body = username + ' has replied to your response!'; // prompt body
       break;
     case 'APPROVED':
       title = 'Your story has been approved!';
-      body = 'Click on this notification to view your story on Aloe :)';
+      body = 'Come check out your story on the feed :)';
       break;
     case 'REJECTED':
-      title = 'Your story has been declined——please review our notes and resubmit!';
-      body = 'Click on this notification to review your story in your profile.';
+      title = 'Your story has been declined :(';
+      body = 'Please review our notes and resubmit!'; // move from title
       break;
     default:
   }
 
+  // body = 'Click on this notification to return to Aloe :)';
+
   var message = {
     notification: {
-      title: title,
+      title: title, // null ?
       body: body,
     },
     token: token,
   };
 
+  if (!message.notification.title) {
+    delete message.notification.title;
+  }
+
   console.log('message', message);
 
   // Send a message to the device corresponding to the provided registration token.
-  admin.messaging().send(message)
-    .then((response) => {
-      // Response is a message ID string.
-      console.log('Successfully sent message:', response);
-    })
-    .catch((error) => {
-      console.log('Error sending message:', error);
-    });
+  // admin.messaging().send(message)
+  //   .then((response) => {
+  //     // Response is a message ID string.
+  //     console.log('Successfully sent message:', response);
+  //   })
+  //   .catch((error) => {
+  //     console.log('Error sending message:', error);
+  //   });
 }
 
 module.exports = {

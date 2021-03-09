@@ -63,13 +63,17 @@ async function getPostsByStatus(request) {
 
 // Change status of post
 async function moderatePost(postData) {
-  const updates = postData.body; // timestamp unnecessary
+  const updates = postData.body;
   const post = db.collection('posts').doc(updates.id);
   await post.update({status: updates.status, blurred: updates.blurred, adminNotes: updates.notes, updatedAt: helpers.Timestamp.now()});
   if (updates.status === constants.APPROVED) {
-    helpers.sendPushNotification('token', 'APPROVED'); // send token
+    const userID = (await post.get()).data().userID;
+    const userDoc = await db.collection('users').doc(userID).get();
+    await helpers.sendPushNotification(userDoc.data().token, 'APPROVED', '', '', '');
   } else if (updates.status === constants.REJECTED) {
-    helpers.sendPushNotification('token', 'REJECTED'); // send token
+    const userID = (await post.get()).data().userID;
+    const userDoc = await db.collection('users').doc(userID).get();
+    await helpers.sendPushNotification(userDoc.data().token, 'REJECTED', '', '', '');
   }
   return true;
 }

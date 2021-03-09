@@ -61,6 +61,7 @@ async function createResponse(responseData) {
   await prompt.update({numResponses: increment});
 
   // parent of reply
+  console.log('check', processedResponse.replyID);
   if (processedResponse.replyID) {
     const parentResponse = db.collection('responses').doc(processedResponse.replyID);
     await parentResponse.update({replies: increment});
@@ -69,7 +70,10 @@ async function createResponse(responseData) {
     const originalUserID = (await parentResponse.get()).data().userID;
     const originalUser = await db.collection('users').doc(originalUserID).get();
     // console.log('username check REPLY', originalUser.data().username);
-    helpers.sendPushNotification(originalUser.data().token, 'REPLY');
+    if(originalUser.id !== processedResponse.userID) {
+      const promptBody = (await prompt.get()).data().prompt;
+      await helpers.sendPushNotification(originalUser.data().token, 'REPLY', processedResponse.userID, processedResponse.anonymous, promptBody);
+    }
   }
 
   const doc = await newResponse.get();
@@ -197,7 +201,9 @@ async function likeContent(parentData) {
         
         const originalUser = await db.collection('users').doc(parentDoc.data().userID).get();
         // console.log('username check STORYLIKE', originalUser.data().username);
-        helpers.sendPushNotification(originalUser.data().token, 'STORYLIKE');
+        if(originalUser.id !== userID) {
+          await helpers.sendPushNotification(originalUser.data().token, 'STORYLIKE', userID, false, '');
+        }
 
       } else if (type === 'prompts') {
         await user.collection('prompted').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
@@ -205,8 +211,9 @@ async function likeContent(parentData) {
       } else {
         const originalUser = await db.collection('users').doc(parentDoc.data().userID).get();
         // console.log('username check RESPONSELIKE', originalUser.data().username);
-        helpers.sendPushNotification(originalUser.data().token, 'RESPONSELIKE');
-
+        if(originalUser.id !== userID) {
+          await helpers.sendPushNotification(originalUser.data().token, 'RESPONSELIKE', userID, false, '');
+        }
       }
     } else {
       console.log('liked already existed');
