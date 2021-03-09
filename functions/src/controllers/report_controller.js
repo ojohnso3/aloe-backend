@@ -1,53 +1,37 @@
 const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
 const constants = require('../constants.js');
+const helpers = require('../helpers.js');
 
 // Report post/response/user
 async function reportFromApp(reportData) {
   const type = reportData.body.type; // posts, responses, users
-  const timestamp = reportData.body.timestamp;
   const reportingUser = reportData.body.userid;
   const reason = reportData.body.reason;
   const parentID = reportData.body.id;
 
-  // console.log('report', reportData.body);
+  if (!parentID || !type) {
+    console.log('ERROR: Need reported id + type')
+    return false;
+  }
 
   const newReport = {
     parentID: parentID,
     type: type,
-    userID: reportingUser,
-    reason: reason,
+    userID: reportingUser || 'No user.',
+    reason: reason || 'No given reason.',
     status: constants.PENDING,
-    createdAt: timestamp,
+    createdAt: helpers.Timestamp.now(),
   };
 
-  // separate username check for user (can just use userID instead)
-  if (type === 'users') {
-    const userCol = db.collection(type).where('username', '==', parentID);
-    const user = await userCol.get();
-    if (user.empty) {
-      // console.log('No matching ' + type + ' document.');
-      return 'error';
-    }
-
-    const userID = user.docs[0].id;
-
-    const userDoc = db.collection(type).doc(userID);
-    await userDoc.update({reported: true});
-
-    newReport['parentID'] = userID;
-    db.collection('reports').add(newReport);
-  } else {
-    const parent = db.collection(type).doc(parentID);
-    if (!(await parent.get()).exists) {
-      // console.log('No matching ' + type + ' document.');
-      return 'error';
-    }
-    await parent.update({reported: true});
-    db.collection('reports').add(newReport);
+  const parent = db.collection(type).doc(parentID);
+  if (!(await parent.get()).exists) {
+    console.log('No matching ' + type + ' document.');
+    return false;
   }
-
-  return 'success'; // return success if success
+  await parent.update({reported: true});
+  db.collection('reports').add(newReport);
+  return true;
 }
 
 
@@ -136,7 +120,7 @@ async function getReports() {
   const reports = await db.collection('reports').orderBy('createdAt', 'desc').get();
   if (reports.empty) {
     console.log('No matching report documents.');
-    return;
+    return [];
   }
 
   const reportDocs = [];
@@ -206,3 +190,30 @@ module.exports = {
   unbanUser,
   reactivateUser,
 };
+
+
+  // separate username check for user (can just use userID instead)
+  // if (type === 'users') {
+  //   const userCol = db.collection(type).doc(parentID);
+  //   const user = await userCol.get();
+  //   if (user.empty) {
+  //     // console.log('No matching ' + type + ' document.');
+  //     return 'error';
+  //   }
+
+  //   const userID = user.docs[0].id;
+
+  //   const userDoc = db.collection(type).doc(userID);
+  //   await userDoc.update({reported: true});
+
+  //   newReport['parentID'] = userID;
+  //   db.collection('reports').add(newReport);
+  // } else {
+  //   const parent = db.collection(type).doc(parentID);
+  //   if (!(await parent.get()).exists) {
+  //     // console.log('No matching ' + type + ' document.');
+  //     return 'error';
+  //   }
+  //   await parent.update({reported: true});
+  //   db.collection('reports').add(newReport);
+  // }

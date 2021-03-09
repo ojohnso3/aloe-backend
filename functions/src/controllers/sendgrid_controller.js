@@ -9,7 +9,7 @@ const sgMail = require('@sendgrid/mail');
 async function sendEmail(id, username, timestamp) {
   let processedTimestamp;
   if (timestamp) {
-    processedTimestamp = new Date(timestamp).toDateString().toLocaleString('en-US', {timeZone: 'America/New_York'});
+    processedTimestamp = new Date(timestamp).toLocaleString('en-US', {timeZone: 'America/New_York'});
   } else {
     processedTimestamp = new Date().toLocaleString('en-US', {timeZone: 'America/New_York'});
   }
