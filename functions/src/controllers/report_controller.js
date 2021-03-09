@@ -11,7 +11,7 @@ async function reportFromApp(reportData) {
   const parentID = reportData.body.id;
 
   if (!parentID || !type) {
-    console.log('ERROR: Need reported id + type')
+    console.log('ERROR: Need reported id + type');
     return false;
   }
 
@@ -48,8 +48,6 @@ async function getReports() {
   }));
   return reportDocs;
 }
-
-
 
 // BELOW FUNCTIONS ARENT IN USE YET
 
@@ -192,30 +190,3 @@ module.exports = {
   unbanUser,
   reactivateUser,
 };
-
-
-  // separate username check for user (can just use userID instead)
-  // if (type === 'users') {
-  //   const userCol = db.collection(type).doc(parentID);
-  //   const user = await userCol.get();
-  //   if (user.empty) {
-  //     // console.log('No matching ' + type + ' document.');
-  //     return 'error';
-  //   }
-
-  //   const userID = user.docs[0].id;
-
-  //   const userDoc = db.collection(type).doc(userID);
-  //   await userDoc.update({reported: true});
-
-  //   newReport['parentID'] = userID;
-  //   db.collection('reports').add(newReport);
-  // } else {
-  //   const parent = db.collection(type).doc(parentID);
-  //   if (!(await parent.get()).exists) {
-  //     // console.log('No matching ' + type + ' document.');
-  //     return 'error';
-  //   }
-  //   await parent.update({reported: true});
-  //   db.collection('reports').add(newReport);
-  // }
