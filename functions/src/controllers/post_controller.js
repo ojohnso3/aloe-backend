@@ -61,7 +61,6 @@ async function createResponse(responseData) {
   await prompt.update({numResponses: increment});
 
   // parent of reply
-  console.log('check', processedResponse.replyID);
   if (processedResponse.replyID) {
     const parentResponse = db.collection('responses').doc(processedResponse.replyID);
     await parentResponse.update({replies: increment});
@@ -70,7 +69,7 @@ async function createResponse(responseData) {
     const originalUserID = (await parentResponse.get()).data().userID;
     const originalUser = await db.collection('users').doc(originalUserID).get();
     // console.log('username check REPLY', originalUser.data().username);
-    if(originalUser.id !== processedResponse.userID) {
+    if (originalUser.id !== processedResponse.userID) {
       const promptBody = (await prompt.get()).data().prompt;
       await helpers.sendPushNotification(originalUser.data().token, 'REPLY', processedResponse.userID, processedResponse.anonymous, promptBody);
     }
@@ -190,7 +189,6 @@ async function likeContent(parentData) {
     console.log('adding like...');
     const docArr = await parent.collection('likes').where('userID', '==', userID).get();
     if (docArr.size === 0) {
-
       await parent.collection('likes').add({userID: userID, timestamp: helpers.Timestamp.now()});
       await parent.update({numLikes: increment});
 
@@ -198,20 +196,18 @@ async function likeContent(parentData) {
 
       if (type === 'posts') {
         await user.collection('liked').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
-        
+
         const originalUser = await db.collection('users').doc(parentDoc.data().userID).get();
         // console.log('username check STORYLIKE', originalUser.data().username);
-        if(originalUser.id !== userID) {
+        if (originalUser.id !== userID) {
           await helpers.sendPushNotification(originalUser.data().token, 'STORYLIKE', userID, false, '');
         }
-
       } else if (type === 'prompts') {
         await user.collection('prompted').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
-
       } else {
         const originalUser = await db.collection('users').doc(parentDoc.data().userID).get();
         // console.log('username check RESPONSELIKE', originalUser.data().username);
-        if(originalUser.id !== userID) {
+        if (originalUser.id !== userID) {
           await helpers.sendPushNotification(originalUser.data().token, 'RESPONSELIKE', userID, false, '');
         }
       }

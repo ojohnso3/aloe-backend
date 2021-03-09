@@ -129,31 +129,3 @@ module.exports = {
   login,
   deleteAccount,
 };
-
-// Login to account (after auth verification)
-// async function oldlogin(loginData) {
-//   const email = loginData.body.email;
-//   const loginTime = loginData.body.loginTime;
-
-//   const timestamp = helpers.dateToTimestamp(loginTime);
-
-//   const users = db.collection('users');
-//   const currUser = await users.where('email', '==', email).where('removed', '==', false).get();
-
-//   if (currUser.empty) {
-//     console.log('No such user.');
-//     return;
-//   }
-//   if (currUser.docs.length !== 1 ) {
-//     console.log('ERROR: More than one user with the same email.');
-//   }
-
-//   const userDoc = currUser.docs[0];
-
-//   const newDoc = users.doc(userDoc.id);
-//   await newDoc.update({loginTime: timestamp});
-
-//   const updatedUser = await newDoc.get();
-
-//   return middleware.userMiddleware(updatedUser.id, updatedUser.data());
-// }

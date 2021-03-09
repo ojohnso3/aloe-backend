@@ -43,7 +43,6 @@ router.put('/user/delete', response(userController.deleteAccount)); // works
 router.put('/user/token', response(userController.addRegistrationToken)); // check
 
 
-
 // Profile routes (CLEAN)
 router.get('/profile/view/:id', response(profileController.getProfile)); // works
 router.get('/profile/created', response(profileController.getCreated)); // works

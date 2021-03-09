@@ -119,12 +119,12 @@ function getAge(dob) {
 }
 
 async function sendPushNotification(token, type, userID, anonymous, prompt) {
-  if(!process.env.PRODUCTION) {
+  if (!process.env.PRODUCTION) {
     console.log('Cannot send notifications on TESTING');
     return;
   }
 
-  if(!token || token === '') {
+  if (!token || token === '') {
     return;
   }
 
@@ -134,7 +134,7 @@ async function sendPushNotification(token, type, userID, anonymous, prompt) {
   let username;
 
   // STORYLIKE, RESPONSELIKE, REPLY, APPROVED, REJECTED
-  switch(type) {
+  switch (type) {
     case 'STORYLIKE':
       user = await getUserInfo(userID, anonymous);
       username = user.username;
@@ -153,7 +153,7 @@ async function sendPushNotification(token, type, userID, anonymous, prompt) {
       username = user.username;
 
       title = prompt;
-      body = username + ' has replied to your response!'; // prompt body
+      body = username + ' has replied to your response!';
       break;
     case 'APPROVED':
       title = 'Your story has been approved!';
@@ -161,16 +161,16 @@ async function sendPushNotification(token, type, userID, anonymous, prompt) {
       break;
     case 'REJECTED':
       title = 'Your story has been declined :(';
-      body = 'Please review our notes and resubmit!'; // move from title
+      body = 'Please review our notes and resubmit!';
       break;
     default:
   }
 
   // body = 'Click on this notification to return to Aloe :)';
 
-  var message = {
+  const message = {
     notification: {
-      title: title, // null ?
+      title: title,
       body: body,
     },
     token: token,
@@ -180,17 +180,17 @@ async function sendPushNotification(token, type, userID, anonymous, prompt) {
     delete message.notification.title;
   }
 
-  console.log('message', message);
+  // console.log('message', message);
 
   // Send a message to the device corresponding to the provided registration token.
   admin.messaging().send(message)
-    .then((response) => {
-      // Response is a message ID string.
-      console.log('Successfully sent message:', response);
-    })
-    .catch((error) => {
-      console.log('Error sending message:', error);
-    });
+      .then((response) => {
+        // Response is a message ID string.
+        console.log('Successfully sent message:', response);
+      })
+      .catch((error) => {
+        console.log('Error sending message:', error);
+      });
 }
 
 module.exports = {

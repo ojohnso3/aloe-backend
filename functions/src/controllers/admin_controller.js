@@ -88,13 +88,6 @@ async function createPrompt(promptData) {
   const newPrompt = await db.collection('prompts').add(processedPrompt.prompt);
   const doc = await newPrompt.get();
 
-  // if (doc.data().numAnswers > 0) {
-  //   if (!processedPrompt.answers) {
-  //     return 'There was an error in prompt answer creation';
-  //   }
-  //   createAnswers(doc.id, processedPrompt.answers);
-  // }
-
   if (doc.data().userID !== constants.ALOE_ID) {
     console.log('ERROR: ids do not match');
   }
@@ -231,27 +224,3 @@ module.exports = {
   addUserTopic,
   addEmail,
 };
-
-// Login as admin
-// async function adminLogin(adminData) {
-//   const email = adminData.params.id;
-//   const users = db.collection('users');
-//   const adminUser = await users.where('email', '==', email).where('removed', '==', false).get();
-
-//   if (adminUser.empty) {
-//     console.log('No such user.');
-//     return {};
-//   }
-//   if (adminUser.docs.length !== 1 ) {
-//     console.log('ERROR: More than one user with the same email.');
-//     return {};
-//   }
-
-//   const userDoc = adminUser.docs[0];
-
-//   if (userDoc.data().type !== 'ADMIN') {
-//     console.log('ERROR: User is not an Admin.');
-//     return {};
-//   }
-//   return middleware.userMiddleware(userDoc.id, userDoc.data());
-// }
