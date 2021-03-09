@@ -21,7 +21,7 @@ async function reportFromApp(reportData) {
     createdAt: timestamp,
   };
 
-  // separate username check for user (TODO: can just use userID instead)
+  // separate username check for user (can just use userID instead)
   if (type === 'users') {
     const userCol = db.collection(type).where('username', '==', parentID);
     const user = await userCol.get();
@@ -162,7 +162,7 @@ async function getBannedUsers() {
     banned.push(middleware.userMiddleware(doc.id, doc.data(), userInfo));
   }));
 
-  // TODO: make below into helper function
+  // Make below into helper function
 
   return bannedUsers.docs.map(async (doc) => {
     const reportDocs = await db.collection('users').doc(doc.id).collection('reports').get();

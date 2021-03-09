@@ -116,7 +116,7 @@ function postProcessing(post) {
     numShares: 0,
     numResponses: 0,
     anonymous: anonymous,
-    blurred: blurred || false, // TODO: might have to check this value
+    blurred: blurred || false, // might have to check this value !!
     reported: false,
     removed: false,
     adminNotes: '',
@@ -170,7 +170,7 @@ function responseProcessing(response) {
     numLikes: 0,
     reported: false,
     removed: false,
-    top: false, // TODO: design
+    top: false, // design !!
   };
 
   for (const key of Object.keys(ret)) {

@@ -1,4 +1,4 @@
-// TODO: install and import AlamoFire (AF)
+// install and import AlamoFire (AF)
 
 // Example function to retrieve 3 featured posts for For You page from server
 func getFeaturedPosts() {

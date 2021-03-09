@@ -16,7 +16,7 @@ function adminMiddleware(id, dbPost, userInfo) {
     status: dbPost.status,
     notes: dbPost.adminNotes,
     userID: dbPost.userID,
-    username: userInfo.username || 'No Corresponding User', // TODO: fix
+    username: userInfo.username || 'No Corresponding User', // fix !!
     profilePic: userInfo.profilePic || 'none',
     verified: userInfo.verified || false, // unecessary
     content: dbPost.content.body,
@@ -42,7 +42,7 @@ function userMiddleware(id, dbUser) {
     pronouns: dbUser.pronouns || '',
     sexuality: dbUser.sexuality || '',
     triggers: dbUser.triggers || [],
-    // email: dbUser.email, // TODO: REMOVE
+    // email: dbUser.email, // REMOVE
     doc: helpers.timestampToDate(dbUser.doc),
     consentSetting: dbUser.consent,
     notifSettings: dbUser.notifications || true,

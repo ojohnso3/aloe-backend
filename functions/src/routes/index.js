@@ -18,7 +18,7 @@ function response(handler) {
         .catch(next);
   };
 }
-// TODO:
+
 // 1) Finish Reporting, 2) Add Auth to all routes
 
 // Admin routes (CLEAN)

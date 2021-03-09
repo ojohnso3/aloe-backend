@@ -2,7 +2,7 @@ const helpers = require('../helpers.js');
 const sgMail = require('@sendgrid/mail');
 
 // TODO: comment out when testing locally
-sgMail.setApiKey(helpers.functions.config().sendgrid.api);
+// sgMail.setApiKey(helpers.functions.config().sendgrid.api);
 // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Add email to db
