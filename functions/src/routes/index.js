@@ -70,9 +70,10 @@ router.get('/foryou/replies', response(foryouController.getReplies)); // works
 
 // Reporting routes (MESSY)
 router.post('/report', response(reportController.reportFromApp)); // works
+router.get('/reports/all', response(reportController.getReports)); // works
+
 router.put('/admin/reactivate', response(reportController.reactivateUser)); // try
 router.get('/reported/:id', response(reportController.getReportedByType)); // tbd
-router.get('/reports/all', response(reportController.getReports)); // tbd
 router.get('/admin/banned', checkIfAuthenticated, response(reportController.getBannedUsers)); // tbd
 router.put('/post/report', checkIfAuthenticated, response(reportController.reportPost)); // done but check
 router.put('/response/report', checkIfAuthenticated, response(reportController.reportResponse)); // done but check

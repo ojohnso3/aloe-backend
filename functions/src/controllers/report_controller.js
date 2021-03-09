@@ -34,6 +34,24 @@ async function reportFromApp(reportData) {
   return true;
 }
 
+// Get all reports for a specific post/response/user
+async function getReports() {
+  const reports = await db.collection('reports').orderBy('createdAt', 'desc').get();
+  if (reports.empty) {
+    console.log('No matching report documents.');
+    return [];
+  }
+
+  const reportDocs = [];
+  await Promise.all(reports.docs.map(async (doc) => {
+    reportDocs.push(middleware.reportMiddleware(doc.id, doc.data()));
+  }));
+  return reportDocs;
+}
+
+
+
+// BELOW FUNCTIONS ARENT IN USE YET
 
 // Report post
 async function reportPost(reportData) {
@@ -112,22 +130,6 @@ async function getReportedByType(reportType) {
       break;
   }
   return; // what??
-}
-
-
-// Get all reports for a specific post/response/user
-async function getReports() {
-  const reports = await db.collection('reports').orderBy('createdAt', 'desc').get();
-  if (reports.empty) {
-    console.log('No matching report documents.');
-    return [];
-  }
-
-  const reportDocs = [];
-  await Promise.all(reports.docs.map(async (doc) => {
-    reportDocs.push(middleware.reportMiddleware(doc.id, doc.data()));
-  }));
-  return reportDocs;
 }
 
 // Get all reports for a specific post/response/user
