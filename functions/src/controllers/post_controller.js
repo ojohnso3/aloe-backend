@@ -47,7 +47,7 @@ async function createPost(postData) {
 
   if (ret) {
     // TODO: comment out when testing locally
-    // sendgridController.sendPostEmail(ret.results.id, ret.results.user, ret.results.timestamp);
+    sendgridController.sendPostEmail(ret.results.id, ret.results.user, ret.results.timestamp);
   }
 
   return ret;

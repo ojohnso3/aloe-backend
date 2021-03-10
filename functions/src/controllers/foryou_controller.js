@@ -5,13 +5,13 @@ const constants = require('../constants.js');
 
 
 // Get ForYou posts
-async function getPosts(post) {
-  console.log('entering get posts', post.query);
+async function getPosts(postData) {
+  console.log('entering get posts', postData.query);
   const posts = db.collection('posts');
   let forYou = [];
 
   // const userID = post.query.userid;
-  const timestamp = post.query.timestamp;
+  const timestamp = postData.query.timestamp;
 
   if (timestamp) {
     console.log('getposts timestamp', timestamp);
@@ -46,9 +46,9 @@ async function getPosts(post) {
 }
 
 // Get posts by topic
-async function getPostsByTopic(post) {
-  const topic = post.query.topic;
-  const timestamp = post.query.timestamp;
+async function getPostsByTopic(postData) {
+  const topic = postData.query.topic;
+  const timestamp = postData.query.timestamp;
 
   // const userID = post.query.userid;
   const posts = db.collection('posts');
