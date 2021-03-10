@@ -9,13 +9,20 @@ const decrement = helpers.FieldValue.increment(-1);
 
 // Check if user has liked post
 async function checkLiked(parentData) {
+  console.log('entering checkLiked', parentData.query);
   const parentID = parentData.query.id;
   const userID = parentData.query.userid;
   const type = parentData.query.type; // posts, prompts, responses
 
+  console.log('before checkliked sub', type + ' ' + parentID);
+
   const likedUsers = db.collection(type).doc(parentID).collection('likes');
 
+  console.log('after checkliked sub');
+
   const userDoc = await likedUsers.where('userID', '==', userID).get();
+
+  console.log('like exists?', !userDoc.empty);
 
   if (userDoc.empty) {
     return false;

@@ -6,6 +6,7 @@ const constants = require('../constants.js');
 
 // Get ForYou posts
 async function getPosts(post) {
+  console.log('entering get posts', post.query);
   const posts = db.collection('posts');
   let forYou = [];
 
@@ -13,17 +14,24 @@ async function getPosts(post) {
   const timestamp = post.query.timestamp;
 
   if (timestamp) {
+    console.log('getposts timestamp', timestamp);
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
+    console.log('getposts processedtimestamp', processedTimestamp);
     if (processedTimestamp) {
       forYou = await posts.where('status', '==', constants.APPROVED).orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
+    console.log('getposts no timestamp');
     forYou = await posts.where('status', '==', constants.APPROVED).orderBy('updatedAt', 'desc').limit(5).get();
   }
+
   if (forYou.empty) {
     console.log('Nothing for getPosts.');
     return {results: []};
   }
+
+  console.log('getposts foryou', forYou.docs.length);
+  console.log('entering getposts processing!');
 
   const finalPosts = [];
   await Promise.all(forYou.docs.map(async (doc) => {
@@ -31,6 +39,8 @@ async function getPosts(post) {
     // const liked = await helpers.checkLiked(doc.id, userID, 'posts');
     finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo)); // removed liked
   }));
+
+  console.log('getposts results', finalPosts);
 
   return {results: finalPosts};
 }
@@ -82,17 +92,21 @@ async function getPostsByTopic(post) {
 
 // Get prompts for feed
 async function getPrompts(promptData) {
+  console.log('entering get prompts', promptData.query);
   const collection = db.collection('prompts');
   let prompts = [];
 
   // const userID = promptData.query.userid;
   const timestamp = promptData.query.timestamp;
   if (timestamp) {
+    console.log('getprompts timestamp', timestamp);
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
+    console.log('getprompts processed timestamp', processedTimestamp);
     if (processedTimestamp) {
       prompts = await collection.orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
   } else {
+    console.log('getprompts no timestamp');
     prompts = await collection.orderBy('updatedAt', 'desc').limit(5).get();
   }
 
@@ -101,6 +115,9 @@ async function getPrompts(promptData) {
     return {results: []};
   }
 
+  console.log('getprompts foryou', prompts.docs.length);
+  console.log('entering getprompts processing!');
+
   const finalPrompts = [];
   await Promise.all(prompts.docs.map(async (doc) => {
     // const topResponse = await getTopResponse(doc.id);
@@ -108,6 +125,8 @@ async function getPrompts(promptData) {
     // const liked = await helpers.checkLiked(doc.id, userID, 'prompts');
     finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), userInfo)); // removed liked
   }));
+
+  console.log('getprompts results', finalPrompts);
 
   return {results: finalPrompts};
 }
