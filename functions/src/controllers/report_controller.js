@@ -24,8 +24,6 @@ async function reportFromApp(reportData) {
     createdAt: helpers.Timestamp.now(),
   };
 
-  console.log("type", type)
-  console.log("parentID", parentID)
   const parent = db.collection(type).doc(parentID);
   if (!(await parent.get()).exists) {
     console.log('No matching ' + type + ' document.');
