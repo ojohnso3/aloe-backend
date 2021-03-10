@@ -8,7 +8,10 @@ const constants = require('../constants.js');
 async function getPosts(post) {
   const posts = db.collection('posts');
   let forYou = [];
+
+  const userID = post.query.userid;
   const timestamp = post.query.timestamp;
+
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
     if (processedTimestamp) {
@@ -25,7 +28,8 @@ async function getPosts(post) {
   const finalPosts = [];
   await Promise.all(forYou.docs.map(async (doc) => {
     const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
-    finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
+    const liked = await helpers.checkLiked(doc.id, userID, 'posts');
+    finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo, liked));
   }));
 
   return {results: finalPosts};
@@ -54,7 +58,8 @@ async function getPostsByTopic(post) {
   const finalPosts = [];
   await Promise.all(forYou.docs.map(async (doc) => {
     const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
-    finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
+    const liked = await helpers.checkLiked(doc.id, userID, 'posts');
+    finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo, liked));
   }));
 
   return {results: finalPosts};
@@ -78,6 +83,8 @@ async function getTopResponse(promptID) {
 async function getPrompts(promptData) {
   const collection = db.collection('prompts');
   let prompts = [];
+
+  const userID = promptData.query.userid;
   const timestamp = promptData.query.timestamp;
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
@@ -95,9 +102,10 @@ async function getPrompts(promptData) {
 
   const finalPrompts = [];
   await Promise.all(prompts.docs.map(async (doc) => {
-    const topResponse = await getTopResponse(doc.id);
+    // const topResponse = await getTopResponse(doc.id);
     const userInfo = await helpers.getUserInfo(constants.ALOE_ID, false); // SET FALSE
-    finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), userInfo, topResponse));
+    const liked = await helpers.checkLiked(doc.id, userID, 'prompts');
+    finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), userInfo, liked));
   }));
 
   return {results: finalPrompts};
@@ -106,6 +114,8 @@ async function getPrompts(promptData) {
 // Get Responses by ID
 async function getResponses(parentData) {
   const collection = db.collection('responses');
+
+  const userID = parentData.query.userid;
 
   const responses = await collection.where('parentID', '==', parentData.query.id).where('replyID', '==', '').orderBy('createdAt', 'desc').get();
   if (responses.empty) {
@@ -116,7 +126,8 @@ async function getResponses(parentData) {
   const finalResponses = [];
   await Promise.all(responses.docs.map(async (doc) => {
     const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
-    finalResponses.push(middleware.responseMiddleware(doc.id, doc.data(), userInfo));
+    const liked = await helpers.checkLiked(doc.id, userID, 'responses');
+    finalResponses.push(middleware.responseMiddleware(doc.id, doc.data(), userInfo, liked));
   }));
 
   return {results: finalResponses};
@@ -125,7 +136,9 @@ async function getResponses(parentData) {
 // Get Replies by ID
 async function getReplies(parentData) {
   const collection = db.collection('responses');
-  const responses = await collection.where('replyID', '==', parentData.query.id).orderBy('createdAt', 'asc').get();
+  const userID = parentData.body.userid;
+
+  const responses = await collection.where('replyID', '==', parentData.body.id).orderBy('createdAt', 'asc').get();
   if (responses.empty) {
     console.log('No matching document for response.');
     return {results: []};
@@ -134,7 +147,8 @@ async function getReplies(parentData) {
   const finalResponses = [];
   await Promise.all(responses.docs.map(async (doc) => {
     const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
-    finalResponses.push(middleware.responseMiddleware(doc.id, doc.data(), userInfo));
+    const liked = await helpers.checkLiked(doc.id, userID, 'responses');
+    finalResponses.push(middleware.responseMiddleware(doc.id, doc.data(), userInfo, liked));
   }));
 
   return {results: finalResponses};

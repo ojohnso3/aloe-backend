@@ -194,6 +194,25 @@ async function sendPushNotification(token, type, userID, anonymous, prompt) {
       });
 }
 
+// Check if user has liked post
+async function checkLiked(parentID, userID, type) {
+  if (!parentID || !userID || !type) {
+    console.log('ERROR: LIKE DATA ISSUE');
+    return false;
+  }
+
+  const likedUsers = db.collection(type).doc(parentID).collection('likes');
+  const userDoc = await likedUsers.where('userID', '==', userID).get();
+
+  if (userDoc.empty) {
+    console.log('User has not liked.');
+    return false;
+  } else {
+    console.log('User has liked.');
+    return true;
+  }
+}
+
 module.exports = {
   timestampToDate,
   dateToTimestamp,
@@ -201,6 +220,7 @@ module.exports = {
   getUserInfo,
   getAge,
   sendPushNotification,
+  checkLiked,
   csvtojson,
   functions,
   Timestamp,

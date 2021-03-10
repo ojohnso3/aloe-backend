@@ -93,7 +93,7 @@ async function createPrompt(promptData) {
   }
   const userInfo = await helpers.getUserInfo(constants.ALOE_ID, false);
 
-  return {results: middleware.promptMiddleware(doc.id, doc.data(), userInfo, '')};
+  return {results: middleware.promptMiddleware(doc.id, doc.data(), userInfo, false)};
 }
 
 // Edit prompt

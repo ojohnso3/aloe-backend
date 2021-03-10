@@ -16,7 +16,7 @@ async function getProfile(userData) {
 }
 
 // Load anonymous created posts on profile
-async function getAnonymousCreated(timestamp) {
+async function getAnonymousCreated(timestamp, userID) {
   const posts = db.collection('posts');
 
   let created = [];
@@ -38,7 +38,8 @@ async function getAnonymousCreated(timestamp) {
   const createdPosts = [];
   await Promise.all(created.docs.map(async (doc) => {
     const userInfo = await helpers.getUserInfo(constants.ANONYMOUS_ID, true); // SET TO TRUE
-    createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
+    const liked = await helpers.checkLiked(doc.id, userID, 'posts');
+    createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo, liked));
   }));
 
   return {results: createdPosts};
@@ -46,34 +47,36 @@ async function getAnonymousCreated(timestamp) {
 
 // Load created posts on profile
 async function getCreated(userData) {
-  const userID = userData.query.id;
+  const id = userData.query.id; // of profile
+  const userID = userData.query.userid;
   const timestamp = userData.query.timestamp;
   const internal = userData.query.internal;
 
-  if (userID === constants.ANONYMOUS_ID) {
-    return getAnonymousCreated(timestamp);
+  if (id === constants.ANONYMOUS_ID) {
+    return getAnonymousCreated(timestamp, userID);
   }
 
   const posts = db.collection('posts');
 
   let created = [];
-  if (internal === '1') {
+  if (internal === '1' && userID === id) {
     if (timestamp) {
       const processedTimestamp = helpers.dateToTimestamp(timestamp);
       if (processedTimestamp) {
-        created = await posts.where('userID', '==', userID).orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
+        created = await posts.where('userID', '==', id).orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
       }
     } else {
-      created = await posts.where('userID', '==', userID).orderBy('updatedAt', 'desc').limit(5).get();
+      created = await posts.where('userID', '==', id).orderBy('updatedAt', 'desc').limit(5).get();
     }
   } else {
     if (timestamp) {
       const processedTimestamp = helpers.dateToTimestamp(timestamp);
       if (processedTimestamp) {
-        created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
+        created = await posts.where('userID', '==', id).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
       }
     } else {
-      created = await posts.where('userID', '==', userID).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('updatedAt', 'desc').limit(5).get();
+      console.log("check id", id);
+      created = await posts.where('userID', '==', id).where('status', '==', constants.APPROVED).where('anonymous', '==', false).orderBy('updatedAt', 'desc').limit(5).get();
     }
   }
 
@@ -84,8 +87,9 @@ async function getCreated(userData) {
 
   const createdPosts = [];
   await Promise.all(created.docs.map(async (doc) => {
-    const userInfo = await helpers.getUserInfo(userID, doc.data().anonymous); // WAS set to false
-    createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
+    const userInfo = await helpers.getUserInfo(id, doc.data().anonymous); // WAS set to false
+    const liked = await helpers.checkLiked(doc.id, userID, 'posts');
+    createdPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo, liked));
   }));
 
   return {results: createdPosts};
@@ -141,9 +145,9 @@ async function getLiked(userData) {
     if (likedContent) {
       const userInfo = await helpers.getUserInfo(likedContent.data().userID, likedContent.data().anonymous);
       if (type === 'posts') {
-        allLiked.push(middleware.postMiddleware(likedContent.id, likedContent.data(), userInfo));
+        allLiked.push(middleware.postMiddleware(likedContent.id, likedContent.data(), userInfo, true));
       } else if (type === 'prompts') {
-        allLiked.push(middleware.promptMiddleware(likedContent.id, likedContent.data(), userInfo));
+        allLiked.push(middleware.promptMiddleware(likedContent.id, likedContent.data(), userInfo, true));
       }
     }
   }));

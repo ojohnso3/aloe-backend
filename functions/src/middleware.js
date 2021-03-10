@@ -65,7 +65,8 @@ function profileMiddleware(id, dbUser) {
   return ret;
 }
 
-function postMiddleware(id, dbPost, userInfo) {
+function postMiddleware(id, dbPost, userInfo, liked) {
+  console.log("liked val", liked);
   const ret = {
     id,
     timestamp: helpers.timestampToDate(dbPost.updatedAt), // created too?
@@ -84,11 +85,12 @@ function postMiddleware(id, dbPost, userInfo) {
     likes: dbPost.numLikes,
     shares: dbPost.numShares,
     notes: dbPost.adminNotes,
+    liked: liked || false,
   };
   return ret;
 }
 
-function promptMiddleware(id, dbPrompt, userInfo, topResponse) {
+function promptMiddleware(id, dbPrompt, userInfo, liked) { // removed top response
   const ret = {
     id,
     timestamp: helpers.timestampToDate(dbPrompt.updatedAt), // created too?
@@ -102,12 +104,13 @@ function promptMiddleware(id, dbPrompt, userInfo, topResponse) {
     likes: dbPrompt.numLikes,
     shares: dbPrompt.numShares,
     responses: dbPrompt.numResponses,
-    topResponse: topResponse,
+    // topResponse: topResponse,
+    liked: liked || false,
   };
   return ret;
 }
 
-function responseMiddleware(id, dbResponse, userInfo) {
+function responseMiddleware(id, dbResponse, userInfo, liked) {
   const ret = {
     id,
     userid: userInfo.userID,
@@ -121,7 +124,8 @@ function responseMiddleware(id, dbResponse, userInfo) {
     likes: dbResponse.numLikes,
     timestamp: helpers.timestampToDate(dbResponse.createdAt), // updated at?
     lifetime: helpers.getTimeFromNow(dbResponse.createdAt),
-    top: false, // TODO design
+    // top: false, // design
+    liked: liked || false,
   };
   return ret;
 }

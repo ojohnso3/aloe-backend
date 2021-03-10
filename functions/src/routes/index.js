@@ -51,7 +51,7 @@ router.put('/profile/edit', response(profileController.editProfile)); // works
 
 
 // Content routes (CLEAN)
-router.get('/content/liked', response(postController.checkLiked)); // works
+// router.get('/content/liked', response(postController.checkLiked)); // works
 router.post('/post/create', response(postController.createPost)); // works
 router.post('/response/create', response(postController.createResponse)); // works
 router.post('/content/remove', response(postController.removeContent)); // works
