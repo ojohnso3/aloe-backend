@@ -2,6 +2,7 @@ const db = require('../firebase/db.js');
 const middleware = require('../middleware.js');
 const constants = require('../constants.js');
 const helpers = require('../helpers.js');
+const sendgridController = require('./sendgrid_controller.js');
 
 // Report post/response/user
 async function reportFromApp(reportData) {
@@ -31,6 +32,9 @@ async function reportFromApp(reportData) {
   }
   await parent.update({reported: true});
   db.collection('reports').add(newReport);
+
+  // TODO: comment out when testing locally
+  sendgridController.sendReportEmail(type, parentID);
   return true;
 }
 
