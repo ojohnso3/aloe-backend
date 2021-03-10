@@ -150,7 +150,6 @@ async function likeContent(parentData) {
 
   // Extra check
   // const docArr = await parent.collection('likes').where('userID', '==', userID).get();
-
   // if (docArr.size > 0) {
   //   liked = '1';
   // }
@@ -158,28 +157,45 @@ async function likeContent(parentData) {
   if (liked === '1') {
     console.log('removing like...');
     const docArr = await parent.collection('likes').where('userID', '==', userID).get();
-    if (docArr.size !== 1) {
-      console.log('ERROR: should like once');
+    if (docArr.size < 1) {
+      console.log('ERROR: There was no like on content. Gracefully exiting.');
+      return false;
     }
 
+    if (docArr.size > 1) {
+      console.log('ERROR: Multiple likes existed on content. Will delete all next.');
+    }
+
+    // Deleting from content liked subcollection
     docArr.forEach(function(doc) {
       doc.ref.delete();
     });
     await parent.update({numLikes: decrement});
 
+    // Deleting from user profile subcollection
     if (type === 'posts') {
       const userArr = await user.collection('liked').where('parentID', '==', parentID).get();
-      if (userArr.size !== 1) {
-        console.log('ERROR: should like POST once');
+      if (userArr.size < 1) {
+        console.log('ERROR: There was no like on profile. Gracefully exiting.');
+        return false;
       }
+      if (userArr.size > 1) {
+        console.log('ERROR: Multiple likes existed on profile. Will delete all next.');
+      }
+
       userArr.forEach(function(doc) {
         doc.ref.delete();
       });
     } else if (type === 'prompts') {
       const userArr = await user.collection('prompted').where('parentID', '==', parentID).get();
-      if (userArr.size !== 1) {
-        console.log('ERROR: should like PROMPT once');
+      if (userArr.size < 1) {
+        console.log('ERROR: There was no save on profile. Gracefully exiting.');
+        return false;
       }
+      if (userArr.size > 1) {
+        console.log('ERROR: Multiple saves existed on profile. Will delete all next.');
+      }
+
       userArr.forEach(function(doc) {
         doc.ref.delete();
       });
@@ -188,30 +204,35 @@ async function likeContent(parentData) {
     console.log('adding like...');
     const docArr = await parent.collection('likes').where('userID', '==', userID).get();
     if (docArr.size === 0) {
+      // Adding to content liked subcollection
       await parent.collection('likes').add({userID: userID, timestamp: helpers.Timestamp.now()});
       await parent.update({numLikes: increment});
 
       const parentDoc = await parent.get();
 
+      // Adding to user profile subcollection
       if (type === 'posts') {
         await user.collection('liked').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
 
         const originalUser = await db.collection('users').doc(parentDoc.data().userID).get();
-        // console.log('username check STORYLIKE', originalUser.data().username);
         if (originalUser.id !== userID) {
           await helpers.sendPushNotification(originalUser.data().token, 'STORYLIKE', userID, false, '');
         }
       } else if (type === 'prompts') {
         await user.collection('prompted').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
-      } else {
+      } else if (type === 'responses') {
         const originalUser = await db.collection('users').doc(parentDoc.data().userID).get();
-        // console.log('username check RESPONSELIKE', originalUser.data().username);
+
         if (originalUser.id !== userID) {
           await helpers.sendPushNotification(originalUser.data().token, 'RESPONSELIKE', userID, false, '');
         }
+      } else {
+        console.log("ERROR: Type is invalid. Gracefully exiting.");
+        return false;
       }
     } else {
-      console.log('liked already existed');
+      console.log('Liked already existed! Gracefull exiting.');
+      return false;
     }
   }
   return true;

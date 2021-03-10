@@ -66,18 +66,18 @@ async function getPostsByTopic(post) {
 }
 
 // Get top response on a prompt
-async function getTopResponse(promptID) {
-  const responses = db.collection('responses');
-  const top = await responses.where('parentID', '==', promptID).orderBy('numLikes', 'desc').limit(1).get();
+// async function getTopResponse(promptID) {
+//   const responses = db.collection('responses');
+//   const top = await responses.where('parentID', '==', promptID).orderBy('numLikes', 'desc').limit(1).get();
 
-  if (top.empty) {
-    console.log('No matching documents.');
-    return '';
-  }
+//   if (top.empty) {
+//     console.log('No matching documents.');
+//     return '';
+//   }
 
-  const topResponse = top.docs[0];
-  return topResponse.data().body;
-}
+//   const topResponse = top.docs[0];
+//   return topResponse.data().body;
+// }
 
 // Get prompts for feed
 async function getPrompts(promptData) {
@@ -136,9 +136,9 @@ async function getResponses(parentData) {
 // Get Replies by ID
 async function getReplies(parentData) {
   const collection = db.collection('responses');
-  const userID = parentData.body.userid;
+  const userID = parentData.query.userid;
 
-  const responses = await collection.where('replyID', '==', parentData.body.id).orderBy('createdAt', 'asc').get();
+  const responses = await collection.where('replyID', '==', parentData.query.id).orderBy('createdAt', 'asc').get();
   if (responses.empty) {
     console.log('No matching document for response.');
     return {results: []};
