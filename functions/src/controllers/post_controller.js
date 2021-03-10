@@ -36,7 +36,7 @@ async function createPost(postData) {
 
   const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
 
-  const ret = {results: middleware.postMiddleware(doc.id, doc.data(), userInfo, false)};
+  const ret = {results: middleware.postMiddleware(doc.id, doc.data(), userInfo)}; // removed false for likes
 
   if (ret) {
     // TODO: comment out when testing locally
@@ -77,7 +77,7 @@ async function createResponse(responseData) {
   const doc = await newResponse.get();
   const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
 
-  return {results: middleware.responseMiddleware(doc.id, doc.data(), userInfo)};
+  return {results: middleware.responseMiddleware(doc.id, doc.data(), userInfo)}; // removed false for likes
 }
 
 // Edit post
@@ -227,7 +227,7 @@ async function likeContent(parentData) {
           await helpers.sendPushNotification(originalUser.data().token, 'RESPONSELIKE', userID, false, '');
         }
       } else {
-        console.log("ERROR: Type is invalid. Gracefully exiting.");
+        console.log('ERROR: Type is invalid. Gracefully exiting.');
         return false;
       }
     } else {
