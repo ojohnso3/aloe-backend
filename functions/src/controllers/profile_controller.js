@@ -156,14 +156,15 @@ async function getLiked(userData) {
 
 // Update profile
 async function editProfile(profileData) {
+  console.log('profile id1: ', profileData.body.id)
   const processedProfile = processing.profileProcessing(profileData.body);
   console.log('processed1', processedProfile)
   if (!processedProfile || Object.keys(processedProfile).length === 0) {
     return false;
   }
 
+  console.log('profile id2: ', profileData.body.id)
   console.log('processed2', processedProfile)
-  console.log('profile id', profileData.body.id)
 
   const user = db.collection('users').doc(profileData.body.id);
   await user.update(processedProfile);
