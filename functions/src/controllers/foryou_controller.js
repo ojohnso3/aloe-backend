@@ -14,9 +14,7 @@ async function getPosts(postData) {
   const timestamp = postData.query.timestamp;
 
   if (timestamp) {
-    console.log('getposts timestamp', timestamp);
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
-    console.log('getposts processedtimestamp', processedTimestamp);
     if (processedTimestamp) {
       forYou = await posts.where('status', '==', constants.APPROVED).orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
@@ -30,7 +28,6 @@ async function getPosts(postData) {
     return {results: []};
   }
 
-  console.log('getposts foryou', forYou.docs.length);
   console.log('entering getposts processing!');
 
   const finalPosts = [];
@@ -40,7 +37,7 @@ async function getPosts(postData) {
     finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo)); // removed liked
   }));
 
-  console.log('getposts results', finalPosts);
+  console.log('finishing getposts w results');
 
   return {results: finalPosts};
 }
@@ -99,9 +96,7 @@ async function getPrompts(promptData) {
   // const userID = promptData.query.userid;
   const timestamp = promptData.query.timestamp;
   if (timestamp) {
-    console.log('getprompts timestamp', timestamp);
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
-    console.log('getprompts processed timestamp', processedTimestamp);
     if (processedTimestamp) {
       prompts = await collection.orderBy('updatedAt', 'desc').startAfter(processedTimestamp).limit(5).get();
     }
@@ -115,7 +110,6 @@ async function getPrompts(promptData) {
     return {results: []};
   }
 
-  console.log('getprompts foryou', prompts.docs.length);
   console.log('entering getprompts processing!');
 
   const finalPrompts = [];
@@ -126,7 +120,7 @@ async function getPrompts(promptData) {
     finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), userInfo)); // removed liked
   }));
 
-  console.log('getprompts results', finalPrompts);
+  console.log('finishing getprompts w results');
 
   return {results: finalPrompts};
 }

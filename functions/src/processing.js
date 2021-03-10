@@ -35,11 +35,9 @@ function userProcessing(user, uid) {
   const timestamp = helpers.Timestamp.now();
 
   const ret = {
-    // email: userData.email,
     uid: uid,
     username: userData.username,
     doc: timestamp,
-    // dob: getTimestamp(userData.dob),
     loginTime: timestamp,
     type: 'USER',
     consent: userData.consent || false,

@@ -14,8 +14,6 @@ async function checkLiked(parentData) {
   const userID = parentData.query.userid;
   const type = parentData.query.type; // posts, prompts, responses
 
-  console.log('before checkliked sub', type + ' ' + parentID);
-
   const likedUsers = db.collection(type).doc(parentID).collection('likes');
 
   console.log('after checkliked sub');

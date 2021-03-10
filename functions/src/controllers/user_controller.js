@@ -25,6 +25,11 @@ async function createAccount(userData) {
 
         const processedUser = processing.userProcessing(userData.body, uid);
         db.collection('users').add(processedUser);
+
+        if (processedUser) {
+          // TODO: comment out when testing locally
+          sendgridController.sendCreationEmail(processedUser.username);
+        }
         return true;
       })
       .catch((error) => {
