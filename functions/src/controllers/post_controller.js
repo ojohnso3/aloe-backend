@@ -231,7 +231,7 @@ async function likeContent(parentData) {
         return false;
       }
     } else {
-      console.log('Liked already existed! Gracefull exiting.');
+      console.log('Liked already existed! Gracefully exiting.');
       return false;
     }
   }

@@ -72,6 +72,8 @@ function profileProcessing(profile) {
     profileData.consent = false;
   }
 
+  console.log('start', profileData);
+
   const ret = {
     username: profileData.username,
     consent: profileData.consent,
@@ -81,11 +83,15 @@ function profileProcessing(profile) {
     triggers: topicParser(profileData.triggers),
   };
 
+  console.log("ret1", ret);
+
   for (const key of Object.keys(ret)) {
     if (ret[key] === '' || ret[key] === undefined) {
       delete ret[key];
     }
   }
+
+  console.log("ret2", ret);
 
   return ret;
 }
