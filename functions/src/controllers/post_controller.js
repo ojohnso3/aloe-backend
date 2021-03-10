@@ -8,21 +8,21 @@ const increment = helpers.FieldValue.increment(1);
 const decrement = helpers.FieldValue.increment(-1);
 
 // Check if user has liked post
-// async function checkLiked(parentData) {
-//   const parentID = parentData.query.id;
-//   const userID = parentData.query.userid;
-//   const type = parentData.query.type; // posts, prompts, responses
+async function checkLiked(parentData) {
+  const parentID = parentData.query.id;
+  const userID = parentData.query.userid;
+  const type = parentData.query.type; // posts, prompts, responses
 
-//   const likedUsers = db.collection(type).doc(parentID).collection('likes');
+  const likedUsers = db.collection(type).doc(parentID).collection('likes');
 
-//   const userDoc = await likedUsers.where('userID', '==', userID).get();
+  const userDoc = await likedUsers.where('userID', '==', userID).get();
 
-//   if (userDoc.empty) {
-//     return false;
-//   } else {
-//     return true;
-//   }
-// }
+  if (userDoc.empty) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
 // Create new post
 async function createPost(postData) {
@@ -272,7 +272,7 @@ async function supportContent(parentData) {
 }
 
 module.exports = {
-  // checkLiked,
+  checkLiked,
   createPost,
   createResponse,
   editPost,
