@@ -34,7 +34,7 @@ async function reportFromApp(reportData) {
   db.collection('reports').add(newReport);
 
   // TODO: comment out when testing locally
-  sendgridController.sendReportEmail(type, parentID);
+  // sendgridController.sendReportEmail(type, parentID);
   return true;
 }
 
