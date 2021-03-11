@@ -6,7 +6,7 @@ const constants = require('../constants.js');
 
 // Get ForYou posts
 async function getPosts(postData) {
-  console.log('entering get posts', postData.query);
+  // console.log('entering get posts', postData.query);
   const posts = db.collection('posts');
   let forYou = [];
 
@@ -28,7 +28,7 @@ async function getPosts(postData) {
     return {results: []};
   }
 
-  console.log('entering getposts processing!');
+  // console.log('entering getposts processing!');
 
   const finalPosts = [];
   await Promise.all(forYou.docs.map(async (doc) => {
@@ -37,7 +37,7 @@ async function getPosts(postData) {
     finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo)); // removed liked
   }));
 
-  console.log('finishing getposts w results');
+  // console.log('finishing getposts w results');
 
   return {results: finalPosts};
 }
@@ -89,7 +89,7 @@ async function getPostsByTopic(postData) {
 
 // Get prompts for feed
 async function getPrompts(promptData) {
-  console.log('entering get prompts', promptData.query);
+  // console.log('entering get prompts', promptData.query);
   const collection = db.collection('prompts');
   let prompts = [];
 
@@ -110,7 +110,7 @@ async function getPrompts(promptData) {
     return {results: []};
   }
 
-  console.log('entering getprompts processing!');
+  // console.log('entering getprompts processing!');
 
   const finalPrompts = [];
   await Promise.all(prompts.docs.map(async (doc) => {
@@ -120,7 +120,7 @@ async function getPrompts(promptData) {
     finalPrompts.push(middleware.promptMiddleware(doc.id, doc.data(), userInfo)); // removed liked
   }));
 
-  console.log('finishing getprompts w results');
+  // console.log('finishing getprompts w results');
 
   return {results: finalPrompts};
 }
