@@ -3,6 +3,7 @@ const middleware = require('../middleware.js');
 const processing = require('../processing.js');
 const helpers = require('../helpers.js');
 const admin = require('../firebase/admin');
+const sendgridController = require('./sendgrid_controller.js');
 
 // Checks if username exists
 async function checkUsername(userData) {
