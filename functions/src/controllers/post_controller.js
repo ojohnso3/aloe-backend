@@ -227,9 +227,10 @@ async function likeContent(parentData) {
         await user.collection('prompted').add({parentID: parentID, timestamp: helpers.Timestamp.now(), contentTimestamp: parentDoc.data().updatedAt});
       } else if (type === 'responses') {
         const originalUser = await db.collection('users').doc(parentDoc.data().userID).get();
+        const originalPrompt = await db.collection('prompts').doc(parentDoc.data().parentID).get();
 
         if (originalUser.id !== userID) {
-          await helpers.sendPushNotification(originalUser.data().token, 'RESPONSELIKE', userID, false, '');
+          await helpers.sendPushNotification(originalUser.data().token, 'RESPONSELIKE', userID, false, originalPrompt.data().prompt);
         }
       } else {
         console.log('ERROR: Type is invalid. Gracefully exiting.');

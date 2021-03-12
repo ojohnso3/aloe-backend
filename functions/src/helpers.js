@@ -146,7 +146,7 @@ async function sendPushNotification(token, type, userID, anonymous, prompt) {
       user = await getUserInfo(userID, anonymous);
       username = user.username;
 
-      // title = prompt;
+      title = prompt;
       body = username + ' has liked your response!';
       break;
     case 'REPLY':
@@ -180,8 +180,6 @@ async function sendPushNotification(token, type, userID, anonymous, prompt) {
   if (!message.notification.title) {
     delete message.notification.title;
   }
-
-  // console.log('message', message);
 
   // Send a message to the device corresponding to the provided registration token.
   admin.messaging().send(message)
