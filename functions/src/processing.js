@@ -114,14 +114,13 @@ function postProcessing(post) {
     numShares: 0,
     numResponses: 0,
     anonymous: anonymous,
-    blurred: blurred || false, // might have to check this value !!
+    blurred: blurred || false,
     reported: false,
     removed: false,
     adminNotes: '',
   };
 
   for (const key of Object.keys(ret)) {
-    // console.log('key', key, ' - ', ret[key]);
     if (ret[key] === undefined) {
       return null;
     }
