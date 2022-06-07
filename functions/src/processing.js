@@ -90,17 +90,14 @@ function profileProcessing(profile) {
 
 function postProcessing(post) {
   const postData = JSON.parse(JSON.stringify(post));
-
   let anonymous = true;
   if (postData.anonymous === '0') {
     anonymous = false;
   }
-
   let blurred = false;
   if (postData.blurred === '1') {
     blurred = true;
   }
-
   const ret = {
     userID: postData.userid,
     createdAt: helpers.Timestamp.now(),
@@ -119,7 +116,6 @@ function postProcessing(post) {
     removed: false,
     adminNotes: '',
   };
-
   for (const key of Object.keys(ret)) {
     if (ret[key] === undefined) {
       return null;
