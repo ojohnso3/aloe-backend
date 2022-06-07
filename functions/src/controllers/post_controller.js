@@ -35,19 +35,13 @@ async function createPost(postData) {
   if (!processedPost) {
     return 'There was an error in post creation';
   }
-
   const newPost = await db.collection('posts').add(processedPost);
   const doc = await newPost.get();
-
   const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
-
   const ret = {results: middleware.postMiddleware(doc.id, doc.data(), userInfo)}; // removed false for likes
-
   if (ret) {
-    // TODO: comment out when testing locally
     sendgridController.sendPostEmail(ret.results.id, ret.results.user, ret.results.timestamp);
   }
-
   return ret;
 }
 
