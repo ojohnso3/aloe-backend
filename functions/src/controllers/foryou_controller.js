@@ -4,15 +4,11 @@ const helpers = require('../helpers.js');
 const constants = require('../constants.js');
 
 
-// Get ForYou posts
+// Get 5 posts per query for ForYou feed
 async function getPosts(postData) {
-  // console.log('entering get posts', postData.query);
   const posts = db.collection('posts');
   let forYou = [];
-
-  // const userID = post.query.userid;
   const timestamp = postData.query.timestamp;
-
   if (timestamp) {
     const processedTimestamp = helpers.dateToTimestamp(timestamp);
     if (processedTimestamp) {
@@ -22,32 +18,22 @@ async function getPosts(postData) {
     console.log('getposts no timestamp');
     forYou = await posts.where('status', '==', constants.APPROVED).orderBy('updatedAt', 'desc').limit(5).get();
   }
-
   if (forYou.empty) {
     console.log('Nothing for getPosts.');
     return {results: []};
   }
-
-  // console.log('entering getposts processing!');
-
   const finalPosts = [];
   await Promise.all(forYou.docs.map(async (doc) => {
     const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
-    // const liked = await helpers.checkLiked(doc.id, userID, 'posts');
-    finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo)); // removed liked
+    finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
-
-  // console.log('finishing getposts w results');
-
   return {results: finalPosts};
 }
 
-// Get posts by topic
+// Get 5 posts per query by selected Topic
 async function getPostsByTopic(postData) {
   const topic = postData.query.topic;
   const timestamp = postData.query.timestamp;
-
-  // const userID = post.query.userid;
   const posts = db.collection('posts');
   let forYou = [];
   if (timestamp) {
@@ -62,14 +48,11 @@ async function getPostsByTopic(postData) {
     console.log('No matching documents.');
     return {results: []};
   }
-
   const finalPosts = [];
   await Promise.all(forYou.docs.map(async (doc) => {
     const userInfo = await helpers.getUserInfo(doc.data().userID, doc.data().anonymous);
-    // const liked = await helpers.checkLiked(doc.id, userID, 'posts');
-    finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo)); // removed liked
+    finalPosts.push(middleware.postMiddleware(doc.id, doc.data(), userInfo));
   }));
-
   return {results: finalPosts};
 }
 
