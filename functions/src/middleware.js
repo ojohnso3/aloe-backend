@@ -1,13 +1,5 @@
 const helpers = require('./helpers.js');
 
-// function getAge(timestamp) {
-//   if (!timestamp) {
-//     return '';
-//   }
-//   const dob = helpers.timestampToDate(timestamp);
-//   return helpers.getAge(dob);
-// }
-
 function adminMiddleware(id, dbPost, userInfo) {
   const ret = {
     id,
@@ -16,15 +8,15 @@ function adminMiddleware(id, dbPost, userInfo) {
     status: dbPost.status,
     notes: dbPost.adminNotes,
     userID: dbPost.userID,
-    username: userInfo.username || 'No Corresponding User', // fix !!
+    username: userInfo.username || 'No Corresponding User',
     profilePic: userInfo.profilePic || 'none',
-    verified: userInfo.verified || false, // unecessary
+    verified: userInfo.verified || false,
     content: dbPost.content.body,
     topics: dbPost.content.topics,
     anonymous: dbPost.anonymous,
     blurred: dbPost.blurred,
     likes: dbPost.numLikes,
-    shares: dbPost.numShares, // TBD
+    shares: dbPost.numShares,
   };
 
   return ret;
@@ -37,12 +29,9 @@ function userMiddleware(id, dbUser) {
     type: dbUser.type,
     verified: dbUser.verified,
     profilePicture: dbUser.profilePic || '',
-    // dob: helpers.timestampToDate(dbUser.dob) || '',
-    // age: getAge(dbUser.dob),
     pronouns: dbUser.pronouns || '',
     sexuality: dbUser.sexuality || '',
     triggers: dbUser.triggers || [],
-    // email: dbUser.email, // REMOVE
     doc: helpers.timestampToDate(dbUser.doc),
     consentSetting: dbUser.consent,
     notifSettings: dbUser.notifications || true,
@@ -58,23 +47,21 @@ function profileMiddleware(id, dbUser) {
     verified: dbUser.verified || false,
     profilePicture: dbUser.profilePic || '',
     doc: helpers.timestampToDate(dbUser.doc),
-    // age: getAge(dbUser.dob),
     pronouns: dbUser.pronouns || '',
     sexuality: dbUser.sexuality || '',
   };
   return ret;
 }
 
-function postMiddleware(id, dbPost, userInfo) { // removed liked
+function postMiddleware(id, dbPost, userInfo) {
   const ret = {
     id,
-    timestamp: helpers.timestampToDate(dbPost.updatedAt), // created too?
+    timestamp: helpers.timestampToDate(dbPost.updatedAt),
     status: dbPost.status,
     userid: userInfo.userID,
     user: userInfo.username,
     profilePicture: userInfo.profilePic || '',
     verified: userInfo.verified || false,
-    // age: userInfo.age || '',
     pronouns: userInfo.pronouns || '',
     sexuality: userInfo.sexuality || '',
     content: dbPost.content.body,
@@ -84,15 +71,14 @@ function postMiddleware(id, dbPost, userInfo) { // removed liked
     likes: dbPost.numLikes,
     shares: dbPost.numShares,
     notes: dbPost.adminNotes,
-    // liked: liked || false,
   };
   return ret;
 }
 
-function promptMiddleware(id, dbPrompt, userInfo) { // removed liked + top response
+function promptMiddleware(id, dbPrompt, userInfo) {
   const ret = {
     id,
-    timestamp: helpers.timestampToDate(dbPrompt.updatedAt), // created too?
+    timestamp: helpers.timestampToDate(dbPrompt.updatedAt),
     userid: userInfo.userID,
     user: userInfo.username,
     profilePicture: userInfo.profilePic || '',
@@ -103,13 +89,11 @@ function promptMiddleware(id, dbPrompt, userInfo) { // removed liked + top respo
     likes: dbPrompt.numLikes,
     shares: dbPrompt.numShares,
     responses: dbPrompt.numResponses,
-    // topResponse: topResponse,
-    // liked: liked || false,
   };
   return ret;
 }
 
-function responseMiddleware(id, dbResponse, userInfo) { // removed liked
+function responseMiddleware(id, dbResponse, userInfo) {
   const ret = {
     id,
     userid: userInfo.userID,
@@ -121,10 +105,8 @@ function responseMiddleware(id, dbResponse, userInfo) { // removed liked
     hasReplies: dbResponse.replies > 0 ? true : false,
     anonymous: dbResponse.anonymous,
     likes: dbResponse.numLikes,
-    timestamp: helpers.timestampToDate(dbResponse.createdAt), // updated at?
+    timestamp: helpers.timestampToDate(dbResponse.createdAt),
     lifetime: helpers.getTimeFromNow(dbResponse.createdAt),
-    // top: false, // design
-    // liked: liked || false,
   };
   return ret;
 }
@@ -136,7 +118,7 @@ function reportMiddleware(id, dbReport) {
     parentID: dbReport.parentID,
     type: dbReport.type,
     reason: dbReport.reason || 'What is the reason??',
-    timestamp: helpers.timestampToDate(dbReport.createdAt), // updated at?
+    timestamp: helpers.timestampToDate(dbReport.createdAt),
     status: dbReport.status,
   };
 
@@ -155,7 +137,6 @@ function resourceMiddleware(id, dbResource) {
   return ret;
 }
 
-
 module.exports = {
   adminMiddleware,
   userMiddleware,
@@ -166,116 +147,3 @@ module.exports = {
   reportMiddleware,
   resourceMiddleware,
 };
-
-// function surveyMiddleware(id, dbPrompt, answers) {
-
-// //     let ret = {
-// //         id,
-// //         timestamp: dbPrompt.timestamp,
-// //         question: dbPrompt.prompt,
-// //         image: dbPrompt.image,
-// //         topics: dbPrompt.topics,
-// //         numLikes: dbPrompt.numLikes,
-// //         numShares: dbPrompt.numShares,
-// //         numAnswers: dbPrompt.numAnswers,
-// //         numResponses: dbPrompt.numResponses,
-// //         answers: answers,
-// //     };
-// //     return ret;
-// // }
-
-// function answerMiddleware(id, dbAnswer) {
-//   const ret = {
-//     id,
-//     // timestamp: dbAnswer.timestamp,
-//     content: dbAnswer.content,
-//     choice: dbAnswer.choice,
-//     // users later
-//   };
-//   return ret;
-// }
-
-// liked: dbPost.likes.includes(user) ? true :
-
-// function surveyMiddleware(id, dbPrompt, answers) {
-
-//     let ret = {
-//         id,
-//         timestamp: dbPrompt.timestamp,
-//         question: dbPrompt.question,
-//         answers: fakeAnswers, // answers
-
-//         // topics: dbPrompt.topics,
-//         // status: dbPost.status,
-//         // user: dbPost.username,
-//         // likes: dbPost.likes,
-//         // saves: dbPost.saves,
-//         // shares: dbPost.shares,
-//     };
-//     return ret;
-// }
-
-// add image later + content instead of body
-// const fakeComments = [
-//   {
-//     id: '123',
-//     user: 'sidthekid',
-//     content: 'You are so strong <3',
-//     likes: ['oj', 'sid'],
-//     timestamp: 'November Yomama',
-//   },
-//   {
-//     id: '0001',
-//     user: 'sidthekid',
-//     content: 'This is amazing!',
-//     likes: ['yomama', 'sid', 'porky', 'joebiden'],
-//     timestamp: 'October Yodada',
-//   },
-// ];
-
-// const fakeResponses = [
-//   {
-//     id: '123',
-//     user: 'sidthekid',
-//     content: 'I think Euphoria romanticized unhealthy relationships.',
-//     likes: ['oj', 'sid'],
-//     timestamp: 'November Yomama',
-//   },
-//   {
-//     id: '0001',
-//     user: 'sidthekid',
-//     content: 'Episode 5 really triggered me.',
-//     likes: ['yomama', 'sid', 'porky', 'joebiden'],
-//     timestamp: 'October Yodada',
-//   },
-// ];
-
-// const fakeAnswers = [
-//   {
-//     id: '123',
-//     choice: 'A',
-//     content: 'Yes!',
-//     users: ['oj', 'cam'],
-//   },
-//   {
-//     id: '999',
-//     choice: 'B',
-//     content: 'No.',
-//     users: ['oj', 'sid'],
-//   },
-// ];
-
-// const ret = {
-//   id,
-//   type: dbResource.type,
-//   name: dbResource.name,
-//   phone: dbResource.contact.phone || 'none',
-//   text: dbResource.contact.text || 'none',
-//   email: dbResource.contact.email || 'none',
-//   website: dbResource.contact.website || 'none',
-//   address: dbResource.contact.address || 'none',
-//   summary: dbResource.description.summary,
-//   confidentiality: dbResource.description.confidentiality,
-//   reporting: dbResource.description.reporting,
-//   image: dbResource.image,
-// };
