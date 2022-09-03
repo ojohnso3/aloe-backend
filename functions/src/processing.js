@@ -1,14 +1,6 @@
 const constants = require('./constants.js');
 const helpers = require('./helpers.js');
 
-// function getTimestamp(dob) {
-//   if (!dob) {
-//     return ''; // could fail by type mismatch
-//   }
-//   const date = new Date(dob);
-//   return helpers.dateToTimestamp(date);
-// }
-
 function processIdentity(string) {
   if (string === 'Prefer not to answer') {
     return '';
@@ -53,7 +45,6 @@ function userProcessing(user, uid) {
   };
 
   for (const key of Object.keys(ret)) {
-    // console.log('key', key, ' - ', ret[key]);
     if (ret[key] === undefined) {
       return null;
     }
@@ -163,7 +154,7 @@ function responseProcessing(response) {
     numLikes: 0,
     reported: false,
     removed: false,
-    top: false, // design !!
+    top: false,
   };
 
   for (const key of Object.keys(ret)) {
@@ -183,7 +174,6 @@ function promptProcessing(prompt) {
     userID: constants.ALOE_ID,
     prompt: promptData.prompt,
     image: promptData.image,
-    // topics: promptData.topics,
     topics: [],
     numLikes: 0,
     numShares: 0,
@@ -215,7 +205,7 @@ function topicProcessing(topics) {
 
   for (const key of Object.keys(ret)) {
     if (ret[key] === undefined) {
-      delete ret[key]; // be careful of returning empty object
+      delete ret[key]; // be careful of returning an empty object
     }
   }
 
@@ -248,16 +238,3 @@ module.exports = {
   topicProcessing,
   universityProcessing,
 };
-
-
-// liked: dbPost.likes.includes(user) ? true : false
-// function answerProcessing(answerString) {
-//   if (answerString != undefined) {
-//     return answerString.split('//');
-//   } else {
-//     return undefined;
-//   }
-// }
-
-// numAnswers: promptData.numAnswers, answers: answers
-// const answers = []; // assemble
